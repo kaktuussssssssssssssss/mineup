@@ -72,3 +72,62 @@
 /* Remove the old generic 3D shape artefacts for these solid blocks. */
 .mc-solid-cube .mc-cube-face{border:0;background-repeat:no-repeat;background-position:center;background-size:100% 100%}
 .mc-egg-solid{filter:drop-shadow(0 9px 10px #0009)}
+
+/* STAGE 08 — real canvas geometry + roulette animation */
+.voxel-viewer{max-width:245px;display:flex;flex-direction:column;align-items:center;width:100%;user-select:none}
+.voxel-canvas{display:block;image-rendering:pixelated;max-width:100%}
+.voxel-canvas.voxel-large{height:174px;width:204px;cursor:grab;touch-action:none;filter:drop-shadow(0 15px 9px #0005)}
+.voxel-canvas.voxel-large:active{cursor:grabbing}
+.voxel-canvas.voxel-thumb{height:84px;width:84px;max-width:100%;margin:auto;filter:drop-shadow(0 7px 6px #0006)}
+.upItem .voxel-thumb{height:84px;width:84px;display:block}
+.invCard .voxel-thumb{height:84px;width:84px}
+.voxel-actions{font-size:9px;letter-spacing:.6px;color:var(--muted);display:flex;gap:12px;align-items:center}
+.voxel-actions button{background:var(--panel);border:1px solid var(--line);border-radius:7px;color:var(--text);padding:3px 10px;cursor:pointer;font-size:16px}
+.upItem>canvas{flex:0 0 auto}
+.upCollections .upItemList{max-height:465px}
+.inventoryGrid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.caseCardNew{overflow:hidden;position:relative;isolation:isolate}
+.caseCardNew:hover{border-color:var(--primary);transform:translateY(-4px)}
+.caseCardNew .caseArt{height:150px}
+.caseMeta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;margin:13px 0;padding:10px 0;border-top:1px solid var(--line)}
+.economyBanner{display:flex;gap:25px;align-items:center;justify-content:space-between;border:1px solid color-mix(in srgb,var(--primary),transparent 76%);background:linear-gradient(110deg,var(--primarySoft),var(--panel));border-radius:13px;padding:19px 23px;margin:17px 0 25px}
+.economyBanner div{display:grid;gap:7px}.economyBanner strong{font-size:11px;color:var(--primary);letter-spacing:1.2px}.economyBanner span{font-size:11px;color:var(--muted);line-height:1.6}
+.caseHistoryPanel{border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:22px;background:var(--panel)}
+.caseHistoryPanel h3{font-size:12px;letter-spacing:1.2px;margin:0 0 15px}.caseHistoryPanel p{font-size:11px;color:var(--muted)}
+.caseHistoryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.dropHistory{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:9px;display:flex;align-items:center;gap:11px;min-width:0}
+.dropHistory img{width:36px;height:36px;image-rendering:pixelated;object-fit:contain}.dropHistory span{display:grid;gap:5px;min-width:0}.dropHistory b{font-size:10px;line-height:1.4}.dropHistory small{color:var(--muted);font-size:9px}
+.caseBackdrop{padding:15px;align-items:center;overflow:auto}
+.caseModalV8{background:var(--panel);border:1px solid var(--line);border-radius:17px;width:min(1040px,100%);padding:27px;text-align:left;position:relative;margin:auto;max-height:calc(100dvh - 30px);overflow-y:auto;box-shadow:0 25px 100px #000b}
+.caseModalV8 .modalClose{z-index:4}.caseModalHeader{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:0 36px 20px 0}
+.caseTitle h2{font:700 30px 'Space Grotesk',sans-serif;margin:9px 0 3px}.caseTitle p{color:var(--muted);font-size:12px;margin:0}.casePriceHead{text-align:right;display:grid;gap:7px;white-space:nowrap}.casePriceHead small{font-size:10px;color:var(--muted);letter-spacing:.7px}.casePriceHead strong{font:800 21px 'Space Grotesk';color:var(--primary)}
+.rouletteWrap{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);margin:6px 0 16px}
+.caseReelWindowV8{height:175px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,var(--primarySoft),transparent 70%);contain:paint}
+.caseReelWindowV8::before,.caseReelWindowV8::after{content:'';position:absolute;top:0;bottom:0;width:13%;z-index:2;pointer-events:none}
+.caseReelWindowV8::before{left:0;background:linear-gradient(90deg,var(--panel2),transparent)}.caseReelWindowV8::after{right:0;background:linear-gradient(270deg,var(--panel2),transparent)}
+.caseReelTrackV8{position:absolute;left:50%;top:50%;display:flex;align-items:center;gap:10px;width:max-content;will-change:transform;transform:translate3d(-60px,-50%,0);backface-visibility:hidden}
+.caseReelCardV8{flex:0 0 120px;width:120px;height:140px;border-radius:10px;border:1px solid color-mix(in srgb,var(--rarity),transparent 55%);background:linear-gradient(165deg,var(--panel),var(--panel2));display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;position:relative;padding:10px;text-align:center}
+.caseReelCardV8 img{height:70px;width:70px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 5px 10px #0008)}
+.caseReelCardV8 small{font-size:10px;color:var(--text);line-height:1.2;max-width:100%}.caseReelCardV8 i{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--rarity)}
+.caseReelCardV8.reelWon{border-color:var(--primary);box-shadow:0 0 30px var(--primarySoft),inset 0 0 10px var(--primarySoft)}
+.reelPointer{position:absolute;top:0;left:50%;width:3px;height:175px;background:var(--primary);transform:translateX(-50%);z-index:3;pointer-events:none;box-shadow:0 0 13px var(--primary),0 0 20px var(--primary)}
+.reelPointer:before,.reelPointer:after{position:absolute;content:'';left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent}
+.reelPointer:before{top:0;border-top:15px solid var(--primary)}.reelPointer:after{bottom:0;border-bottom:15px solid var(--primary)}
+.rouletteBottom{display:flex;justify-content:space-between;gap:10px;background:var(--panel);color:var(--muted);font-size:9px;letter-spacing:1.3px;padding:12px 15px}
+.caseActions{display:flex;gap:16px;align-items:center;margin:15px 0 23px}.caseSpinBtn{min-width:245px;min-height:49px;font-size:13px;white-space:nowrap}.caseSecurity{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;line-height:1.5;max-width:610px}.caseSecurity svg{flex:none;color:#6cdab6}
+.dropCelebration{display:flex;gap:15px;align-items:center;padding:10px 20px;border:1px solid var(--rarity);border-radius:12px;background:color-mix(in srgb,var(--rarity),transparent 91%)}
+.dropCelebration .voxel-thumb{height:78px;width:78px}.dropCelebration>div{display:grid;gap:7px}.dropCelebration small{color:var(--muted);font-size:10px}.dropCelebration strong{font-size:17px}.dropCelebration span{font-size:12px;color:var(--rarity)}
+.oddsSection{border-top:1px solid var(--line);padding-top:22px}.oddsHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:15px}.oddsHeader h3{font-size:13px;letter-spacing:1px;margin:0 0 5px}.oddsHeader p{margin:0;color:var(--muted);font-size:11px}.oddsHeader>span{color:var(--primary);font-size:11px;font-weight:800}
+.oddsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.oddsItem{display:flex;align-items:center;gap:12px;min-width:0;padding:10px;border:1px solid var(--line);border-left:3px solid var(--rarity);border-radius:9px;background:var(--panel2)}
+.oddsItem img{width:46px;height:46px;image-rendering:pixelated;object-fit:contain;flex:none}.oddsItem div{display:grid;gap:6px;min-width:0}.oddsItem strong{font-size:11px;line-height:1.4}.oddsItem small{color:var(--muted);font-size:10px}.oddsItem b{font-size:14px;font-variant-numeric:tabular-nums;margin-left:auto;color:var(--rarity);white-space:nowrap}
+.economyNote{font-size:10px;line-height:1.5;color:var(--muted);margin-top:12px}
+@media(max-width:1450px){.inventoryGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1050px){.caseHistoryGrid{grid-template-columns:repeat(2,1fr)}.inventoryGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.caseModalV8{padding:17px;max-height:calc(100dvh - 16px)}.caseModalHeader{flex-direction:column;align-items:flex-start;padding-right:28px}.casePriceHead{text-align:left}.caseReelWindowV8{height:155px}.reelPointer{height:155px}.caseActions{flex-direction:column;align-items:stretch}.caseSpinBtn{width:100%;min-width:0}.oddsGrid{grid-template-columns:1fr}.economyBanner{align-items:flex-start;flex-direction:column}.inventoryGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.caseArtPremium{height:167px;isolation:isolate;position:relative;display:grid;place-items:center;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--tone),transparent 80%),transparent 70%)}
+.caseArtPremium .caseGlow{opacity:.32;filter:blur(44px);width:130px;height:120px}
+.caseArtModel{position:relative;z-index:2;transform:scale(1.3);filter:drop-shadow(0 13px 12px #0009)}
+.caseArtPremium .caseArtMiniLabel{position:absolute;bottom:7px;font-size:9px;letter-spacing:2px;color:var(--tone);font-weight:900}
+.inventoryControls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 17px}
+.inventoryControls select{padding:11px 14px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;font:600 11px inherit}
+.inventoryControlActive{border-color:var(--primary);color:var(--primary)}
