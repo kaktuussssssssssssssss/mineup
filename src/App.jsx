@@ -199,31 +199,28 @@ function VoxelCuboid({ w, h, d, x = 0, y = 0, z = 0, front, side, top, className
   )
 }
 
-function DragonEggModel() {
-  const src = textureSource('dragon_egg')
-  const face = `center/100% 100% no-repeat url(${src})`
-  const side = 'linear-gradient(180deg,#1a1621,#2c2634 55%,#16121a)'
-  const top = 'linear-gradient(180deg,#3d3449,#241f2b)'
-  const layers = [
-    { w: 28, h: 10, d: 28, y: -46 },
-    { w: 44, h: 12, d: 44, y: -32 },
-    { w: 60, h: 13, d: 60, y: -17 },
-    { w: 72, h: 14, d: 72, y: 0 },
-    { w: 80, h: 15, d: 80, y: 17 },
-    { w: 70, h: 14, d: 70, y: 33 },
-    { w: 54, h: 13, d: 54, y: 48 }
-  ]
-  return (
-    <span className="voxel-assembly egg-solid" aria-hidden="true">
-      {layers.map((layer, index) => (
-        <VoxelCuboid key={index} {...layer} front={face} side={side} top={top} className="eggBand" />
-      ))}
-    </span>
-  )
+// Solid textured Minecraft cubes. All six faces exist in 3D space;
+// unlike layered images, these stay solid from every viewing angle.
+function SolidCube({id='cobblestone',size=96,x=0,y=0,z=0}) {
+ const tex=textureSource(id)
+ return <span className="mc-solid-cube" style={{'--s':`${size}px`,'--half':`${size/2}px`,transform:`translate3d(${x}px, ${y}px, ${z}px)`}} aria-hidden="true">
+   {['front','back','left','right','top','bottom'].map(face=><i key={face} className={'mc-cube-face '+face} style={{backgroundImage:`url("${tex}")`}}/>)}
+ </span>
 }
+function DragonEggModel(){
+ // Stepped silhouette matching Minecraft's blocky egg. Solid tiers TOUCH,
+ // all surfaces are textured, so rotation cannot reveal disconnected sprites.
+ return <span className="mc-egg-solid" aria-hidden="true">
+  <SolidCube id="dragon_egg" size={74} y={24}/>
+  <SolidCube id="dragon_egg" size={61} y={-15}/>
+  <SolidCube id="dragon_egg" size={42} y={-45}/>
+ </span>
+}
+function CobblestoneModel(){return <SolidCube id="cobblestone" size={94}/>}
 
 function MinecraftSprite({ id }) {
   if (id === 'dragon_egg') return <DragonEggModel />
+  if (id === 'cobblestone') return <CobblestoneModel />
   const src = textureSource(id)
   return (
     <span className={'mc-sprite-extrusion' + (id === 'enchanted_apple' ? ' mc-enchanted' : '')} aria-hidden="true">
@@ -309,6 +306,13 @@ export default function App() {
   const [inventory, setInventory] = useState(() => ({ ...defaultInventory, ...stored('mineup-demo-inventory', defaultInventory) }))
   const [history, setHistory] = useState(() => stored('mineup-demo-history', []))
   const [result, setResult] = useState(null)
+  const [caseRolling,setCaseRolling]=useState(false)
+  const [caseRollResult,setCaseRollResult]=useState(null)
+  const [caseReel,setCaseReel]=useState(0)
+  const [caseWinningId,setCaseWinningId]=useState(null)
+  const caseTimer=useRef(null)
+  useEffect(()=>()=>{if(caseTimer.current)clearTimeout(caseTimer.current)},[])
+
 
   const t = labels[lang] || labels.ru
   const uc = chanceCopy[lang] || chanceCopy.ru
@@ -408,6 +412,48 @@ export default function App() {
     setTargetId('diamond')
     setMultiplier(5.714)
     setResult(null)
+  }
+
+  // DEMO CASE: draws using browser crypto, costs only simulated MC.
+  // Not a rewarded ad integration. A real site must validate payment and reward server-side.
+  const casePools = [
+    [['cobblestone',65],['coal',25],['iron',8],['gold',2]],
+    [['cobblestone',28],['coal',34],['iron',25],['gold',10],['emerald',3]],
+    [['coal',25],['iron',40],['gold',23],['emerald',10],['diamond',2]],
+    [['iron',40],['gold',32],['emerald',20],['diamond',8]],
+    [['gold',45],['emerald',32],['diamond',19],['diamond_sword',4]],
+    [['iron',30],['emerald',30],['diamond',28],['diamond_sword',12]],
+    [['emerald',35],['diamond',35],['diamond_sword',25],['totem',5]],
+    [['diamond',40],['diamond_sword',32],['totem',22],['netherite',6]],
+    [['diamond_sword',42],['totem',30],['netherite',23],['nether_star',5]],
+    [['totem',40],['netherite',32],['nether_star',23],['dragon_egg',5]],
+    [['netherite',40],['nether_star',35],['dragon_egg',20],['enchanted_apple',5]]
+  ]
+  function secureRoll(){
+    if(typeof crypto!=='undefined' && crypto.getRandomValues){let a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296}
+    return Math.random()
+  }
+  function openDemoCase(){
+    if(activeCase===null || caseRolling)return
+    const idx=activeCase,price=cases[idx][2]
+    if(coins<price){setCaseRollResult({error:true,text:lang==='en'?'Not enough MC Coins.':'Недостаточно MC Coins.'});return}
+    const pool=casePools[idx];const total=pool.reduce((a,x)=>a+x[1],0)
+    let roll=secureRoll()*total,won=pool[pool.length-1][0]
+    for(const [id,weight] of pool){roll-=weight;if(roll<0){won=id;break}}
+    // Debit and payout once, before the animation, not per frame.
+    setCoins(c=>c-price)
+    setCaseRollResult(null)
+    setCaseWinningId(won)
+    setCaseRolling(true)
+    caseTimer.current=setTimeout(()=>{
+      setInventory(prev=>({...prev,[won]:(prev[won]||0)+1}))
+      setCaseRollResult({id:won})
+      setCaseRolling(false)
+    },2600)
+  }
+  function closeCase(){
+    if(caseRolling)return
+    setActiveCase(null);setCaseRollResult(null)
   }
 
   function go(p) {
@@ -574,7 +620,7 @@ export default function App() {
             <>
               <div className="eyebrow"><span className="dot" /> MINEUP / COLLECTION</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Layers3 size={15} />11 CASES</span></div>
-              <div className="caseGrid">{cases.map((c, i) => <button className="caseCard" key={i} onClick={() => setActiveCase(i)}><span className="caseIndex">{String(i + 1).padStart(2, '0')} / {c[0]}</span>{caseArt(i)}<strong>{c[1]}</strong><div className="casePrice">{i === 0 ? t.free : formatCoins(c[2]) + ' MC'} <ArrowUpRight size={15} /></div></button>)}</div>
+              <div className="caseGrid">{cases.map((c, i) => <button className="caseCard" key={i} onClick={() => {setActiveCase(i);setCaseRollResult(null);setCaseReel(0)}}><span className="caseIndex">{String(i + 1).padStart(2, '0')} / {c[0]}</span>{caseArt(i)}<strong>{c[1]}</strong><div className="casePrice">{i === 0 ? t.free : formatCoins(c[2]) + ' MC'} <ArrowUpRight size={15} /></div></button>)}</div>
             </>
           )}
 
@@ -624,16 +670,30 @@ export default function App() {
       </div>
 
       {activeCase !== null && (
-        <div className="modalBackdrop" onClick={() => setActiveCase(null)}>
-          <div className="modal" role="dialog" aria-modal="true" aria-label={cases[activeCase][1]} onClick={(e) => e.stopPropagation()}>
-            <button className="modalClose" onClick={() => setActiveCase(null)} aria-label="Close"><X /></button>
-            {caseArt(activeCase)}
-            <span className="eyebrow">{cases[activeCase][0]}</span>
+        <div className="modalBackdrop" onClick={closeCase}>
+          <div className="modal caseModal" role="dialog" aria-modal="true" aria-label={cases[activeCase][1]} onClick={(e) => e.stopPropagation()}>
+            <button className="modalClose" disabled={caseRolling} onClick={closeCase} aria-label="Close"><X /></button>
+            <div className="eyebrow" style={{justifyContent:'center'}}>TEST CASE / LOCAL DEMO</div>
             <h2>{cases[activeCase][1]}</h2>
             <p>{cases[activeCase][4]}</p>
-            <div className="modalPrice">{activeCase === 0 ? t.free : formatCoins(cases[activeCase][2]) + ' MC'}</div>
-            <div className="notice"><LockKeyhole size={18} />{t.notice}</div>
-            <button className="primary" onClick={() => setActiveCase(null)}>OK <Check size={16} /></button>
+            <div className="caseReelWindow">
+              <div className={'caseReelTrack '+(caseRolling?'rolling':'')} key={String(activeCase)+String(caseRolling)}>
+                {Array.from({length:11},(_,i)=>{
+                  const pool=casePools[activeCase]
+                  const id=i===9 && caseWinningId ? caseWinningId : pool[(i+caseReel)%pool.length][0]
+                  return <div className="caseReelCard" key={i}>
+                    <img src={textureSource(id)} alt="" draggable="false"/>
+                    <small>{getItem(id).name}</small>
+                  </div>
+                })}
+              </div>
+              <span className="caseReelMarker" />
+            </div>
+            {caseRolling?<p className="casePending">{lang==='en'?'Opening...':'Прокрутка...'}</p>:caseRollResult?.id?<div className="caseWon">🎁 {lang==='en'?'You received':'Твой дроп'}: <strong>{getItem(caseRollResult.id).name}</strong><div>+1 → {t.inventory}</div></div>:caseRollResult?.error?<div className="resultBanner error">{caseRollResult.text}</div>:null}
+            <div className="modalPrice">{activeCase===0?'0 MC • FREE TEST':formatCoins(cases[activeCase][2])+' MC'}</div>
+            <div className="notice"><ShieldCheck size={18}/>{activeCase===0?'Тестовый бесплатный кейс: пока БЕЗ рекламы. Реальную rewarded-рекламу подключим позже.':'Тестовое открытие за виртуальные MC Coins; приз сохраняется в инвентаре браузера.'}</div>
+            <button className="primary" disabled={caseRolling} onClick={openDemoCase}>{caseRolling?'ОТКРЫВАЕМ...':(caseRollResult?.id?'ОТКРЫТЬ ЕЩЁ':'ОТКРЫТЬ КЕЙС')} <Gift size={16}/></button>
+            <div className="caseOdds">{casePools[activeCase].map(([id,p])=><span key={id}>{getItem(id).name}: {p}%</span>)}</div>
           </div>
         </div>
       )}
