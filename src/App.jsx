@@ -211,8 +211,8 @@ function DragonEggModel(){
  // Stepped silhouette matching Minecraft's blocky egg. Solid tiers TOUCH,
  // all surfaces are textured, so rotation cannot reveal disconnected sprites.
  return <span className="mc-egg-solid" aria-hidden="true">
-  <SolidCube id="dragon_egg" size={74} y={24}/>
-  <SolidCube id="dragon_egg" size={61} y={-15}/>
+  <SolidCube id="dragon_egg" size={76} y={22}/>
+  <SolidCube id="dragon_egg" size={60} y={-17}/>
   <SolidCube id="dragon_egg" size={42} y={-45}/>
  </span>
 }
@@ -308,8 +308,7 @@ export default function App() {
   const [result, setResult] = useState(null)
   const [caseRolling,setCaseRolling]=useState(false)
   const [caseRollResult,setCaseRollResult]=useState(null)
-  const [caseReel,setCaseReel]=useState(0)
-  const [caseWinningId,setCaseWinningId]=useState(null)
+  const [caseReel,setCaseReel]=useState([])
   const caseTimer=useRef(null)
   useEffect(()=>()=>{if(caseTimer.current)clearTimeout(caseTimer.current)},[])
 
@@ -442,18 +441,27 @@ export default function App() {
     for(const [id,weight] of pool){roll-=weight;if(roll<0){won=id;break}}
     // Debit and payout once, before the animation, not per frame.
     setCoins(c=>c-price)
+    // Build the complete reel once and lock the prize at index 23.
+    // The animation stops on that exact card instead of showing a separate outcome.
+    const reel=Array.from({length:29},(_,i)=>{
+      if(i===23)return won
+      const r=secureRoll()*total
+      let weight=r
+      for(const [id,w] of pool){weight-=w;if(weight<0)return id}
+      return pool[pool.length-1][0]
+    })
+    setCaseReel(reel)
     setCaseRollResult(null)
-    setCaseWinningId(won)
     setCaseRolling(true)
     caseTimer.current=setTimeout(()=>{
       setInventory(prev=>({...prev,[won]:(prev[won]||0)+1}))
       setCaseRollResult({id:won})
       setCaseRolling(false)
-    },2600)
+    },1750)
   }
   function closeCase(){
     if(caseRolling)return
-    setActiveCase(null);setCaseRollResult(null)
+    setActiveCase(null);setCaseRollResult(null);setCaseReel([])
   }
 
   function go(p) {
@@ -620,7 +628,7 @@ export default function App() {
             <>
               <div className="eyebrow"><span className="dot" /> MINEUP / COLLECTION</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Layers3 size={15} />11 CASES</span></div>
-              <div className="caseGrid">{cases.map((c, i) => <button className="caseCard" key={i} onClick={() => {setActiveCase(i);setCaseRollResult(null);setCaseReel(0)}}><span className="caseIndex">{String(i + 1).padStart(2, '0')} / {c[0]}</span>{caseArt(i)}<strong>{c[1]}</strong><div className="casePrice">{i === 0 ? t.free : formatCoins(c[2]) + ' MC'} <ArrowUpRight size={15} /></div></button>)}</div>
+              <div className="caseGrid">{cases.map((c, i) => <button className="caseCard" key={i} onClick={() => {setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}><span className="caseIndex">{String(i + 1).padStart(2, '0')} / {c[0]}</span>{caseArt(i)}<strong>{c[1]}</strong><div className="casePrice">{i === 0 ? t.free : formatCoins(c[2]) + ' MC'} <ArrowUpRight size={15} /></div></button>)}</div>
             </>
           )}
 
@@ -676,16 +684,16 @@ export default function App() {
             <div className="eyebrow" style={{justifyContent:'center'}}>TEST CASE / LOCAL DEMO</div>
             <h2>{cases[activeCase][1]}</h2>
             <p>{cases[activeCase][4]}</p>
-            <div className="caseReelWindow">
-              <div className={'caseReelTrack '+(caseRolling?'rolling':'')} key={String(activeCase)+String(caseRolling)}>
-                {Array.from({length:11},(_,i)=>{
-                  const pool=casePools[activeCase]
-                  const id=i===9 && caseWinningId ? caseWinningId : pool[(i+caseReel)%pool.length][0]
-                  return <div className="caseReelCard" key={i}>
+            <div className={'caseReelWindow '+(caseRollResult?.id?'reelFinished':'')}>
+              <div className={'caseReelTrack '+(caseRolling?'reelFast':caseRollResult?.id?'reelStopped':'reelIdle')}
+                key={String(activeCase)+'-'+(caseRolling?'rolling':caseRollResult?.id?'stopped':'idle')}
+                style={{'--reel-stop':'2581px'}}>
+                {(caseReel.length?caseReel:Array.from({length:29},(_,i)=>casePools[activeCase][i%casePools[activeCase].length][0])).map((id,i)=>
+                  <div className={'caseReelCard '+(caseReel.length && i===23?'isWinner':'')} key={i}>
                     <img src={textureSource(id)} alt="" draggable="false"/>
                     <small>{getItem(id).name}</small>
                   </div>
-                })}
+                )}
               </div>
               <span className="caseReelMarker" />
             </div>

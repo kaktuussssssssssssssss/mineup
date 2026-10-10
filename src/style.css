@@ -56,3 +56,19 @@
 .caseWon{padding:13px;background:var(--primarySoft);border-radius:9px;font-size:13px}.caseWon strong{color:var(--primary)}.caseWon div{font-size:11px;color:var(--muted);margin-top:7px}
 .caseOdds{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:16px}.caseOdds span{font-size:9px;color:var(--muted);padding:6px 9px;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
 .casePending{font-size:13px;color:var(--primary)!important}
+
+/* Stage 7: responsive reel locked to the actual awarded item. */
+.caseReelWindow{height:154px;background:radial-gradient(circle at 50% 50%,var(--primarySoft),var(--panel2) 72%);box-shadow:inset 0 0 40px #0007}
+.caseReelTrack{position:absolute;display:flex;gap:8px;width:max-content;left:50%;top:50%;height:122px;align-items:center;will-change:transform;transition:none}
+.caseReelTrack.reelIdle{transform:translate(-56px,-50%)}
+.caseReelTrack.reelFast{animation:voxCaseFast 1.75s cubic-bezier(.07,.82,.13,1) both}
+.caseReelTrack.reelStopped{transform:translate(calc(-1 * var(--reel-stop)), -50%)}
+.caseReelCard{width:102px;height:112px;flex:0 0 102px;transition:background .2s}
+.caseReelCard.isWinner{border-color:var(--primary);background:var(--primarySoft)}
+.caseReelWindow.reelFinished .caseReelCard.isWinner{box-shadow:0 0 19px var(--primarySoft),inset 0 0 14px var(--primarySoft)}
+.caseReelMarker{width:3px;box-shadow:0 0 15px var(--primary),0 0 30px var(--primary);pointer-events:none}
+@keyframes voxCaseFast{0%{transform:translate(-56px,-50%)}15%{transform:translate(-420px,-50%)}50%{transform:translate(-1650px,-50%)}80%{transform:translate(-2330px,-50%)}100%{transform:translate(calc(-1 * var(--reel-stop)),-50%)}}
+@media(prefers-reduced-motion:reduce){.caseReelTrack.reelFast{animation:voxCaseFast 1.75s cubic-bezier(.07,.82,.13,1) both!important}}
+/* Remove the old generic 3D shape artefacts for these solid blocks. */
+.mc-solid-cube .mc-cube-face{border:0;background-repeat:no-repeat;background-position:center;background-size:100% 100%}
+.mc-egg-solid{filter:drop-shadow(0 9px 10px #0009)}
