@@ -15,3 +15,15 @@
 .upItem:hover .voxel-thumb-rotator{transform:rotateX(-24deg) rotateY(58deg) scale(.48);transition:transform .25s ease}
 .upItem .voxel-thumb .voxel-piece i{box-sizing:border-box}
 @media(max-width:600px){.upItem .voxel-thumb{height:66px}.voxel-thumb-rotator{transform:rotateX(-24deg) rotateY(32deg) scale(.37)}}
+
+
+/* Stage 4 — Vanilla Minecraft sprite extrusion (replaces placeholder voxel geometry) */
+.mc-sprite-extrusion{display:block;position:absolute;width:116px;height:116px;left:-58px;top:-58px;transform-style:preserve-3d;transform:rotateZ(-8deg);pointer-events:none}
+.mc-sprite-extrusion img{position:absolute;width:116px;height:116px;left:0;top:0;object-fit:contain;image-rendering:pixelated;backface-visibility:visible;user-select:none;pointer-events:none;transform-style:preserve-3d}
+.mc-sprite-layer{filter:brightness(.46) saturate(.8)}
+.mc-sprite-face{filter:drop-shadow(0 0 1px #000)}
+.mc-enchanted .mc-sprite-face{animation:mc-glint 3.6s ease-in-out infinite}
+@keyframes mc-glint{0%,100%{filter:drop-shadow(0 0 3px #9968e388) hue-rotate(0deg)}50%{filter:drop-shadow(0 0 12px #9a67ecbb) hue-rotate(28deg)}}
+.voxel-thumb-rotator{transform:rotateX(-14deg) rotateY(22deg) scale(.44)}
+.upItem:hover .voxel-thumb-rotator{transform:rotateX(-15deg) rotateY(50deg) scale(.5)}
+@media(max-width:600px){.voxel-thumb-rotator{transform:rotateX(-14deg) rotateY(22deg) scale(.4)}}

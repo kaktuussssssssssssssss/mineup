@@ -1,31 +1,33 @@
 import React, {useEffect,useState,useRef} from 'react'
 import {Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, RotateCcw, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal} from 'lucide-react'
 
-// Lightweight interactive 3D voxel previews. Uses browser CSS 3D, without extra packages.
-const palettes={cobblestone:['#8f9399','#686c72','#b5b7bc'],coal:['#444854','#222630','#737987'],iron:['#e3e3e8','#9fa1ae','#fafaff'],gold:['#f9c44a','#a96b19','#ffe08a'],emerald:['#33d999','#0b775b','#7affc2'],diamond:['#62e2f6','#197baf','#acf6ff'],diamond_sword:['#53e0ee','#23779b','#baffff'],totem:['#dbb95e','#97792c','#ffe3a0'],netherite:['#6c6475','#2b2933','#a398ac'],nether_star:['#f5f8db','#a8bac2','#ffffff'],dragon_egg:['#50455f','#211c2a','#877a9b'],enchanted_apple:['#d9af4e','#7f53b0','#fff0ab']};
-function VoxelShape({id}){
- const c=palettes[id]||palettes.iron;
- const dims=id.includes('sword')?'sword':id==='diamond'||id==='emerald'||id==='nether_star'?'gem':id==='totem'?'totem':id==='enchanted_apple'?'apple':id==='dragon_egg'?'egg':id==='cobblestone'?'stone':id==='coal'?'coal':'ingot';
- const cube=(cls,x,y,z,color)=> <div className={'voxel-piece '+cls} style={{'--x':x+'px','--y':y+'px','--z':z+'px','--front':color||c[0],'--side':c[1],'--top':c[2]}}><i className="vf"/><i className="vb"/><i className="vr"/><i className="vl"/><i className="vt"/><i className="vd"/></div>;
- if(dims==='sword')return <div className="voxel-assembly sword">{cube('blade',0,-21,0,c[0])}{cube('hilt',0,38,0,'#785c45')}{cube('guard',0,22,0,'#ada6b5')}{cube('point',0,-55,0,c[2])}</div>;
- if(dims==='totem')return <div className="voxel-assembly totem">{cube('body',0,0,0)}{cube('arm',-36,-5,0)}{cube('arm',36,-5,0)}{cube('eye',-11,-13,18,'#64f6ca')}{cube('eye',11,-13,18,'#64f6ca')}</div>;
- if(dims==='apple')return <div className="voxel-assembly apple">{cube('body',0,8,0)}{cube('stem',0,-41,0,'#62974a')}</div>;
- if(dims==='egg')return <div className="voxel-assembly egg">{cube('body',0,15,0)}{cube('upper',0,-33,0,c[0])}</div>;
- if(dims==='gem')return <div className="voxel-assembly gem">{cube('body',0,0,0)}{cube('upper',0,-34,0,c[2])}</div>;
- return <div className={'voxel-assembly '+dims}>{cube('body',0,0,0)}</div>;
+// Vanilla Minecraft Java 1.21.8 pixel sprites, displayed as extruded 3D item cards.
+// Loaded from Faithful-Pack/Default-Java 1.21.8 mirror of the default Mojang assets.
+// Sprites are requested by the browser at runtime. No client mod or external 3D package required.
+const mcTextureRoot='https://raw.githubusercontent.com/Faithful-Pack/Default-Java/1.21.8/assets/minecraft/textures/';
+const itemTextures={
+ cobblestone:'block/cobblestone.png',coal:'item/coal.png',iron:'item/iron_ingot.png',gold:'item/gold_ingot.png',
+ emerald:'item/emerald.png',diamond:'item/diamond.png',diamond_sword:'item/diamond_sword.png',
+ totem:'item/totem_of_undying.png',netherite:'item/netherite_ingot.png',nether_star:'item/nether_star.png',
+ dragon_egg:'block/dragon_egg.png',enchanted_apple:'item/golden_apple.png'
+};
+const textureSource=(id)=>mcTextureRoot+(itemTextures[id]||itemTextures.diamond);
+function MinecraftSprite({id}){
+ const src=textureSource(id);
+ // The repeated alpha-masked pixel sprites form a visible 3D edge when rotated.
+ return <span className={'mc-sprite-extrusion'+(id==='enchanted_apple'?' mc-enchanted':'')} aria-hidden="true">
+   {[-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7].map((z,i)=><img key={z} className={i===14?'mc-sprite-face':'mc-sprite-layer'} src={src} alt="" draggable="false" loading={i===14?'eager':'lazy'} style={{transform:`translateZ(${z}px)`}}/>)}
+ </span>;
 }
 function VoxelViewer({id,label}){
- const [angles,setAngles]=useState({x:-18,y:30});const drag=useRef(null);
- useEffect(()=>setAngles({x:-18,y:30}),[id]);
+ const [angles,setAngles]=useState({x:-10,y:25});const drag=useRef(null);
+ useEffect(()=>setAngles({x:-10,y:25}),[id]);
  function down(e){drag.current={px:e.clientX,py:e.clientY,x:angles.x,y:angles.y};e.currentTarget.setPointerCapture(e.pointerId)}
- function move(e){if(!drag.current)return;const d=drag.current;setAngles({x:Math.max(-80,Math.min(80,d.x-(e.clientY-d.py)*.55)),y:d.y+(e.clientX-d.px)*.65})}
- function end(){drag.current=null}
- return <div className="voxel-viewer" role="group" aria-label={label+' — интерактивная 3D-модель'}><div className="voxel-stage" onPointerDown={down} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onLostPointerCapture={end} title="Зажми и вращай мышкой" style={{touchAction:'none'}}><div className="voxel-rotator" style={{transform:`rotateX(${angles.x}deg) rotateY(${angles.y}deg)`}}><VoxelShape id={id}/></div></div><div className="voxel-actions"><span>↔ 3D • DRAG</span><button type="button" onClick={()=>setAngles({x:-18,y:30})} aria-label="Сбросить поворот">↺</button></div></div>
+ function move(e){if(!drag.current)return;const d=drag.current;setAngles({x:Math.max(-78,Math.min(78,d.x-(e.clientY-d.py)*.55)),y:d.y+(e.clientX-d.px)*.65})}
+ return <div className="voxel-viewer" role="group" aria-label={label+' — Minecraft 3D'}><div className="voxel-stage" onPointerDown={down} onPointerMove={move} onPointerUp={()=>drag.current=null} onPointerCancel={()=>drag.current=null} onLostPointerCapture={()=>drag.current=null} title="Зажми мышку, чтобы повернуть" style={{touchAction:'none'}}><div className="voxel-rotator" style={{transform:`rotateX(${angles.x}deg) rotateY(${angles.y}deg)`}}><MinecraftSprite id={id}/></div></div><div className="voxel-actions"><span>↔ 3D • DRAG</span><button type="button" onClick={()=>setAngles({x:-10,y:25})} aria-label="Сбросить поворот">↺</button></div></div>;
 }
-
-// Compact 3D thumbnail built from the very same geometry as the draggable viewer.
 function VoxelThumbnail({id}){
- return <span className="voxel-thumb" aria-hidden="true"><span className="voxel-thumb-perspective"><span className="voxel-thumb-rotator"><VoxelShape id={id}/></span></span></span>
+ return <span className="voxel-thumb" aria-hidden="true"><span className="voxel-thumb-perspective"><span className="voxel-thumb-rotator"><MinecraftSprite id={id}/></span></span></span>;
 }
 
 const cases=[['FREE CASE','Бесплатный',0,'#a8b5ac','Земля / уголь / палки'],['VILLAGE','Деревенский',100,'#c89b6c','Деревня и инструменты'],['MINER','Шахтёрский',300,'#96a5af','Руды и ресурсы'],['IRON AGE','Железная эпоха',750,'#b1bcc1','Железные предметы'],['GOLD RUSH','Золотая лихорадка',1500,'#e2ba61','Золотые находки'],['REDSTONE','Редстоун',3000,'#d75d57','Механизмы и схемы'],['DIAMOND','Алмазный',6000,'#64d1dc','Алмазное снаряжение'],['NETHER','Незер',12000,'#eb8265','Сокровища Незера'],['NETHERITE','Незеритовый',25000,'#ae89cd','Незеритовое снаряжение'],['THE END','Энд',60000,'#bd9bdc','Редкие находки Энда'],['LEGENDARY','Легендарный',150000,'#f4cf80','Легендарные предметы']]
@@ -70,7 +72,7 @@ export default function App(){
  <div className="shell"><header className="top"><div className="topLeft"><button className="mobileMenu" onClick={()=>setMenu(v=>!v)} aria-label="menu">{menu?<X size={22}/>:<Menu size={22}/>}</button><span className="crumb">MINEUP</span><ChevronRight size={13}/><span>{t[page]}</span></div><div className="topRight"><div className="topBalance"><Coins size={17}/><span>0 <em>MC</em></span><small>{t.demo}</small></div><button className="account" onClick={()=>go('profile')}><UserRound size={17}/><span>{t.guest}</span></button></div></header>
  <main className="main">
  {page==='upgrade'&&<><div className="eyebrow"><span className="dot"/> MINEUP PROJECT — ALPHA 0.1</div><section className="hero"><div className="heroContent"><div className="heroBadge"><Sparkles size={13}/>{t.hello}</div><h1>{t.head.split(' ').slice(0,2).join(' ')}<br/><span>{t.head.split(' ').slice(2).join(' ')||'UPGRADE.'}</span></h1><p>{t.sub}</p><div className="heroBtns"><button className="primary" onClick={()=>go('cases')}>{t.explore}<ArrowUpRight size={17}/></button><span className="betaTag"><span className="onlineDot"/>{t.demo}</span></div></div><div className="heroImage"><div className="halo haloOne"/><div className="halo haloTwo"/><div className="heroItem"><img src="/items/custom_question_black_white.png" alt="Question block"/></div><div className="heroOrb orb1"/><div className="heroOrb orb2"/><div className="renderNote">ITEM PREVIEW / CUSTOM TEXTURE</div></div></section><section className="upgradeLab" aria-label={uc.title}>
- <div className="upgradeIntro"><div><div className="eyebrow">STAGE 03 / VOXEL PREVIEW</div><h2>{uc.title}</h2><p>{uc.desc}</p></div><span className="stamp"><ShieldCheck size={15}/> DEMO / NO DROPS</span></div>
+ <div className="upgradeIntro"><div><div className="eyebrow">STAGE 04 / MINECRAFT TEXTURES</div><h2>{uc.title}</h2><p>{uc.desc}</p></div><span className="stamp"><ShieldCheck size={15}/> DEMO / NO DROPS</span></div>
  <div className="upgradeTriad">
   <div className="upSlot"><span className="upSlotLabel">01 / {uc.source}</span><VoxelViewer id={source.id} label={source.name}/><strong>{source.name}</strong><span className="upValue">{source.value.toLocaleString('ru-RU')} MC</span></div>
   <div className="upChance"><div className="upWheel" style={{'--pct':chance+'%'}}><div><strong>{chance.toFixed(2)}%</strong><span>{uc.chance}</span></div></div><small>{uc.formula}</small></div>
