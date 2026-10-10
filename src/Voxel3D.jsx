@@ -108,10 +108,54 @@ function makeEgg(px){
   }
   return out
 }
+// The beacon is a complex translucent object, not a solid textured cube.
+// Build an obsidian pedestal, a glowing 3D core and a clear outer glass shell.
+// All pieces are polygons in the same 3D coordinate system as the voxel items.
+function solidBox(x0,y0,z0,x1,y1,z1,front,right,top,back=front,left=right,bottom=top){
+  return [
+    {points:[[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]],fill:front},
+    {points:[[x1,y0,z0],[x0,y0,z0],[x0,y1,z0],[x1,y1,z0]],fill:back},
+    {points:[[x1,y0,z1],[x1,y0,z0],[x1,y1,z0],[x1,y1,z1]],fill:right},
+    {points:[[x0,y0,z0],[x0,y0,z1],[x0,y1,z1],[x0,y1,z0]],fill:left},
+    {points:[[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]],fill:top},
+    {points:[[x0,y1,z1],[x1,y1,z1],[x1,y1,z0],[x0,y1,z0]],fill:bottom}
+  ]
+}
+function makeBeacon(){
+  const shapes=[]
+  const add=(...args)=>shapes.push(...solidBox(...args))
+  // Rough obsidian base and its pale metallic top rim.
+  add(-8,4,-8,8,8,8,'#1e1c27','#11111a','#343543')
+  add(-7.3,3.3,-7.3,7.3,4.3,7.3,'#8b999d','#5b6a70','#a4b8bc')
+  add(-6,2,-6,6,3.4,6,'#1a3639','#163038','#667c75')
+  // Real luminous core, inner crystal and beacon lens.
+  add(-4.3,-3.4,-4.3,4.3,2.2,4.3,'#a0f3de','#52b9c2','#d5ffef')
+  add(-2.4,-5.3,-2.4,2.4,2.4,2.4,'#fcf0a8','#c3e6a9','#fffdd2')
+  add(-5,-5.8,-5,5,-4.7,5,'#c0f8fa','#6ac8d6','#edffff')
+  // Slim inset blue-green metal edges and corner pillars.
+  for(const x of [-6.9,6.1])for(const z of [-6.9,6.1])
+    add(x,-7.8,z,x+.8,3.6,z+.8,'rgba(126,237,235,.5)','rgba(83,181,198,.5)','rgba(240,255,255,.6)')
+  // Lower and upper glass rims.
+  for(const y of [-7.9,2.7]){
+    add(-7.7,y,-7.7,7.7,y+.55,-7.0,'rgba(130,234,243,.65)','rgba(61,176,197,.6)','rgba(208,251,254,.75)')
+    add(-7.7,y,7.0,7.7,y+.55,7.7,'rgba(130,234,243,.65)','rgba(61,176,197,.6)','rgba(208,251,254,.75)')
+    add(-7.7,y,-7.7,-7,y+.55,7.7,'rgba(130,234,243,.55)','rgba(61,176,197,.5)','rgba(208,251,254,.6)')
+    add(7.0,y,-7.7,7.7,y+.55,7.7,'rgba(130,234,243,.55)','rgba(61,176,197,.5)','rgba(208,251,254,.6)')
+  }
+  // Transparent outer walls: the central core remains visible when rotating.
+  add(-7.7,-7.8,-7.7,7.7,3.2,7.7,
+      'rgba(89,226,235,.12)','rgba(95,194,234,.16)','rgba(185,250,255,.16)',
+      'rgba(100,232,250,.09)','rgba(95,194,234,.14)','rgba(140,236,248,.12)')
+  return shapes
+}
+
 async function getMesh(id,src,blockIds){
   if(meshCache.has(id))return meshCache.get(id)
+  if(id==='beacon'){
+    const mesh=makeBeacon();meshCache.set(id,mesh);return mesh
+  }
   const px=await loadPixels(id,src)
-  const mesh=id==='dragon_egg'?makeEgg(px):blockIds.includes(id)?makeCube(px):makeSprite(px)
+  const mesh=id==='dragon_egg'?makeEgg(px):id==='heavy_core'?makeCube(px).map(f=>({...f,points:f.points.map(([x,y,z])=>[x*.52,y*.52+1.5,z*.52])})):blockIds.includes(id)?makeCube(px):makeSprite(px)
   meshCache.set(id,mesh)
   return mesh
 }

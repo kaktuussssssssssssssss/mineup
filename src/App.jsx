@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {VoxelViewer, VoxelThumbnail} from './Voxel3D.jsx'
-import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw } from 'lucide-react'
+import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2 } from 'lucide-react'
 
 const mcTextureRoot = 'https://raw.githubusercontent.com/Faithful-Pack/Default-Java/1.21.8/assets/minecraft/textures/'
 const itemTextures = {
@@ -49,9 +49,63 @@ const itemTextures = {
   "beacon": "block/beacon.png",
   "end_crystal": "item/end_crystal.png",
   "dragon_egg": "block/dragon_egg.png",
-  "enchanted_apple": "item/golden_apple.png"
+  "enchanted_apple": "item/golden_apple.png",
+  "sand": "block/sand.png",
+  "gravel": "block/gravel.png",
+  "netherrack": "block/netherrack.png",
+  "grass_block": "block/grass_block_side.png",
+  "oak_log": "block/oak_log.png",
+  "mud": "block/mud.png",
+  "snowball": "item/snowball.png",
+  "flint": "item/flint.png",
+  "clay_ball": "item/clay_ball.png",
+  "wheat": "item/wheat.png",
+  "leather": "item/leather.png",
+  "feather": "item/feather.png",
+  "string": "item/string.png",
+  "raw_copper": "item/raw_copper.png",
+  "raw_gold": "item/raw_gold.png",
+  "stone_pickaxe": "item/stone_pickaxe.png",
+  "bow": "item/bow.png",
+  "arrow": "item/arrow.png",
+  "book": "item/book.png",
+  "torch": "item/torch.png",
+  "iron_axe": "item/iron_axe.png",
+  "iron_helmet": "item/iron_helmet.png",
+  "iron_chestplate": "item/iron_chestplate.png",
+  "golden_carrot": "item/golden_carrot.png",
+  "glass": "block/glass.png",
+  "quartz": "item/quartz.png",
+  "gunpowder": "item/gunpowder.png",
+  "glowstone_dust": "item/glowstone_dust.png",
+  "slime_ball": "item/slime_ball.png",
+  "nether_wart": "item/nether_wart.png",
+  "amethyst_shard": "item/amethyst_shard.png",
+  "prismarine_shard": "item/prismarine_shard.png",
+  "prismarine_crystals": "item/prismarine_crystals.png",
+  "golden_sword": "item/golden_sword.png",
+  "golden_pickaxe": "item/golden_pickaxe.png",
+  "diamond_axe": "item/diamond_axe.png",
+  "diamond_helmet": "item/diamond_helmet.png",
+  "diamond_chestplate": "item/diamond_chestplate.png",
+  "sea_lantern": "block/sea_lantern.png",
+  "tnt": "block/tnt_side.png",
+  "ender_chest": "block/ender_chest_front.png",
+  "gilded_blackstone": "block/gilded_blackstone.png",
+  "soul_sand": "block/soul_sand.png",
+  "netherite_pickaxe": "item/netherite_pickaxe.png",
+  "netherite_axe": "item/netherite_axe.png",
+  "netherite_helmet": "item/netherite_helmet.png",
+  "echo_shard": "item/echo_shard.png",
+  "music_disc_pigstep": "item/music_disc_pigstep.png",
+  "music_disc_13": "item/music_disc_13.png",
+  "mace": "item/mace.png",
+  "heavy_core": "block/heavy_core.png",
+  "trial_key": "item/trial_key.png",
+  "ominous_trial_key": "item/ominous_trial_key.png",
+  "dragon_breath": "item/dragon_breath.png"
 }
-const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon"]
+const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon", "sand", "gravel", "netherrack", "grass_block", "oak_log", "mud", "glass", "sea_lantern", "tnt", "ender_chest", "gilded_blackstone", "soul_sand"]
 const textureSource = (id) => mcTextureRoot + (itemTextures[id] || itemTextures.diamond)
 
 const cases = [
@@ -71,54 +125,108 @@ const cases = [
 const previewItems = [
   {id: "dirt", name: "Земля", value: 8, rarity: "COMMON"},
   {id: "stick", name: "Палка", value: 12, rarity: "COMMON"},
+  {id: "sand", name: "Песок", value: 14, rarity: "COMMON"},
   {id: "cobblestone", name: "Булыжник", value: 18, rarity: "COMMON"},
+  {id: "gravel", name: "Гравий", value: 19, rarity: "COMMON"},
+  {id: "netherrack", name: "Незерак", value: 23, rarity: "COMMON"},
   {id: "oak_planks", name: "Дубовые доски", value: 25, rarity: "COMMON"},
   {id: "stone", name: "Камень", value: 28, rarity: "COMMON"},
+  {id: "grass_block", name: "Дёрн", value: 30, rarity: "COMMON"},
+  {id: "oak_log", name: "Дубовое бревно", value: 32, rarity: "COMMON"},
+  {id: "mud", name: "Грязь", value: 36, rarity: "COMMON"},
+  {id: "snowball", name: "Снежок", value: 40, rarity: "COMMON"},
   {id: "coal", name: "Уголь", value: 42, rarity: "COMMON"},
   {id: "bread", name: "Хлеб", value: 55, rarity: "COMMON"},
+  {id: "flint", name: "Кремень", value: 58, rarity: "COMMON"},
+  {id: "clay_ball", name: "Комок глины", value: 62, rarity: "COMMON"},
+  {id: "wheat", name: "Пшеница", value: 68, rarity: "COMMON"},
   {id: "apple", name: "Яблоко", value: 75, rarity: "COMMON"},
+  {id: "leather", name: "Кожа", value: 82, rarity: "COMMON"},
+  {id: "feather", name: "Перо", value: 90, rarity: "COMMON"},
+  {id: "string", name: "Нить", value: 97, rarity: "COMMON"},
   {id: "copper_ingot", name: "Медный слиток", value: 105, rarity: "UNCOMMON"},
+  {id: "raw_copper", name: "Рудная медь", value: 115, rarity: "UNCOMMON"},
   {id: "raw_iron", name: "Рудное железо", value: 125, rarity: "UNCOMMON"},
   {id: "iron", name: "Железный слиток", value: 155, rarity: "UNCOMMON"},
+  {id: "raw_gold", name: "Рудное золото", value: 175, rarity: "UNCOMMON"},
+  {id: "stone_pickaxe", name: "Каменная кирка", value: 185, rarity: "UNCOMMON"},
   {id: "lapis", name: "Лазурит", value: 200, rarity: "UNCOMMON"},
   {id: "redstone", name: "Редстоун", value: 225, rarity: "UNCOMMON"},
+  {id: "bow", name: "Лук", value: 240, rarity: "UNCOMMON"},
+  {id: "arrow", name: "Стрела", value: 255, rarity: "UNCOMMON"},
   {id: "iron_sword", name: "Железный меч", value: 270, rarity: "UNCOMMON"},
+  {id: "book", name: "Книга", value: 295, rarity: "UNCOMMON"},
   {id: "gold", name: "Золотой слиток", value: 310, rarity: "UNCOMMON"},
+  {id: "torch", name: "Факел", value: 315, rarity: "UNCOMMON"},
   {id: "iron_pickaxe", name: "Железная кирка", value: 390, rarity: "UNCOMMON"},
+  {id: "iron_axe", name: "Железный топор", value: 430, rarity: "UNCOMMON"},
   {id: "crafting_table", name: "Верстак", value: 450, rarity: "UNCOMMON"},
+  {id: "iron_helmet", name: "Железный шлем", value: 480, rarity: "UNCOMMON"},
   {id: "emerald", name: "Изумруд", value: 520, rarity: "RARE"},
+  {id: "iron_chestplate", name: "Железный нагрудник", value: 690, rarity: "RARE"},
   {id: "golden_apple", name: "Золотое яблоко", value: 700, rarity: "RARE"},
   {id: "obsidian", name: "Обсидиан", value: 790, rarity: "RARE"},
+  {id: "golden_carrot", name: "Золотая морковь", value: 830, rarity: "RARE"},
+  {id: "glass", name: "Стекло", value: 900, rarity: "RARE"},
   {id: "diamond", name: "Алмаз", value: 1000, rarity: "RARE"},
+  {id: "quartz", name: "Кварц", value: 1100, rarity: "RARE"},
+  {id: "gunpowder", name: "Порох", value: 1250, rarity: "RARE"},
   {id: "diamond_ore", name: "Алмазная руда", value: 1350, rarity: "RARE"},
+  {id: "glowstone_dust", name: "Светокаменная пыль", value: 1600, rarity: "RARE"},
   {id: "blaze_rod", name: "Огненный стержень", value: 1700, rarity: "RARE"},
+  {id: "slime_ball", name: "Сгусток слизи", value: 1750, rarity: "RARE"},
   {id: "ender_pearl", name: "Эндер-жемчуг", value: 1900, rarity: "RARE"},
+  {id: "nether_wart", name: "Незерский нарост", value: 2050, rarity: "RARE"},
   {id: "diamond_pickaxe", name: "Алмазная кирка", value: 2200, rarity: "EPIC"},
+  {id: "amethyst_shard", name: "Осколок аметиста", value: 2450, rarity: "EPIC"},
   {id: "diamond_sword", name: "Алмазный меч", value: 2600, rarity: "EPIC"},
+  {id: "prismarine_shard", name: "Призмариновый осколок", value: 3150, rarity: "EPIC"},
   {id: "enchanting_table", name: "Чародейский стол", value: 3300, rarity: "EPIC"},
+  {id: "prismarine_crystals", name: "Призмариновые кристаллы", value: 3600, rarity: "EPIC"},
+  {id: "golden_sword", name: "Золотой меч", value: 4000, rarity: "EPIC"},
   {id: "ghast_tear", name: "Слеза гаста", value: 4100, rarity: "EPIC"},
+  {id: "golden_pickaxe", name: "Золотая кирка", value: 4550, rarity: "EPIC"},
   {id: "ender_eye", name: "Око Эндера", value: 4900, rarity: "EPIC"},
   {id: "magma_cream", name: "Сгусток магмы", value: 5100, rarity: "EPIC"},
+  {id: "diamond_axe", name: "Алмазный топор", value: 5550, rarity: "EPIC"},
   {id: "crying_obsidian", name: "Плачущий обсидиан", value: 6200, rarity: "EPIC"},
+  {id: "diamond_helmet", name: "Алмазный шлем", value: 6700, rarity: "EPIC"},
   {id: "end_stone", name: "Эндняк", value: 7200, rarity: "EPIC"},
   {id: "totem", name: "Тотем бессмертия", value: 7800, rarity: "EPIC"},
+  {id: "diamond_chestplate", name: "Алмазный нагрудник", value: 8900, rarity: "LEGENDARY"},
   {id: "ancient_debris", name: "Древние обломки", value: 9800, rarity: "LEGENDARY"},
+  {id: "sea_lantern", name: "Морской фонарь", value: 10400, rarity: "LEGENDARY"},
+  {id: "tnt", name: "Динамит", value: 11300, rarity: "LEGENDARY"},
   {id: "trident", name: "Трезубец", value: 11500, rarity: "LEGENDARY"},
+  {id: "ender_chest", name: "Эндер-сундук", value: 12700, rarity: "LEGENDARY"},
   {id: "netherite", name: "Незеритовый слиток", value: 14500, rarity: "LEGENDARY"},
+  {id: "gilded_blackstone", name: "Позолоченный чернит", value: 15400, rarity: "LEGENDARY"},
   {id: "shulker_shell", name: "Панцирь шалкера", value: 15500, rarity: "LEGENDARY"},
+  {id: "soul_sand", name: "Песок душ", value: 17800, rarity: "LEGENDARY"},
   {id: "netherite_sword", name: "Незеритовый меч", value: 22000, rarity: "LEGENDARY"},
+  {id: "netherite_pickaxe", name: "Незеритовая кирка", value: 26000, rarity: "LEGENDARY"},
   {id: "nether_star", name: "Звезда Незера", value: 29000, rarity: "LEGENDARY"},
+  {id: "netherite_axe", name: "Незеритовый топор", value: 32500, rarity: "LEGENDARY"},
+  {id: "netherite_helmet", name: "Незеритовый шлем", value: 38000, rarity: "LEGENDARY"},
+  {id: "echo_shard", name: "Осколок эха", value: 44000, rarity: "MYTHIC"},
   {id: "elytra", name: "Элитры", value: 48000, rarity: "MYTHIC"},
+  {id: "music_disc_pigstep", name: "Пластинка Pigstep", value: 51000, rarity: "MYTHIC"},
+  {id: "music_disc_13", name: "Пластинка 13", value: 56000, rarity: "MYTHIC"},
   {id: "netherite_chestplate", name: "Незеритовый нагрудник", value: 58000, rarity: "MYTHIC"},
   {id: "heart_of_the_sea", name: "Сердце моря", value: 65000, rarity: "MYTHIC"},
+  {id: "mace", name: "Булава", value: 69000, rarity: "MYTHIC"},
+  {id: "heavy_core", name: "Тяжёлое ядро", value: 73000, rarity: "MYTHIC"},
   {id: "beacon", name: "Маяк", value: 80000, rarity: "MYTHIC"},
+  {id: "trial_key", name: "Ключ испытаний", value: 87000, rarity: "MYTHIC"},
   {id: "end_crystal", name: "Кристалл Энда", value: 97000, rarity: "MYTHIC"},
+  {id: "ominous_trial_key", name: "Зловещий ключ испытаний", value: 110000, rarity: "MYTHIC"},
+  {id: "dragon_breath", name: "Драконье дыхание", value: 120000, rarity: "MYTHIC"},
   {id: "dragon_egg", name: "Яйцо дракона", value: 135000, rarity: "MYTHIC"},
   {id: "enchanted_apple", name: "Зачарованное золотое яблоко", value: 350000, rarity: "MYTHIC"}
 ]
 const itemMap = Object.fromEntries(previewItems.map((item) => [item.id, item]))
 const rarityColors = { COMMON: '#9ba3b2', UNCOMMON: '#d6b069', RARE: '#5dd8c4', EPIC: '#7ca8ff', LEGENDARY: '#c89bff', MYTHIC: '#f070ff' }
-const casePools = [[["dirt", 45], ["stick", 25], ["cobblestone", 14], ["coal", 9], ["copper_ingot", 5], ["iron", 2]], [["oak_planks", 10], ["bread", 30], ["apple", 28], ["copper_ingot", 18], ["iron", 10], ["iron_pickaxe", 3.5], ["emerald", 0.5]], [["coal", 8], ["raw_iron", 25], ["iron", 28], ["lapis", 18], ["iron_pickaxe", 15], ["emerald", 5], ["diamond", 1]], [["iron_sword", 15], ["iron_pickaxe", 24], ["emerald", 30], ["obsidian", 17], ["diamond", 11], ["diamond_sword", 2.5], ["totem", 0.5]], [["gold", 10], ["emerald", 25], ["golden_apple", 27], ["diamond", 24], ["diamond_sword", 12], ["totem", 1.8], ["netherite", 0.2]], [["lapis", 10], ["redstone", 8], ["diamond_ore", 20], ["diamond_pickaxe", 32], ["diamond_sword", 22], ["totem", 7.5], ["netherite", 0.5]], [["diamond", 8], ["diamond_ore", 10], ["diamond_pickaxe", 22], ["diamond_sword", 24], ["totem", 25], ["ancient_debris", 9], ["netherite", 1.9], ["nether_star", 0.1]], [["ender_eye", 7], ["ghast_tear", 10], ["crying_obsidian", 13], ["totem", 30], ["ancient_debris", 20], ["netherite", 17], ["netherite_sword", 2.8], ["nether_star", 0.2]], [["totem", 7], ["ancient_debris", 14], ["netherite", 30], ["netherite_sword", 26], ["nether_star", 16], ["elytra", 6.8], ["dragon_egg", 0.2]], [["netherite_sword", 16], ["nether_star", 21], ["elytra", 30], ["netherite_chestplate", 15], ["beacon", 14], ["dragon_egg", 3.7], ["enchanted_apple", 0.3]], [["nether_star", 7], ["elytra", 10], ["netherite_chestplate", 13], ["beacon", 23], ["end_crystal", 20], ["dragon_egg", 22], ["enchanted_apple", 5]]]
+const casePools = [[["dirt",38],["stick",20],["cobblestone",12],["coal",7],["copper_ingot",5],["iron",2],["sand",3],["gravel",2],["snowball",3],["netherrack",2],["stone",1],["grass_block",1],["oak_log",1],["mud",1],["flint",1],["clay_ball",1]],[["oak_planks",10],["bread",22],["apple",25.5],["copper_ingot",13],["iron",10],["iron_pickaxe",3.5],["emerald",0.5],["wheat",3],["leather",3],["raw_copper",5],["feather",2],["string",1],["arrow",1],["bow",0.5]],[["coal",8],["raw_iron",19],["iron",26],["lapis",13],["iron_pickaxe",15],["emerald",5],["diamond",1],["raw_gold",3],["stone_pickaxe",3],["book",3],["torch",2],["crafting_table",1],["arrow",1]],[["iron_sword",15],["iron_pickaxe",16],["emerald",26],["obsidian",17],["diamond",11],["diamond_sword",2.5],["totem",0.5],["iron_axe",5],["iron_helmet",3],["book",2],["iron_chestplate",2]],[["gold",7],["emerald",25],["golden_apple",22],["diamond",19],["diamond_sword",12],["totem",1.8],["netherite",0.2],["golden_carrot",3],["quartz",2],["glass",2],["gunpowder",3],["glowstone_dust",1],["blaze_rod",1],["slime_ball",1]],[["lapis",8],["redstone",8],["diamond_ore",20],["diamond_pickaxe",25],["diamond_sword",17],["totem",7.5],["netherite",0.5],["amethyst_shard",4],["prismarine_shard",3],["prismarine_crystals",3],["ender_pearl",1],["nether_wart",1],["enchanting_table",1],["golden_sword",1]],[["diamond",8],["diamond_ore",10],["diamond_pickaxe",22],["diamond_sword",18],["totem",19],["ancient_debris",9],["netherite",1.9],["nether_star",0.1],["diamond_axe",3],["golden_pickaxe",3],["diamond_helmet",2],["diamond_chestplate",2],["magma_cream",1],["end_stone",1]],[["ender_eye",7],["ghast_tear",10],["crying_obsidian",13],["totem",30],["ancient_debris",11],["netherite",14],["netherite_sword",2.8],["nether_star",0.2],["sea_lantern",2],["tnt",2],["ender_chest",2],["gilded_blackstone",1],["netherite_pickaxe",2],["trident",1],["shulker_shell",1],["soul_sand",1]],[["totem",7],["ancient_debris",14],["netherite",30],["netherite_sword",26],["nether_star",10],["elytra",2.8],["dragon_egg",0.2],["netherite_pickaxe",3],["netherite_axe",3],["netherite_helmet",2],["echo_shard",2]],[["netherite_sword",16],["nether_star",21],["elytra",22],["netherite_chestplate",15],["beacon",9],["dragon_egg",3.7],["enchanted_apple",0.3],["music_disc_pigstep",4],["music_disc_13",4],["mace",2],["heavy_core",2],["heart_of_the_sea",1]],[["nether_star",7],["elytra",10],["netherite_chestplate",13],["beacon",19],["end_crystal",20],["dragon_egg",16],["enchanted_apple",5],["trial_key",2],["ominous_trial_key",2],["dragon_breath",2],["heavy_core",2],["mace",2]]]
 const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['settings', Settings2]]
 
 const labels = {
@@ -211,6 +319,12 @@ const chanceCopy = {
   }
 }
 
+const extraCopy = {
+ ru: { search:'Поиск предметов...', found:'Найдено', nothing:'Ничего не найдено', sortCheap:'Сначала дешёвые', sortExpensive:'Сначала дорогие', sortName:'По названию', sourceList:'Мои предметы', targetList:'Каталог целей', reset:'Сброс', mode:'ИГРОВОЕ ДЕМО', myCollection:'Коллекция', demoSaves:'Локальное сохранение', download:'Скачать сохранение', upload:'Восстановить сохранение', backupHint:'Сохрани JSON-файл, чтобы перенести тестовый прогресс в другой браузер. Серверные аккаунты добавим отдельно.', confirmReset:'Сбросить весь тестовый прогресс? Отменить это действие нельзя.', backupBad:'Неверный файл сохранения VOXUP.', backupOk:'Сохранение восстановлено.', spin:'АПГРЕЙД В ПРОЦЕССЕ', noHigher:'Для самого дорогого предмета нет более дорогих целей.', pickSource:'Выбери предмет из инвентаря', resetFilters:'Очистить фильтры', showcase:'Каталог предметов', total:'Предметов', casesOpened:'Кейсов открыто', upgrades:'Апгрейдов', wins:'Удачных', profit:'Стоимость инвентаря', fair:'Вероятность совпадает с показанной. Тестовая валюта, без реальных денег.'},
+ uk: { search:'Пошук предметів...', found:'Знайдено', nothing:'Нічого не знайдено', sortCheap:'Спочатку дешеві', sortExpensive:'Спочатку дорогі', sortName:'За назвою', sourceList:'Мої предмети', targetList:'Каталог цілей', reset:'Скинути', mode:'ІГРОВЕ ДЕМО', myCollection:'Колекція', demoSaves:'Локальне збереження', download:'Завантажити збереження', upload:'Відновити збереження', backupHint:'Збережи JSON-файл, щоб перенести тестовий прогрес в інший браузер. Серверні акаунти додамо окремо.', confirmReset:'Скинути весь тестовий прогрес? Скасувати цю дію не можна.', backupBad:'Неправильний файл збереження VOXUP.', backupOk:'Збереження відновлено.', spin:'АПГРЕЙД В ПРОЦЕСІ', noHigher:'Для найдорожчого предмета немає дорожчих цілей.', pickSource:'Обери предмет з інвентарю', resetFilters:'Очистити фільтри', showcase:'Каталог предметів', total:'Предметів', casesOpened:'Кейсів відкрито', upgrades:'Апгрейдів', wins:'Успішних', profit:'Вартість інвентарю', fair:'Імовірність відповідає показаній. Тестова валюта, без реальних грошей.'},
+ en: { search:'Search items...', found:'Found', nothing:'Nothing found', sortCheap:'Cheapest first', sortExpensive:'Most expensive first', sortName:'By name', sourceList:'Owned items', targetList:'Upgrade targets', reset:'Reset', mode:'GAME DEMO', myCollection:'Collection', demoSaves:'Local backup', download:'Download save', upload:'Restore save', backupHint:'Export JSON to move your test progress to another browser. Cloud accounts come later.', confirmReset:'Reset all demo progress? This cannot be undone.', backupBad:'Invalid VOXUP save file.', backupOk:'Save restored.', spin:'UPGRADE IN PROGRESS', noHigher:'There are no more expensive targets for the highest-value item.', pickSource:'Select an item from your inventory', resetFilters:'Clear filters', showcase:'Item catalogue', total:'Items', casesOpened:'Cases opened', upgrades:'Upgrades', wins:'Wins', profit:'Inventory value', fair:'The displayed probability matches actual odds. Simulated currency only.'}
+}
+
 const defaultInventory = {
   dirt: 30, stick: 25, cobblestone: 20, oak_planks: 12, stone: 10, coal: 10,
   bread: 5, apple: 5, copper_ingot: 4, raw_iron: 4, iron: 4,
@@ -268,8 +382,25 @@ export default function App() {
   const [caseReel, setCaseReel] = useState([])
   const [caseSpinId, setCaseSpinId] = useState(0)
   const [caseHistory, setCaseHistory] = useState(() => stored('mineup-case-history', []))
+  const [stats,setStats]=useState(()=>{
+    const saved=stored('mineup-demo-stats',null)
+    if(saved && typeof saved==='object')return saved
+    const h=stored('mineup-demo-history',[]),c=stored('mineup-case-history',[])
+    return {cases:Array.isArray(c)?c.length:0,upgrades:Array.isArray(h)?h.length:0,wins:Array.isArray(h)?h.filter(x=>x.ok).length:0}
+  })
   const [inventoryOnly,setInventoryOnly]=useState(true)
   const [inventoryOrder,setInventoryOrder]=useState('value_desc')
+  const [sourceSearch,setSourceSearch]=useState('')
+  const [targetSearch,setTargetSearch]=useState('')
+  const [inventorySearch,setInventorySearch]=useState('')
+  const [sourceOrder,setSourceOrder]=useState('value_asc')
+  const [targetOrder,setTargetOrder]=useState('value_asc')
+  const [targetRarity,setTargetRarity]=useState('all')
+  const [upgradeBusy,setUpgradeBusy]=useState(false)
+  const [backupMessage,setBackupMessage]=useState('')
+  const busyGuard=useRef(false)
+  const upgradeTimer=useRef(null)
+  const backupInput=useRef(null)
   const reelTrack = useRef(null)
   const reelWindow = useRef(null)
   const reelAnimation = useRef(null)
@@ -279,13 +410,21 @@ export default function App() {
 
   const t = labels[lang] || labels.ru
   const uc = chanceCopy[lang] || chanceCopy.ru
+  const ex = extraCopy[lang] || extraCopy.ru
   const source = useMemo(() => getItem(sourceId), [sourceId])
   const target = useMemo(() => getItem(targetId), [targetId])
   const ownedItems = previewItems.filter((item) => (inventory[item.id] || 0) > 0)
   const possibleTargets = previewItems.filter((item) => item.value > source.value)
   const validTarget = target.value > source.value
   const chance = validTarget ? clamp((source.value / target.value) * 90, 0.1, 90) : 0
-  const sliderValue = Math.round((Math.log(multiplier / 1.01) / Math.log(900 / 1.01)) * 1000)
+  const sliderValue = clamp(Math.round((Math.log(clamp(multiplier,1.01,900) / 1.01) / Math.log(900 / 1.01)) * 1000),0,1000)
+  const bySort=(a,b,order)=>order==='name'?a.name.localeCompare(b.name,'ru'):order==='value_desc'?b.value-a.value:a.value-b.value
+  const matches=(item,term)=>!term.trim()||`${item.name} ${item.id} ${item.rarity}`.toLowerCase().includes(term.trim().toLowerCase())
+  const filteredSources=ownedItems.filter(item=>matches(item,sourceSearch)).sort((a,b)=>bySort(a,b,sourceOrder))
+  const filteredTargets=possibleTargets.filter(item=>matches(item,targetSearch)&&(targetRarity==='all'||item.rarity===targetRarity)).sort((a,b)=>bySort(a,b,targetOrder))
+  const portfolioValue=previewItems.reduce((total,item)=>total+(Number(inventory[item.id])||0)*item.value,0)
+  const totalItems=previewItems.reduce((total,item)=>total+(Number(inventory[item.id])||0),0)
+  useEffect(()=>()=>{if(upgradeTimer.current)clearTimeout(upgradeTimer.current)},[])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -308,8 +447,9 @@ export default function App() {
       localStorage.setItem('mineup-demo-inventory', JSON.stringify(inventory))
       localStorage.setItem('mineup-demo-history', JSON.stringify(history))
       localStorage.setItem('mineup-case-history', JSON.stringify(caseHistory))
+      localStorage.setItem('mineup-demo-stats', JSON.stringify(stats))
     } catch {}
-  }, [sourceId, targetId, multiplier, coins, inventory, history, caseHistory])
+  }, [sourceId, targetId, multiplier, coins, inventory, history, caseHistory, stats])
 
   useEffect(() => {
     if (target.value <= source.value) {
@@ -326,6 +466,7 @@ export default function App() {
   }
 
   function selectSource(id) {
+    if(busyGuard.current)return
     setSourceId(id)
     const item = getItem(id)
     if (target.value <= item.value) {
@@ -334,33 +475,47 @@ export default function App() {
     }
     setResult(null)
   }
+  function selectTarget(id){
+    if(busyGuard.current)return
+    const item=getItem(id)
+    if(item.value<=source.value)return
+    setTargetId(id)
+    setMultiplier(clamp(item.value/source.value,1.01,900))
+    setResult(null)
+  }
 
   function runUpgrade() {
-    if(!validTarget)return
-    const count = inventory[source.id] || 0
-    if (count < 1) {
-      setResult({ type: 'error', text: lang === 'en' ? 'You do not own this source item.' : lang === 'uk' ? 'У тебе немає цього початкового предмета.' : 'У тебя нет этого исходного предмета.' })
+    if(!validTarget || busyGuard.current)return
+    const count=Number(inventory[source.id])||0
+    if(count<1){
+      setResult({type:'error',text:lang==='en'?'You do not own this item.':lang==='uk'?'У тебе немає цього предмета.':'У тебя нет этого предмета.'})
       return
     }
-    const success = Math.random() * 100 < chance
-    const nextInventory = { ...inventory, [source.id]: count - 1 }
-    if (success) nextInventory[target.id] = (nextInventory[target.id] || 0) + 1
+    busyGuard.current=true
+    const success=secureRoll()*100<chance
+    const nextInventory={...inventory,[source.id]:count-1}
+    if(success)nextInventory[target.id]=(Number(nextInventory[target.id])||0)+1
+    const entry={id:Date.now()+secureRoll(),ok:success,source:source.id,target:target.id,chance:chance.toFixed(2),time:new Date().toLocaleTimeString(lang==='en'?'en-US':'ru-RU',{hour:'2-digit',minute:'2-digit'})}
+    const nextHistory=[entry,...history].slice(0,12)
+    // Commit rewards before the animation starts. A reload cannot reroll a result.
+    try{
+      localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))
+      localStorage.setItem('mineup-demo-history',JSON.stringify(nextHistory))
+    }catch{}
     setInventory(nextInventory)
-    const entry = {
-      id: Date.now(),
-      ok: success,
-      source: source.id,
-      target: target.id,
-      chance: chance.toFixed(2),
-      time: new Date().toLocaleTimeString(lang === 'en' ? 'en-US' : 'ru-RU', { hour: '2-digit', minute: '2-digit' })
-    }
-    setHistory((prev) => [entry, ...prev].slice(0, 12))
-    setResult({
-      type: success ? 'success' : 'fail',
-      text: success
-        ? `${t.success} • ${source.name} → ${target.name}`
-        : `${t.fail} • ${source.name} сгорел${lang === 'uk' ? '' : ''}`
-    })
+    setHistory(nextHistory)
+    const nextStats={cases:stats.cases||0,upgrades:(stats.upgrades||0)+1,wins:(stats.wins||0)+(success?1:0)}
+    try{localStorage.setItem('mineup-demo-stats',JSON.stringify(nextStats))}catch{}
+    setStats(nextStats)
+    setResult(null)
+    setUpgradeBusy(true)
+    if(upgradeTimer.current)clearTimeout(upgradeTimer.current)
+    upgradeTimer.current=setTimeout(()=>{
+      busyGuard.current=false
+      setUpgradeBusy(false)
+      setResult({type:success?'success':'fail',text:success?`${t.success} • ${source.name} → ${target.name}`:`${t.fail} • ${source.name}`})
+      upgradeTimer.current=null
+    },1600)
   }
 
   function sellItem(id) {
@@ -371,14 +526,54 @@ export default function App() {
   }
 
   function resetDemo() {
+    if(busyGuard.current || rollingGuard.current)return
+    if(!window.confirm(ex.confirmReset))return
     setCoins(2500)
     setInventory({ ...defaultInventory })
     setHistory([])
     setCaseHistory([])
+    setStats({cases:0,upgrades:0,wins:0})
     setSourceId('iron')
     setTargetId('diamond')
     setMultiplier(5.714)
     setResult(null)
+  }
+
+  function exportSave(){
+    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent}
+    const file=new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
+    const url=URL.createObjectURL(file)
+    const a=document.createElement('a');a.href=url;a.download='voxup-save.json';document.body.appendChild(a);a.click();a.remove()
+    setTimeout(()=>URL.revokeObjectURL(url),500)
+  }
+  async function importSave(e){
+    const file=e.target.files?.[0]
+    if(!file)return
+    try{
+      if(file.size>2*1024*1024)throw new Error('oversized')
+      const data=JSON.parse(await file.text())
+      if(data?.format!=='voxup-save'||data.version!==1||!data.inventory||typeof data.inventory!=='object'||!Number.isFinite(data.coins))throw new Error('invalid')
+      if(busyGuard.current||rollingGuard.current)throw new Error('busy')
+      const validInventory={}
+      for(const item of previewItems){
+        const count=Number(data.inventory[item.id]||0)
+        validInventory[item.id]=Number.isSafeInteger(count)&&count>=0&&count<=1e7?count:0
+      }
+      const safeCoins=clamp(Math.floor(data.coins),0,1e12)
+      const safeHistory=Array.isArray(data.history)?data.history.filter(h=>h&&itemMap[h.source]&&itemMap[h.target]).slice(0,12):[]
+      const safeCaseHistory=Array.isArray(data.caseHistory)?data.caseHistory.filter(h=>h&&itemMap[h.item]).slice(0,30):[]
+      const nextSource=itemMap[data.sourceId]?data.sourceId:'iron'
+      const nextTarget=itemMap[data.targetId]?data.targetId:'diamond'
+      const nextMult=clamp(Number(data.multiplier)||5.714,1.01,900)
+      const positiveInt=(v,fallback)=>Number.isSafeInteger(Number(v))&&Number(v)>=0&&Number(v)<=1e9?Number(v):fallback
+      const nextStats={cases:positiveInt(data.stats?.cases,safeCaseHistory.length),upgrades:positiveInt(data.stats?.upgrades,safeHistory.length),wins:positiveInt(data.stats?.wins,safeHistory.filter(h=>h.ok).length)}
+      const writes={'mineup-demo-coins':safeCoins,'mineup-demo-inventory':validInventory,'mineup-demo-history':safeHistory,'mineup-case-history':safeCaseHistory,'mineup-preview-source':nextSource,'mineup-preview-target':nextTarget,'mineup-preview-multiplier':nextMult,'mineup-demo-stats':nextStats}
+      Object.entries(writes).forEach(([key,val])=>localStorage.setItem(key,JSON.stringify(val)))
+      setCoins(safeCoins);setInventory(validInventory);setHistory(safeHistory);setCaseHistory(safeCaseHistory);setStats(nextStats)
+      setSourceId(nextSource);setTargetId(nextTarget);setMultiplier(nextMult)
+      setBackupMessage(ex.backupOk)
+    }catch{setBackupMessage(ex.backupBad)}
+    e.target.value=''
   }
 
   // DEMO CASE: draws using browser crypto, costs only simulated MC.
@@ -416,6 +611,9 @@ export default function App() {
     setCoins(nextCoins)
     setInventory(nextInventory)
     setCaseHistory(nextHistory)
+    const nextStats={cases:(stats.cases||0)+1,upgrades:stats.upgrades||0,wins:stats.wins||0}
+    try{localStorage.setItem('mineup-demo-stats',JSON.stringify(nextStats))}catch{}
+    setStats(nextStats)
     rollingGuard.current=true
     setCaseRollResult(null)
     setCaseReel(reel)
@@ -486,7 +684,7 @@ export default function App() {
         </div>
         <div className="sideBottom">
           <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">MINEUP <strong>ALPHA 0.3</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="stage">MINEUP <strong>ALPHA 0.4</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
@@ -503,7 +701,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP PROJECT — ALPHA 0.3</div>
+              <div className="eyebrow"><span className="dot" /> MINEUP PROJECT — ALPHA 0.4</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -516,7 +714,7 @@ export default function App() {
 
               <section className="upgradeLab" aria-label={uc.title}>
                 <div className="upgradeIntro">
-                  <div><div className="eyebrow">STAGE 08 / MINECRAFT 3D · GAMEPLAY</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
+                  <div><div className="eyebrow">STAGE 09 / 100 ITEMS · SEARCH · 3D BEACON</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
                   <span className="stamp"><ShieldCheck size={15} /> {t.demoMode}</span>
                 </div>
 
@@ -535,9 +733,9 @@ export default function App() {
                     <small className="ownedMark">{t.sourceOwned}: <b>{inventory[source.id] || 0}</b></small>
                   </div>
                   <div className="upChance">
-                    <div className="upWheel" style={{ '--pct': chance + '%' }}><div><strong>{chance.toFixed(2)}%</strong><span>{uc.chance}</span></div></div>
+                    <div className={'upWheel '+(upgradeBusy?'wheelRolling':'')} style={{ '--pct': chance + '%' }}><div><strong>{chance.toFixed(2)}%</strong><span>{upgradeBusy?ex.spin:uc.chance}</span></div></div>
                     <small>{uc.formula}</small>
-                    <button className="upgradeRun" onClick={runUpgrade} disabled={(inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {uc.run}</button>
+                    <button className="upgradeRun" onClick={runUpgrade} disabled={upgradeBusy || (inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {upgradeBusy?ex.spin:uc.run}</button>
                   </div>
                   <div className="upSlot">
                     <span className="upSlotLabel">02 / {uc.target}</span>
@@ -550,41 +748,46 @@ export default function App() {
 
                 <div className="upgradeSlider">
                   <label htmlFor="upMultiplier">{uc.mult} <b>×{multiplier < 10 ? multiplier.toFixed(2) : multiplier.toFixed(0)}</b></label>
-                  <input id="upMultiplier" type="range" min="0" max="1000" step="1" value={sliderValue} onChange={(e) => pickTargetByMultiplier((1.01 * Math.pow(900 / 1.01, Number(e.target.value) / 1000)).toFixed(3))} />
+                  <input id="upMultiplier" type="range" min="0" max="1000" step="1" value={sliderValue} disabled={upgradeBusy} onChange={(e) => pickTargetByMultiplier((1.01 * Math.pow(900 / 1.01, Number(e.target.value) / 1000)).toFixed(3))} />
                   <div><span>×1.01 • до 90%</span><span>×900 • до 0,1%</span></div>
                 </div>
 
-                {result && <div className={'resultBanner ' + result.type}>{result.text}</div>}
+                {result && <div className={'resultBanner resultReveal ' + result.type} role="status"><span>{result.type==='success'?'✦':result.type==='fail'?'×':'!'}</span>{result.text}</div>}
 
+                <div className="catalogCountBadge"><Gem size={15}/><b>{previewItems.length}</b> {ex.total} • {ex.showcase} <span>{ex.fair}</span></div>
                 <div className="upCollections">
-                  <div>
-                    <h3>{uc.inventorySource}</h3>
-                    <div className="upItemList">
-                      {previewItems.filter(item=>(inventory[item.id]||0)>0).map((item) => (
-                        <button key={item.id} className={'upItem ' + (item.id === source.id ? 'upPicked' : '') + ((inventory[item.id] || 0) < 1 ? ' upDisabled' : '')} onClick={() => selectSource(item.id)} aria-pressed={item.id === source.id}>
-                          <VoxelThumbnail id={item.id} textureSource={textureSource} blockIds={blockIds} />
-                          <strong>{item.name}</strong>
-                          <small>{formatCoins(item.value)} MC</small>
-                          <em>{t.owned}: {inventory[item.id] || 0}</em>
-                        </button>
-                      ))}
+                  <section className="upCollectionSide">
+                    <div className="collectionHead"><h3>{uc.inventorySource} <small>{filteredSources.length} / {ownedItems.length}</small></h3></div>
+                    <div className="catalogControls">
+                      <label className="catalogSearch"><Search size={16}/><input type="search" placeholder={ex.search} aria-label={ex.sourceList} value={sourceSearch} onChange={e=>setSourceSearch(e.target.value)} autoComplete="off"/></label>
+                      <select value={sourceOrder} onChange={e=>setSourceOrder(e.target.value)} aria-label="Сортировка исходных предметов"><option value="value_asc">{ex.sortCheap}</option><option value="value_desc">{ex.sortExpensive}</option><option value="name">{ex.sortName}</option></select>
                     </div>
-                  </div>
-                  <div>
-                    <h3>{uc.inventoryTarget}</h3>
                     <div className="upItemList">
-                      {possibleTargets.map((item) => (
-                        <button key={item.id} className={'upItem ' + (item.id === target.id ? 'upPicked' : '')} onClick={() => setTargetId(item.id)} aria-pressed={item.id === target.id}>
-                          <VoxelThumbnail id={item.id} textureSource={textureSource} blockIds={blockIds} />
-                          <strong>{item.name}</strong>
-                          <small>{formatCoins(item.value)} MC</small>
-                          <em style={{ color: rarityColors[item.rarity] }}>{item.rarity}</em>
-                        </button>
-                      ))}
+                      {filteredSources.map(item=><button key={item.id} className={'upItem '+(item.id===source.id?'upPicked':'')} onClick={()=>selectSource(item.id)} disabled={upgradeBusy} aria-pressed={item.id===source.id}>
+                        <VoxelThumbnail id={item.id} textureSource={textureSource} blockIds={blockIds}/>
+                        <strong>{item.name}</strong><small>{formatCoins(item.value)} MC</small><em>{t.owned}: {inventory[item.id]||0}</em>
+                      </button>)}
+                      {!filteredSources.length&&<div className="catalogEmpty"><Search size={19}/>{ex.nothing}</div>}
                     </div>
-                  </div>
+                  </section>
+                  <section className="upCollectionSide">
+                    <div className="collectionHead"><h3>{uc.inventoryTarget} <small>{filteredTargets.length} / {possibleTargets.length}</small></h3></div>
+                    <div className="catalogControls">
+                      <label className="catalogSearch"><Search size={16}/><input type="search" placeholder={ex.search} aria-label={ex.targetList} value={targetSearch} onChange={e=>setTargetSearch(e.target.value)} autoComplete="off"/></label>
+                      <select value={targetOrder} onChange={e=>setTargetOrder(e.target.value)} aria-label="Сортировка целей"><option value="value_asc">{ex.sortCheap}</option><option value="value_desc">{ex.sortExpensive}</option><option value="name">{ex.sortName}</option></select>
+                    </div>
+                    <div className="rarityFilters" aria-label="Filter by rarity">
+                      {['all','COMMON','UNCOMMON','RARE','EPIC','LEGENDARY','MYTHIC'].map(r=><button key={r} type="button" className={targetRarity===r?'selected':''} onClick={()=>setTargetRarity(r)} style={r==='all'?{}:{'--rarity':rarityColors[r]}}>{r==='all'?lang==='en'?'All':'Все':r}</button>)}
+                    </div>
+                    <div className="upItemList">
+                      {filteredTargets.map(item=><button key={item.id} className={'upItem '+(item.id===target.id?'upPicked':'')} onClick={()=>selectTarget(item.id)} disabled={upgradeBusy} aria-pressed={item.id===target.id}>
+                        <VoxelThumbnail id={item.id} textureSource={textureSource} blockIds={blockIds}/>
+                        <strong>{item.name}</strong><small>{formatCoins(item.value)} MC</small><em style={{color:rarityColors[item.rarity]}}>{item.rarity}</em>
+                      </button>)}
+                      {!filteredTargets.length&&<div className="catalogEmpty"><Search size={19}/>{possibleTargets.length?ex.nothing:ex.noHigher}</div>}
+                    </div>
+                  </section>
                 </div>
-
                 <div className="historyPanel">
                   <div className="historyHead"><h3>{t.history}</h3><span>{t.actionHint}</span></div>
                   {history.length ? (
@@ -618,7 +821,7 @@ export default function App() {
 
           {page === 'cases' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP / CASE COLLECTION · 11 CASES</div>
+              <div className="eyebrow"><span className="dot" /> MINEUP / CASE COLLECTION · 11 CASES · 100 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
               <div className="economyBanner"><div><strong>ЭКОНОМИКА / DEMO</strong><span>Открытия бесплатного кейса доступны для теста без рекламы. У платных кейсов свои таблицы шансов; все цены игровые.</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>Инвентарь <ArrowUpRight size={15}/></button></div>
               <div className="caseGrid">{cases.map((c,i)=><button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
@@ -635,9 +838,13 @@ export default function App() {
               <div className="eyebrow">MINEUP / COLLECTION</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.inventory}</h1><p>{t.invText}</p></div><span className="stamp"><Coins size={15} />{formatCoins(coins)} MC</span></div>
               <div className="inventoryMeta"><div className="notice"><Coins size={18} />{t.coinsInfo}</div><button className="secondaryBtn" onClick={resetDemo}><RotateCcw size={16} /> {t.resetDemo}</button></div>
-              <div className="inventoryControls"><button className={'secondaryBtn '+(inventoryOnly?'inventoryControlActive':'')} onClick={()=>setInventoryOnly(v=>!v)}>{inventoryOnly?'✓ Только мои предметы':'Показать только мои'}</button><select value={inventoryOrder} onChange={e=>setInventoryOrder(e.target.value)} aria-label="Сортировать инвентарь"><option value="value_desc">Сначала дорогие</option><option value="value_asc">Сначала дешёвые</option><option value="name">По названию</option></select></div>
+              <div className="inventoryControls">
+                <label className="catalogSearch inventorySearch"><Search size={16}/><input type="search" placeholder={ex.search} value={inventorySearch} onChange={e=>setInventorySearch(e.target.value)} autoComplete="off"/></label>
+                <button className={'secondaryBtn '+(inventoryOnly?'inventoryControlActive':'')} onClick={()=>setInventoryOnly(v=>!v)}>{inventoryOnly?'✓ Только мои предметы':'Показать только мои'}</button>
+                <select value={inventoryOrder} onChange={e=>setInventoryOrder(e.target.value)} aria-label="Сортировать инвентарь"><option value="value_desc">{ex.sortExpensive}</option><option value="value_asc">{ex.sortCheap}</option><option value="name">{ex.sortName}</option></select>
+              </div>
               <div className="inventoryGrid">
-                {previewItems.filter(item=>!inventoryOnly||(inventory[item.id]||0)>0).sort((a,b)=>inventoryOrder==='name'?a.name.localeCompare(b.name,'ru'):inventoryOrder==='value_asc'?a.value-b.value:b.value-a.value).map((item) => (
+                {previewItems.filter(item=>(!inventoryOnly||(inventory[item.id]||0)>0)&&matches(item,inventorySearch)).sort((a,b)=>inventoryOrder==='name'?a.name.localeCompare(b.name,'ru'):inventoryOrder==='value_asc'?a.value-b.value:b.value-a.value).map((item) => (
                   <div key={item.id} className={'invCard ' + ((inventory[item.id] || 0) < 1 ? 'is-empty' : '')}>
                     <VoxelThumbnail id={item.id} textureSource={textureSource} blockIds={blockIds} />
                     <strong>{item.name}</strong>
@@ -654,7 +861,15 @@ export default function App() {
             <>
               <div className="eyebrow">MINEUP / USER</div>
               <h1 className="sectionTitle">{t.profile}</h1>
-              <div className="empty"><UserRound size={45} /><h2>{t.guest}</h2><p>{t.profileSoon}</p><span>{t.demo}</span></div>
+              <div className="profileLead"><UserRound size={38}/><div><h2>{t.guest}</h2><p>{t.profileSoon}</p><span>{ex.mode}</span></div></div>
+              <div className="profileStats">
+                {[ [ex.total,previewItems.length], [ex.myCollection,totalItems], [ex.profit,formatCoins(portfolioValue)+' MC'], [ex.casesOpened,stats.cases||0], [ex.upgrades,stats.upgrades||0], [ex.wins,stats.wins||0] ].map(([label,value],i)=><div className="profileStat" key={i}><span>{label}</span><strong>{value}</strong></div>)}
+              </div>
+              <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
+                <button className="primary" onClick={exportSave}><Download size={17}/>{ex.download}</button>
+                <button className="secondaryBtn" onClick={()=>backupInput.current?.click()}><Upload size={17}/>{ex.upload}</button>
+                <input ref={backupInput} type="file" accept=".json,application/json" hidden onChange={importSave}/>
+              </div>{backupMessage&&<div className="backupFeedback" role="status">{backupMessage}</div>}</section>
             </>
           )}
 
@@ -672,7 +887,7 @@ export default function App() {
             </>
           )}
 
-          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.3 • LOCAL DEMO / CASES + 3D</span></footer>
+          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.4 • LOCAL DEMO / 100 ITEMS + SEARCH</span></footer>
         </main>
       </div>
 
@@ -694,7 +909,7 @@ export default function App() {
               </div>
               <div className="rouletteBottom"><span>{caseRolling?'ПРОКРУТКА • 5 СЕКУНД':'СОДЕРЖИМОЕ КЕЙСА'}</span><span>{caseRolling?'● LIVE ROLL':caseRollResult?.id?'РЕЗУЛЬТАТ ПОЛУЧЕН':'ГОТОВ К ОТКРЫТИЮ'}</span></div>
             </div>
-            {caseRollResult?.id&&<div className="dropCelebration" style={{'--rarity':rarityColors[getItem(caseRollResult.id).rarity]}}><VoxelThumbnail id={caseRollResult.id} textureSource={textureSource} blockIds={blockIds}/><div><small>ТВОЙ ДРОП • +1 В ИНВЕНТАРЬ</small><strong>{getItem(caseRollResult.id).name}</strong><span>{formatCoins(getItem(caseRollResult.id).value)} MC • {getItem(caseRollResult.id).rarity}</span></div></div>}
+            {caseRollResult?.id&&<div className="dropCelebration dropReveal" style={{'--rarity':rarityColors[getItem(caseRollResult.id).rarity]}}><VoxelThumbnail id={caseRollResult.id} textureSource={textureSource} blockIds={blockIds}/><div><small>ТВОЙ ДРОП • +1 В ИНВЕНТАРЬ</small><strong>{getItem(caseRollResult.id).name}</strong><span>{formatCoins(getItem(caseRollResult.id).value)} MC • {getItem(caseRollResult.id).rarity}</span></div></div>}
             {caseRollResult?.error&&<div className="resultBanner error">{caseRollResult.text}</div>}
             <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling} onClick={openDemoCase}>{caseRolling?'ПРОКРУТКА...':caseRollResult?.id?'ОТКРЫТЬ ЕЩЁ':'ОТКРЫТЬ КЕЙС'} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз начисляется один раз при нажатии. Перезагрузка не уничтожит выигрыш.'}</span></div></div>
             <section className="oddsSection"><div className="oddsHeader"><div><h3>ЧТО МОЖЕТ ВЫПАСТЬ</h3><p>Фиксированные вероятности, указаны для каждого предмета</p></div><span>СРЕДНИЙ ДРОП: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
