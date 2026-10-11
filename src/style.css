@@ -423,3 +423,30 @@ button{outline-offset:3px}input,select{color-scheme:dark}[data-theme='light'] in
 @media(prefers-reduced-motion:reduce){.caseDioramaCore,.caseDioramaSide,.caseCard.caseCardNew{transition:none!important}}
 
 .caseDioramaFallback{position:absolute;inset:0;display:grid;place-items:center;color:var(--caseHue);opacity:.75;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--caseHue),transparent 63%))}.caseDioramaFrame img{position:relative;z-index:2}
+
+/* Stage 15 additions: preserve existing visual identity. */
+.caseStarterCard{border-color:color-mix(in srgb,#78e6c4,transparent 48%)!important;background:linear-gradient(155deg,color-mix(in srgb,#78e6c4,transparent 94%),var(--panel))!important}
+.caseStarterCard::before{content:'ONE-TIME GIFT';position:absolute;right:12px;top:12px;color:#91eccc;font-size:8px;letter-spacing:1.3px;font-weight:900;z-index:4;pointer-events:none}
+.promoHero{margin-top:24px;max-width:920px;padding:clamp(24px,4vw,48px);border:1px solid color-mix(in srgb,var(--primary),transparent 65%);border-radius:18px;background:radial-gradient(ellipse at 85% 0%,var(--primarySoft),transparent 60%),var(--panel);overflow:hidden}
+.promoHero h1{font:800 clamp(32px,5vw,55px) 'Space Grotesk',Arial,sans-serif;letter-spacing:-2px;margin:16px 0}
+.promoHero>p{color:var(--muted);font-size:13px;line-height:1.8;max-width:540px}
+.promoRewardPreview{margin:24px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid var(--line);background:var(--panel2);padding:15px;border-radius:12px}
+.promoRewardPreview>div{display:flex;align-items:center;gap:14px}
+.promoRewardPreview img{width:66px;height:66px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 8px #0008)}
+.promoRewardPreview strong{display:block;font-size:22px;color:var(--text);letter-spacing:2px}
+.promoRewardPreview small{display:block;font-size:12px;margin-top:5px;color:var(--muted)}
+.promoRewardPreview>b{font-size:10px;color:#7adbc3;letter-spacing:1px}
+.promoRedeemForm{display:flex;gap:10px;align-items:stretch;max-width:740px}
+.promoRedeemForm input{min-width:0;flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--text);font:800 14px 'Space Grotesk',Arial,sans-serif;letter-spacing:2px;border-radius:9px;padding:16px}
+.promoRedeemForm input:focus-visible{outline:2px solid var(--primary)}
+.promoFeedback{margin-top:14px;padding:13px 15px;background:var(--primarySoft);color:var(--primary);border-radius:8px;font-weight:800;font-size:12px}
+.promoNotice{max-width:920px;margin-top:18px;color:var(--muted);border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:16px;display:flex;align-items:center;gap:12px;font-size:12px;line-height:1.7}
+.promoNotice svg{flex:none;color:var(--primary)}
+.starterInfo{margin:20px 0;padding:18px;border:1px solid color-mix(in srgb,#7adbc3,transparent 72%);background:linear-gradient(105deg,#7adbc309,var(--panel2));border-radius:12px;display:flex;align-items:center;gap:14px}
+.starterInfo>svg{color:#7adbc3;flex:none}.starterInfo>span{display:block;flex:1;min-width:0}
+.starterInfo strong{display:block;font-size:12px}.starterInfo small{display:block;color:var(--muted);font-size:11px;line-height:1.6;margin-top:5px}
+@media(max-width:650px){.promoRedeemForm{flex-direction:column}.promoRedeemForm .primary{justify-content:center}.promoHero{padding:22px}.promoRewardPreview{align-items:flex-start}.promoRewardPreview img{width:47px;height:47px}.promoRewardPreview strong{font-size:17px}.promoRewardPreview>b{font-size:8px}.starterInfo{flex-wrap:wrap}.starterInfo button{width:100%;justify-content:center}}
+.invCard{position:relative}.invFavoriteRow{position:absolute;right:9px;top:9px;z-index:3}
+.invFavoriteBtn{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);color:var(--muted);transition:color .16s,border-color .16s}
+.invFavoriteBtn:hover,.invFavoriteBtn.isFavorite{color:var(--primary);border-color:var(--primary)}
+.invCard .sellBtn:disabled{cursor:not-allowed}

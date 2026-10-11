@@ -47,7 +47,7 @@ function loadPixels(id,src){
 }
 function pix(px,x,y){return px[((y+1600)%16)*16+((x+1600)%16)]||[90,90,90,255]}
 
-function makeCube(px){
+function makeCube(px,topPixels=null,bottomPixels=null){
   const out=[]
   // Each of the six sides is a separate surface in 3D, made of colored 1x1 tiles.
   for(let y=0;y<16;y++)for(let x=0;x<16;x++){
@@ -57,8 +57,8 @@ function makeCube(px){
     out.push(face([[right,top,-8],[left,top,-8],[left,bottom,-8],[right,bottom,-8]],rgb,.57))
     out.push(face([[-8,top,right],[-8,top,left],[-8,bottom,left],[-8,bottom,right]],rgb,.66))
     out.push(face([[8,top,left],[8,top,right],[8,bottom,right],[8,bottom,left]],rgb,.82))
-    out.push(face([[left,-8,top],[right,-8,top],[right,-8,bottom],[left,-8,bottom]],rgb,1.12))
-    out.push(face([[left,8,bottom],[right,8,bottom],[right,8,top],[left,8,top]],rgb,.47))
+    out.push(face([[left,-8,top],[right,-8,top],[right,-8,bottom],[left,-8,bottom]],topPixels?pix(topPixels,x,y):rgb,1.12))
+    out.push(face([[left,8,bottom],[right,8,bottom],[right,8,top],[left,8,top]],bottomPixels?pix(bottomPixels,x,y):rgb,.47))
   }
   return out
 }
@@ -205,7 +205,23 @@ async function getMesh(id,src,blockIds){
     const mesh=makeBeacon();meshCache.set(id,mesh);return mesh
   }
   const px=await loadPixels(id,src)
-  const mesh=id==='dragon_egg'?makeEgg(px):id==='heavy_core'?makeCube(px).map(f=>({...f,points:f.points.map(([x,y,z])=>[x*.52,y*.52+1.5,z*.52])})):blockIds.includes(id)?makeCube(px):makeSprite(px)
+  // Certain real Minecraft blocks have different top and bottom textures.
+  // Rendering the side atlas on all six sides made the old previews look wrong.
+  const surfaces={
+    grass_block:['grass_block_top.png','dirt.png'],
+    oak_log:['oak_log_top.png','oak_log_top.png'],
+    crafting_table:['crafting_table_top.png','oak_planks.png'],
+    bookshelf:['oak_planks.png','oak_planks.png'],
+    tnt:['tnt_top.png','tnt_bottom.png'],
+    ancient_debris:['ancient_debris_top.png','ancient_debris_top.png'],
+    barrel:['barrel_top.png','barrel_bottom.png']
+  }
+  const pair=surfaces[id]
+  const root=src.slice(0,src.lastIndexOf('/')+1)
+  const topPixels=pair?await loadPixels(id+':top',root+pair[0]):null
+  const bottomPixels=pair?await loadPixels(id+':bottom',root+pair[1]):null
+  const cube=()=>makeCube(px,topPixels,bottomPixels)
+  const mesh=id==='dragon_egg'?makeEgg(px):id==='heavy_core'?cube().map(f=>({...f,points:f.points.map(([x,y,z])=>[x*.52,y*.52+1.5,z*.52])})):blockIds.includes(id)?cube():makeSprite(px)
   meshCache.set(id,mesh)
   return mesh
 }
