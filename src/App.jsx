@@ -354,7 +354,7 @@ const labels = {
   ru: {
     upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Аркада',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя коллекция. Твой риск. Твой следующий апгрейд.',
-    explore: 'Посмотреть кейсы', demo: 'В разработке', hello: 'Основа будущей игровой платформы',
+    explore: 'Посмотреть кейсы', demo: 'В разработке', hello: '150 предметов · 21 кейс · игровой инвентарь',
     catalog: 'КАТАЛОГ КЕЙСОВ', all: 'Все кейсы', free: 'За рекламу', balance: 'Баланс', guest: 'Гостевой режим',
     ready: 'Первый этап готов', progress: 'Подключим на следующих этапах',
     intro: 'Мы строим настоящий игровой проект по частям. Сейчас доступны оформление, каталог и персональные настройки. А ниже уже появился первый тестовый игровой цикл: предметы, шанс, инвентарь и демо-апгрейд.',
@@ -374,7 +374,7 @@ const labels = {
   uk: {
     upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Аркада',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя колекція. Твій ризик. Твій наступний апгрейд.',
-    explore: 'Переглянути кейси', demo: 'У розробці', hello: 'Основа майбутньої ігрової платформи',
+    explore: 'Переглянути кейси', demo: 'У розробці', hello: '150 предметів · 21 кейс · ігровий інвентар',
     catalog: 'КАТАЛОГ КЕЙСІВ', all: 'Усі кейси', free: 'За рекламу', balance: 'Баланс', guest: 'Гостьовий режим',
     ready: 'Перший етап готовий', progress: 'Підключимо на наступних етапах',
     intro: 'Ми будуємо справжній ігровий проєкт поступово. Зараз доступні оформлення, каталог і персональні налаштування. Нижче вже є перший тестовий ігровий цикл: предмети, шанс, інвентар і демо-апгрейд.',
@@ -394,7 +394,7 @@ const labels = {
   en: {
     upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Arcade',
     head: 'MORE THAN LUCK.', sub: 'Your collection. Your risk. Your next upgrade.',
-    explore: 'Explore cases', demo: 'In development', hello: 'The foundation of a new game platform',
+    explore: 'Explore cases', demo: 'In development', hello: '150 items · 21 cases · Minecraft collection',
     catalog: 'CASE COLLECTION', all: 'All cases', free: 'Watch an ad', balance: 'Balance', guest: 'Guest mode',
     ready: 'Stage one complete', progress: 'Available in future stages',
     intro: 'We are building a real game platform step by step. Design, catalogue and personal settings are already live. Below you now have the first playable test loop: items, odds, inventory and a demo upgrade.',
@@ -894,23 +894,96 @@ const localeExtras = {
   }
 }
 
-function ReflexArcade({lang='ru',langText}){
-  const [active,setActive]=React.useState(false)
-  const [time,setTime]=React.useState(20)
-  const [score,setScore]=React.useState(0)
-  const [target,setTarget]=React.useState(5)
-  const [hits,setHits]=React.useState(0)
-  const [best,setBest]=React.useState(()=>{try{return Number(localStorage.getItem('voxup-arcade-best')||0)}catch{return 0}})
-  const clockRef=React.useRef(null)
-  const activeRef=React.useRef(false)
-  const targetRef=React.useRef(5)
-  const scoreRef=React.useRef(0)
-  const t=lang==='ru'?{title:'РЕАКТОР РУДЫ',sub:'Найди светящийся алмаз раньше, чем истечёт время. На карте 16 ячеек — реагируй быстро!',start:'ИГРАТЬ · 20 СЕКУНД',time:'Время',score:'Очки',best:'Рекорд',end:'Время вышло!',again:'Попробовать снова',hint:'Кликай по светящемуся алмазу. Это игра на реакцию — MC Coins не расходуются и не начисляются.'}:lang==='uk'?{title:'РУДНИЙ РЕАКТОР',sub:'Знайди сяючий діамант до завершення часу. 16 клітинок — реагуй швидко!',start:'ГРАТИ · 20 СЕКУНД',time:'Час',score:'Бали',best:'Рекорд',end:'Час вийшов!',again:'Спробувати ще',hint:'Натискай на сяючий діамант. MC Coins не витрачаються і не нараховуються.'}:{title:'ORE REACTOR',sub:'Find the glowing diamond before time runs out. Sixteen cells — react fast!',start:'PLAY · 20 SECONDS',time:'Time',score:'Score',best:'Best',end:'Time is up!',again:'Play again',hint:'Hit the glowing diamond. Pure skill game; no MC Coins are spent or awarded.'}
-  React.useEffect(()=>{if(!active)return;clockRef.current=window.setInterval(()=>setTime(v=>Math.max(0,v-1)),1000);return()=>window.clearInterval(clockRef.current)},[active])
-  React.useEffect(()=>{if(active&&time===0){activeRef.current=false;setActive(false)}},[active,time])
-  const begin=()=>{window.clearInterval(clockRef.current);scoreRef.current=0;setTime(20);setScore(0);setHits(0);const i=Math.floor(Math.random()*16);targetRef.current=i;setTarget(i);activeRef.current=true;setActive(true)}
-  const hit=(i)=>{if(!activeRef.current||i!==targetRef.current)return;const n=scoreRef.current+10;scoreRef.current=n;setScore(n);setHits(v=>v+1);if(n>best){setBest(n);try{localStorage.setItem('voxup-arcade-best',String(n))}catch{}}let next=Math.floor(Math.random()*15);if(next>=targetRef.current)next++;targetRef.current=next;setTarget(next)}
-  return <section className="arcadeArena"><div className="arcadeHeading"><div className="eyebrow">VOXUP / SKILL MODE</div><h2>{t.title}</h2><p>{t.sub}</p></div><div className="arcadeStats"><div><small>{t.time}</small><strong>{time}s</strong></div><div><small>{t.score}</small><strong>{score}</strong></div><div><small>{t.best}</small><strong>{best}</strong></div></div><div className="arcadeGame"><div className="arcadeCells">{Array.from({length:16},(_,i)=><button aria-label={i===target&&active?'Diamond target':'Empty cell'} key={i} onClick={()=>hit(i)} className={'arcadeCell '+(i===target&&active?'hasGem':'')} disabled={!active}>{i===target&&active?<span>◆</span>:<span className="arcadeStone">▪</span>}</button>)}</div><aside className="arcadeInstructions"><div className="arcadeDoodle">✦</div><p>{active?t.hint:time===0?t.end:t.hint}</p><button className="primary arcadeStart" onClick={begin}>{hits||time===0?t.again:t.start} <Zap size={17}/></button><small>{lang==='ru'?'Рекорд сохраняется только в этом браузере.':lang==='uk'?'Рекорд зберігається лише у цьому браузері.':'Best score is stored on this device.'}</small></aside></div></section>
+const MATCH_ITEMS = ['diamond','emerald','coal','iron','redstone','gold','amethyst_shard','ender_pearl','blaze_rod','netherite','prismarine_shard','totem','lapis','golden_apple','copper_ingot','diamond_sword','trident','wind_charge','nether_star','enchanted_book'];
+const MATCH_REWARD_ITEMS = ['coal','raw_iron','lapis','copper_ingot','redstone','amethyst_shard','iron'];
+function shuffleCards(list){
+ const out=[...list];
+ for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
+ return out;
+}
+function ItemMatchArcade({lang='ru',onComplete}){
+ const phrases={
+ ru:{title:'ПАРНЫЙ ДРОП',subtitle:'Найди 8 пар предметов Minecraft за 75 секунд. Карточки открываются по две — запоминай расположение и собирай коллекцию.',start:'НАЧАТЬ ИГРУ',again:'ИГРАТЬ ЕЩЁ',time:'ВРЕМЯ',moves:'ХОДЫ',matched:'НАЙДЕНО',best:'РЕКОРД',won:'КОЛЛЕКЦИЯ СОБРАНА',lost:'ВРЕМЯ ВЫШЛО',idle:'Готов к поиску?',hint:'Переворачивай карточки и находи два одинаковых предмета. Победа — все 8 пар до конца времени.',reward:'Награда дня',taken:'Сегодняшняя награда уже получена',free:'Первая победа дня даёт один небольшой предмет в инвентарь. Без реальных денег и рекламы.',noPrize:'Сегодняшний бонус уже получен. Играть на рекорд можно сколько угодно.'},
+ uk:{title:'ПАРНИЙ ДРОП',subtitle:'Знайди 8 пар предметів Minecraft за 75 секунд. Відкривай дві картки та запам’ятовуй розташування.',start:'ПОЧАТИ ГРУ',again:'ГРАТИ ЩЕ',time:'ЧАС',moves:'ХОДИ',matched:'ЗНАЙДЕНО',best:'РЕКОРД',won:'КОЛЕКЦІЮ ЗІБРАНО',lost:'ЧАС ВИЙШОВ',idle:'Готовий до пошуку?',hint:'Знаходь дві однакові речі. Перемога — всі 8 пар до завершення часу.',reward:'Нагорода дня',taken:'Сьогодні нагороду вже отримано',free:'Перша перемога дня дає один недорогий предмет до інвентарю. Без реальних грошей і реклами.',noPrize:'Сьогодні бонус уже отримано. Грай на рекорд скільки завгодно.'},
+ en:{title:'ITEM MATCH',subtitle:'Find 8 matching Minecraft item pairs in 75 seconds. Flip two cards at a time and remember their positions.',start:'START GAME',again:'PLAY AGAIN',time:'TIME',moves:'MOVES',matched:'MATCHED',best:'BEST SCORE',won:'COLLECTION COMPLETE',lost:'TIME IS UP',idle:'Ready to play?',hint:'Find two identical items. Match all 8 pairs before the countdown reaches zero.',reward:'Daily drop',taken:'Daily reward already claimed',free:'Your first win each day adds one small item to your demo inventory. No real money or ads.',noPrize:'You already claimed today’s bonus. Keep playing for a high score.'}
+ };
+ const t=phrases[lang]||phrases.en;
+ const [phase,setPhase]=React.useState('idle');
+ const [deck,setDeck]=React.useState([]);
+ const [faceUp,setFaceUp]=React.useState([]);
+ const [matched,setMatched]=React.useState([]);
+ const [moves,setMoves]=React.useState(0);
+ const [time,setTime]=React.useState(75);
+ const [score,setScore]=React.useState(0);
+ const [best,setBest]=React.useState(()=>Math.max(0,Number(stored('voxup-match-best',0))||0));
+ const [prize,setPrize]=React.useState(null);
+ const phaseRef=React.useRef('idle'),faceRef=React.useRef([]),matchRef=React.useRef(new Set()),busyRef=React.useRef(false),countRef=React.useRef(0),deadlineRef=React.useRef(0),timeouts=React.useRef([]);
+ React.useEffect(()=>()=>{timeouts.current.forEach(clearTimeout);timeouts.current=[]},[]);
+ React.useEffect(()=>{
+  if(phase!=='playing')return;
+  const interval=window.setInterval(()=>{
+   const left=Math.max(0,Math.ceil((deadlineRef.current-Date.now())/1000));setTime(left);
+   if(!left){phaseRef.current='lost';setPhase('lost');busyRef.current=true;timeouts.current.forEach(clearTimeout);timeouts.current=[]}
+  },180);
+  return()=>clearInterval(interval);
+ },[phase]);
+ function begin(){
+  timeouts.current.forEach(clearTimeout);timeouts.current=[];
+  const picks=shuffleCards(MATCH_ITEMS).slice(0,8);
+  const cards=shuffleCards([...picks,...picks].map((id,i)=>({id,uid:i})));
+  setDeck(cards);setFaceUp([]);setMatched([]);setMoves(0);setScore(0);setTime(75);setPrize(null);
+  faceRef.current=[];matchRef.current=new Set();busyRef.current=false;countRef.current=0;
+  deadlineRef.current=Date.now()+75000;phaseRef.current='playing';setPhase('playing');
+ }
+ function flip(i){
+  if(phaseRef.current!=='playing'||busyRef.current||faceRef.current.includes(i)||matchRef.current.has(i)||!deck[i])return;
+  const next=[...faceRef.current,i];faceRef.current=next;setFaceUp(next);
+  if(next.length!==2)return;
+  busyRef.current=true;const [a,b]=next;setMoves(n=>n+1);countRef.current++;
+  const same=deck[a].id===deck[b].id;
+  const timer=window.setTimeout(()=>{
+   if(phaseRef.current!=='playing')return;
+   if(same){matchRef.current.add(a);matchRef.current.add(b);setMatched([...matchRef.current]);}
+   faceRef.current=[];setFaceUp([]);busyRef.current=false;
+   if(same&&matchRef.current.size===16){
+    phaseRef.current='won';setPhase('won');busyRef.current=true;
+    const remaining=Math.max(0,Math.ceil((deadlineRef.current-Date.now())/1000));
+    const finalScore=Math.max(100,1000+remaining*10-Math.max(0,countRef.current-8)*45);
+    setScore(finalScore);
+    if(finalScore>best){setBest(finalScore);try{localStorage.setItem('voxup-match-best',JSON.stringify(finalScore))}catch{}}
+    const earned=onComplete?.();setPrize(earned||null);
+   }
+  },same?320:700);
+  timeouts.current.push(timer);
+ }
+ const complete=matched.length/2;
+ return <section className="matchArena" aria-label={t.title}>
+  <div className="matchHero"><div><div className="eyebrow">VOXUP / ITEM-BASED ARCADE</div><h2>{t.title}</h2><p>{t.subtitle}</p><div className="matchPill">✦ {t.free}</div></div><div className="matchHeroArt"><img src={textureSource('diamond')} alt=""/><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div></div>
+  <div className="matchCounters"><div><small>{t.time}</small><strong>{time}<em>s</em></strong></div><div><small>{t.moves}</small><strong>{moves}</strong></div><div><small>{t.matched}</small><strong>{complete}<em>/8</em></strong></div><div><small>{t.best}</small><strong>{best}</strong></div></div>
+  <div className="matchLayout"><div className="matchBoard">{Array.from({length:16},(_,i)=>{
+   const card=deck[i],revealed=faceUp.includes(i)||matched.includes(i);
+   return <button key={card?.uid??i} type="button" className={'matchCard '+(revealed?'flipped ':'')+(matched.includes(i)?'matched ':'')} onClick={()=>flip(i)} disabled={phase!=='playing'||matched.includes(i)} aria-label={revealed&&card?getItem(card.id).name:'Скрытая карточка '+(i+1)}>
+    <span className="matchCardInner"><span className="matchCardBack"><Gem size={25}/><small>VOXUP</small></span><span className="matchCardFront">{card&&<><img src={textureSource(card.id)} alt="" draggable="false"/><small>{getItem(card.id).name}</small></>}</span></span>
+   </button>
+  })}</div><aside className="matchSide"><div className="matchSideHead"><div className="eyebrow">SKIN MEMORY / 08 PAIRS</div><h3>{phase==='won'?t.won:phase==='lost'?t.lost:t.idle}</h3><p>{phase==='won'?(prize?.awarded?`${t.reward}: ${getItem(prize.id).name}`:t.noPrize):t.hint}</p></div>
+   <div className="matchRewardArt"><img src={textureSource(prize?.id||'diamond')} alt=""/><div><strong>{prize?.awarded?getItem(prize.id).name:t.reward}</strong><small>{prize?.awarded?`${getItem(prize.id).value} MC · ${t.reward}`:t.free}</small></div></div>
+   <button className="primary matchStart" onClick={begin}><Gamepad2 size={18}/>{phase==='idle'?t.start:t.again}</button><p className="matchFootnote">{t.taken}: {stored('voxup-match-last-reward-day','')===new Date().toLocaleDateString('sv-SE')?'✓':'—'}</p>
+  </aside></div>
+ </section>
+}
+
+function AdminConsole({coins,onCoins,onItem,audit,onLock,blocked=false,lang='ru'}){
+ const [amount,setAmount]=React.useState('10000');const [itemId,setItemId]=React.useState('diamond');const [qty,setQty]=React.useState('1');const [feedback,setFeedback]=React.useState('');
+ const ru=lang==='ru',uk=lang==='uk';
+ const txt=(r,u,e)=>ru?r:uk?u:e;
+ function grantCoins(mode){const n=Number(amount);if(!Number.isSafeInteger(n)||n<1||n>1e8){setFeedback(txt('Введите целое число от 1 до 100 000 000','Введіть ціле число від 1 до 100 000 000','Enter an integer from 1 to 100,000,000'));return}if(blocked){setFeedback(txt('Заверши текущую игру/выигрыш','Заверши поточну гру/виграш','Finish the current reward first'));return}onCoins(n,mode);setFeedback(txt('Тестовая операция выполнена','Тестову операцію виконано','Local test balance updated'))}
+ function grantItem(){const n=Number(qty);if(!Number.isSafeInteger(n)||n<1||n>100){setFeedback(txt('Количество: от 1 до 100','Кількість: від 1 до 100','Quantity: 1–100'));return}if(blocked){setFeedback(txt('Заверши текущий выигрыш','Заверши поточний виграш','Finish the pending reward'));return}onItem(itemId,n);setFeedback(txt('Предметы добавлены в локальный инвентарь','Предмети додано до локального інвентарю','Items added to local inventory'))}
+ return <section className="adminStudio"><div className="adminIntro"><div><div className="eyebrow">VOXUP LAB / LOCAL TEST ONLY</div><h2>{txt('Панель администратора','Панель адміністратора','Admin laboratory')}</h2><p>{txt('Здесь можно тестировать баланс и предметы именно в своём браузере. Код 1764 не защищает настоящую серверную валюту: для публичного сайта потребуется серверная авторизация.','Тут можна тестувати баланс і предмети лише у своєму браузері. Код 1764 не захищає серверну валюту.','This only changes the current browser’s local demo. Code 1764 does not secure real server balances.')}</p></div><button className="secondaryBtn" onClick={onLock}><LockKeyhole size={16}/>{txt('Закрыть панель','Закрити панель','Lock panel')}</button></div>
+ <div className="adminBalance"><Coins size={26}/><div><small>{txt('Текущий локальный баланс','Поточний локальний баланс','Current local balance')}</small><strong>{formatCoins(coins)} <em>MC</em></strong></div><span>DEMO · NOT SERVER VERIFIED</span></div>
+ <div className="adminGrid"><section className="adminCard"><div className="eyebrow">01 / MC COINS</div><h3>{txt('Выдать монеты','Видати монети','Grant coins')}</h3><label htmlFor="admin-coins">{txt('Количество MC','Кількість MC','Amount MC')}</label><input id="admin-coins" type="number" min="1" max="100000000" value={amount} onChange={e=>setAmount(e.target.value)} /><div className="adminPresets">{[1000,10000,50000,100000].map(n=><button key={n} onClick={()=>setAmount(String(n))}>+{formatCoins(n)}</button>)}</div><div className="adminActions"><button className="primary" onClick={()=>grantCoins('add')}><Coins size={16}/>{txt('Начислить','Нарахувати','Add')}</button><button className="secondaryBtn" onClick={()=>grantCoins('subtract')}>{txt('Списать','Списати','Subtract')}</button></div></section>
+ <section className="adminCard"><div className="eyebrow">02 / ITEMS</div><h3>{txt('Выдать предметы','Видати предмети','Grant items')}</h3><label htmlFor="admin-item">{txt('Предмет из каталога','Предмет з каталогу','Catalogue item')}</label><select id="admin-item" value={itemId} onChange={e=>setItemId(e.target.value)}>{previewItems.map(i=><option key={i.id} value={i.id}>{i.name} — {formatCoins(i.value)} MC</option>)}</select><div className="adminChosen"><img src={textureSource(itemId)} alt=""/><span>{getItem(itemId).name}</span><small>{getItem(itemId).rarity}</small></div><label htmlFor="admin-qty">{txt('Количество','Кількість','Quantity')}</label><input id="admin-qty" type="number" min="1" max="100" value={qty} onChange={e=>setQty(e.target.value)}/><button className="primary" onClick={grantItem}><Gift size={16}/>{txt('Добавить в инвентарь','Додати до інвентарю','Grant item')}</button></section></div>
+ <div className="adminLogs"><h3>{txt('История тестовых выдач','Історія тестових видач','Local activity log')}</h3>{audit.length?<div className="adminLogList">{audit.map(a=><div key={a.id}><span>{a.label}</span><small>{a.when}</small></div>)}</div>:<p>{txt('Пока операций нет','Операцій ще немає','No local actions yet')}</p>}</div>{feedback&&<div className="adminFeedback" role="status">{feedback}</div>}
+ </section>
 }
 
 export default function App() {
@@ -928,6 +1001,11 @@ export default function App() {
   const [pendingReward, setPendingReward] = useState(() => stored('mineup-pending-reward',null))
   const [menu, setMenu] = useState(false)
   const [activeCase, setActiveCase] = useState(null)
+  const [adminUnlocked,setAdminUnlocked]=useState(false)
+  const [adminLoginOpen,setAdminLoginOpen]=useState(false)
+  const [adminCode,setAdminCode]=useState('')
+  const [adminError,setAdminError]=useState('')
+  const [adminAudit,setAdminAudit]=useState(()=>stored('voxup-admin-audit',[]))
 
   const [sourceId, setSourceId] = useState(() => stored('mineup-preview-source', 'iron'))
   const [targetId, setTargetId] = useState(() => stored('mineup-preview-target', 'diamond'))
@@ -1032,6 +1110,8 @@ export default function App() {
       localStorage.setItem('mineup-demo-stats', JSON.stringify(stats))
     } catch {}
   }, [sourceId, targetId, multiplier, coins, inventory, history, caseHistory, stats])
+
+  useEffect(()=>{try{localStorage.setItem('voxup-admin-audit',JSON.stringify(adminAudit.slice(0,30)))}catch{}},[adminAudit])
 
   useEffect(() => {
     try {
@@ -1186,11 +1266,12 @@ export default function App() {
     setMultiplier(5.714)
     setResult(null)
     setPendingReward(null)
-    try{localStorage.removeItem('mineup-pending-reward')}catch{}
+    setAdminAudit([])
+    try{localStorage.removeItem('mineup-pending-reward');localStorage.removeItem('voxup-match-best');localStorage.removeItem('voxup-match-last-reward-day');localStorage.removeItem('voxup-admin-audit')}catch{}
   }
 
   function exportSave(){
-    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
+    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,extras:{matchBest:stored('voxup-match-best',0),matchLastRewardDay:stored('voxup-match-last-reward-day',''),adminAudit},settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
     const file=new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
     const url=URL.createObjectURL(file)
     const a=document.createElement('a');a.href=url;a.download='voxup-save.json';document.body.appendChild(a);a.click();a.remove()
@@ -1223,6 +1304,15 @@ export default function App() {
       setCoins(safeCoins);setInventory(validInventory);setHistory(safeHistory);setCaseHistory(safeCaseHistory);setStats(nextStats)
       setSourceId(nextSource);setTargetId(nextTarget);setMultiplier(nextMult)
       setPendingReward(safePending)
+      if(data.extras && typeof data.extras==='object'){
+        const best=Number(data.extras.matchBest)
+        const safeBest=Number.isSafeInteger(best)&&best>=0&&best<=1000000?best:0
+        const claimDay=String(data.extras.matchLastRewardDay||'')
+        const safeDay=/^\d{4}-\d{2}-\d{2}$/.test(claimDay)?claimDay:''
+        try{localStorage.setItem('voxup-match-best',JSON.stringify(safeBest));localStorage.setItem('voxup-match-last-reward-day',JSON.stringify(safeDay))}catch{}
+        const safeAudit=Array.isArray(data.extras.adminAudit)?data.extras.adminAudit.slice(0,30).filter(x=>x&&typeof x==='object'&&typeof x.label==='string'&&x.label.length<150).map((x,i)=>({id:String(x.id||'import-'+i).slice(0,60),label:x.label,when:String(x.when||'').slice(0,40)})):[]
+        setAdminAudit(safeAudit)
+      }
       const opts=data.settings||{}
       if(Number.isFinite(Number(opts.volume)))setVolume(clamp(Number(opts.volume),0,100))
       if(Number.isFinite(Number(opts.radius)))setRadius(clamp(Number(opts.radius),4,24))
@@ -1331,6 +1421,35 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function appendAdminAudit(label){setAdminAudit(prev=>[{id:`a-${Date.now()}-${Math.random()}`,label,when:new Date().toLocaleString('ru-RU')},...prev].slice(0,30))}
+  function changeAdminCoins(amount,mode){
+    if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward)return;
+    if(!Number.isSafeInteger(amount)||amount<1||amount>1e8)return;
+    const next=clamp(coins+(mode==='subtract'?-amount:amount),0,1e12);
+    try{localStorage.setItem('mineup-demo-coins',JSON.stringify(next))}catch{}
+    setCoins(next);appendAdminAudit(`${mode==='subtract'?'-':'+'}${formatCoins(amount)} MC`);
+  }
+  function grantAdminItem(id,qty){
+    if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward || !itemMap[id] || !Number.isSafeInteger(qty)||qty<1||qty>100)return;
+    const next={...inventory,[id]:clamp((Number(inventory[id])||0)+qty,0,1e7)};
+    try{localStorage.setItem('mineup-demo-inventory',JSON.stringify(next))}catch{}
+    setInventory(next);appendAdminAudit(`+${qty} × ${itemMap[id].name}`);
+  }
+  function unlockAdmin(e){
+    e?.preventDefault?.();
+    if(adminCode.trim()!=='1764'){setAdminError(lang==='ru'?'Неверный код':lang==='uk'?'Неправильний код':'Wrong code');return}
+    setAdminUnlocked(true);setAdminLoginOpen(false);setAdminCode('');setAdminError('');go('admin');
+  }
+  function awardMatchPrize(){
+    const day=new Date().toLocaleDateString('sv-SE')
+    if(stored('voxup-match-last-reward-day','')===day)return {awarded:false}
+    const itemId=MATCH_REWARD_ITEMS[Math.floor(secureRoll()*MATCH_REWARD_ITEMS.length)]
+    const next={...inventory,[itemId]:(Number(inventory[itemId])||0)+1}
+    // Commit inventory and one-time claim synchronously, before UI result.
+    try{localStorage.setItem('voxup-match-last-reward-day',JSON.stringify(day));localStorage.setItem('mineup-demo-inventory',JSON.stringify(next))}catch{}
+    setInventory(next)
+    return {awarded:true,id:itemId}
+  }
   const caseFeature = ['dirt','apple','iron_pickaxe','iron_sword','gold','redstone','diamond_sword','blaze_rod','netherite','dragon_egg','enchanted_apple','wheat','bow','compass','crossbow','golden_helmet','prismarine_shard','netherite_sword','mace','wind_charge','music_disc_creator']
   const caseDisplayOrder = cases.map((_,i)=>i).sort((a,b)=>cases[a][2]-cases[b][2] || a-b)
   const caseArt = (i) => (
@@ -1346,26 +1465,26 @@ export default function App() {
       <aside className={'side ' + (menu ? 'show' : '')}>
         <button className="brand" onClick={() => go('upgrade')}>
           <span className="brandIcon"><Gem size={23} /></span>
-          <span>MINE<span className="brandAccent">UP</span><small>ITEM UPGRADE PLATFORM</small></span>
+          <span>VOX<span className="brandAccent">UP</span><small>ITEM UPGRADE PLATFORM</small></span>
         </button>
         <div className="navCaption">PLATFORM / 01</div>
         <div className="navItems">
-          {nav.map(([id, Icon]) => (
+          {(adminUnlocked?[...nav,['admin',ShieldCheck]]:nav).map(([id, Icon]) => (
             <button key={id} className={'navItem ' + (page === id ? 'active' : '')} onClick={() => go(id)}>
-              <Icon size={19} /><span>{t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
+              <Icon size={19} /><span>{id==='admin'?'LAB / ADMIN':t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
             </button>
           ))}
         </div>
         <div className="sideBottom">
           <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">MINEUP <strong>ALPHA 0.7</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="stage">VOXUP <strong>ALPHA 0.8</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
 
       <div className="shell">
         <header className="top">
-          <div className="topLeft"><button className="mobileMenu" onClick={() => setMenu((v) => !v)} aria-label="menu">{menu ? <X size={22} /> : <Menu size={22} />}</button><span className="crumb">MINEUP</span><ChevronRight size={13} /><span>{t[page]}</span></div>
+          <div className="topLeft"><button className="mobileMenu" onClick={() => setMenu((v) => !v)} aria-label="menu">{menu ? <X size={22} /> : <Menu size={22} />}</button><span className="crumb">VOXUP</span><ChevronRight size={13} /><span>{t[page]}</span></div>
           <div className="topRight">
             <div className="topBalance"><Coins size={17} /><span>{formatCoins(coins)} <em>MC</em></span><small>{t.demo}</small></div>
             <button className="account" onClick={() => go('profile')}><UserRound size={17} /><span>{t.guest}</span></button>
@@ -1375,7 +1494,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.7</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.8</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -1388,7 +1507,7 @@ export default function App() {
 
               <section className="upgradeLab" aria-label={uc.title}>
                 <div className="upgradeIntro">
-                  <div><div className="eyebrow">STAGE 10.2 / ECONOMY + REWARDS</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
+                  <div><div className="eyebrow">STAGE 12 / UPGRADE ARENA</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
                   <span className="stamp"><ShieldCheck size={15} /> {t.demoMode}</span>
                 </div>
 
@@ -1486,17 +1605,20 @@ export default function App() {
                 <div className="upDisclaimer"><LockKeyhole size={17} /><span>{uc.noMoney}. {uc.launch}</span></div>
               </section>
 
-              <div className="areaHeading"><div><div className="eyebrow">STAGE 01 / FIRST LOOK</div><h2>{t.ready}</h2><p>{t.intro}</p></div><span className="stamp"><ShieldCheck size={15} />{t.demo}</span></div>
-              <div className="previewPanels">
-                <div className="previewCard"><div className="cardEyebrow"><Gem size={16} />UPGRADER</div><div className="previewCenter"><div className="previewQuestion">?</div><div className="previewRing"><span>— %</span></div><div className="previewQuestion">✓</div></div><div className="previewFoot"><span>{t.progress}</span><LockKeyhole size={17} /></div></div>
-                <div className="previewCard"><div className="cardEyebrow"><Gift size={16} />FREE CASE</div>{caseArt(0)}<div className="previewFoot"><span>{t.progress}</span><LockKeyhole size={17} /></div></div>
-              </div>
+              <section className="discoverSection">
+                <div className="discoverHeading"><div><div className="eyebrow">DISCOVER / VOXUP EXPERIENCE</div><h2>{lang==='ru'?'Твоя коллекция. Твои возможности.':lang==='uk'?'Твоя колекція. Твої можливості.':'Your inventory. More ways to play.'}</h2><p>{lang==='ru'?'Выбирай кейсы, собирай редкие предметы или играй в поиск пар. Вся игра строится вокруг Minecraft-предметов.':lang==='uk'?'Відкривай кейси, збирай рідкісні предмети або знаходь пари. Усе пов’язано з Minecraft-предметами.':'Collect items, open cases or match skins. Everything connects to your Minecraft collection.'}</p></div><span className="stamp"><Sparkles size={15}/> 150 ITEMS · 21 CASES</span></div>
+                <div className="discoverGrid">
+                  <button className="discoverCard discoverCases" onClick={()=>go('cases')}><div className="eyebrow">01 / CASE COLLECTION</div><h3>{t.cases}</h3><p>{lang==='ru'?'21 тематический кейс и подробные таблицы вероятностей.':lang==='uk'?'21 тематичний кейс з відкритими шансами.':'21 themed cases with visible odds.'}</p><div className="discoverArt"><img src={textureSource('diamond')} alt=""/><img src={textureSource('totem')} alt=""/></div><span className="discoverLink">{t.explore} <ArrowUpRight size={16}/></span></button>
+                  <button className="discoverCard discoverArcade" onClick={()=>go('arcade')}><div className="eyebrow">02 / ITEM MATCH</div><h3>{t.arcade}</h3><p>{lang==='ru'?'Открой 16 карт и найди пары. Первый успех дня приносит предмет.':lang==='uk'?'Відкрий 16 карт і знайди пари. Перша перемога дня дає предмет.':'Match 16 item cards. First win of the day awards a demo item.'}</p><div className="discoverArt"><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Играть':lang==='uk'?'Грати':'Play'} <ArrowUpRight size={16}/></span></button>
+                  <button className="discoverCard discoverInventory" onClick={()=>go('inventory')}><div className="eyebrow">03 / YOUR COLLECTION</div><h3>{t.inventory}</h3><p>{totalItems} {lang==='ru'?'предметов в твоём инвентаре.':lang==='uk'?'предметів у твоєму інвентарі.':'items in your current inventory.'}</p><div className="discoverArt"><img src={textureSource('netherite_sword')} alt=""/><img src={textureSource('ender_pearl')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Открыть':lang==='uk'?'Відкрити':'Open'} <ArrowUpRight size={16}/></span></button>
+                </div>
+              </section>
             </>
           )}
 
           {page === 'cases' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP / CASE COLLECTION · 21 CASES · 150 ITEMS</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP / CASE COLLECTION · 21 CASES · 150 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
               <div className="economyBanner"><div><strong>ECONOMY / DEMO</strong><span>{L.cases_banner}</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>{L.inventory} <ArrowUpRight size={15}/></button></div>
               <div className="caseGrid">{caseDisplayOrder.map((i,orderIndex)=>{const c=cases[i];return <button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
@@ -1510,7 +1632,7 @@ export default function App() {
 
           {page === 'inventory' && (
             <>
-              <div className="eyebrow">MINEUP / COLLECTION</div>
+              <div className="eyebrow">VOXUP / COLLECTION</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.inventory}</h1><p>{t.invText}</p></div><span className="stamp"><Coins size={15} />{formatCoins(coins)} MC</span></div>
               <div className="inventoryMeta"><div className="notice"><Coins size={18} />{t.coinsInfo}</div><button className="secondaryBtn" onClick={resetDemo}><RotateCcw size={16} /> {t.resetDemo}</button></div>
               <div className="inventoryControls">
@@ -1532,11 +1654,13 @@ export default function App() {
             </>
           )}
 
-          {page === 'arcade' && <ReflexArcade lang={lang} />}
+          {page === 'arcade' && <ItemMatchArcade lang={lang} onComplete={awardMatchPrize} />}
+
+          {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} audit={adminAudit} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
 
           {page === 'profile' && (
             <>
-              <div className="eyebrow">MINEUP / USER</div>
+              <div className="eyebrow">VOXUP / USER</div>
               <h1 className="sectionTitle">{t.profile}</h1>
               <div className="profileLead"><UserRound size={38}/><div><h2>{t.guest}</h2><p>{t.profileSoon}</p><span>{ex.mode}</span></div></div>
               <div className="profileStats">
@@ -1571,12 +1695,15 @@ export default function App() {
                 <section className="settingBox"><div className="settingName"><Activity size={17}/>{pc.motion}</div><div className="choices">{[['full',pc.motionFull],['calm',pc.motionCalm],['off',pc.motionOff]].map(([id,name])=><button key={id} className={motion===id?'chosen':''} onClick={()=>setMotion(id)}>{name}{motion===id&&<Check size={15}/>}</button>)}</div></section>
                 <section className="settingBox"><div className="settingName"><Sparkles size={17}/>{pc.rareEffects}</div><div className="choices">{[['on',pc.rareOn],['off',pc.rareOff]].map(([id,name])=><button key={id} className={jackpotFx===id?'chosen':''} onClick={()=>setJackpotFx(id)}>{name}{jackpotFx===id&&<Check size={15}/>}</button>)}</div><small className="settingNote">{pc.oddsGuarantee}</small></section>
               </div>
+              <div className="adminAccess"><div><div className="eyebrow">LOCAL LAB / DEV MODE</div><h3>{lang==='ru'?'Тестовая панель':lang==='uk'?'Тестова панель':'Local testing console'}</h3><p>{lang==='ru'?'Быстро выдавай тестовые MC Coins и предметы. Для настоящих аккаунтов нужна серверная админ-панель.':lang==='uk'?'Видавай тестові MC Coins та предмети. Для справжніх акаунтів потрібна серверна панель.':'Grant demo coins and items on this device. Real accounts require a secure server.'}</p></div><button className="secondaryBtn" onClick={()=>{if(adminUnlocked)go('admin');else setAdminLoginOpen(true)}}><ShieldCheck size={17}/>{lang==='ru'?'Открыть панель':lang==='uk'?'Відкрити панель':'Open admin lab'}</button></div>
             </>
           )}
 
-          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.7 • LOCAL DEMO / 150 ITEMS · 21 CASES</span></footer>
+          <footer><span>© 2026 VOXUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.8 • LOCAL DEMO / 150 ITEMS · 21 CASES</span></footer>
         </main>
       </div>
+
+      {adminLoginOpen && <div className="modalBackdrop adminLoginBackdrop" onClick={()=>setAdminLoginOpen(false)}><form className="adminLoginModal" onSubmit={unlockAdmin} onClick={e=>e.stopPropagation()}><div className="adminLoginIcon"><ShieldCheck size={27}/></div><div className="eyebrow">VOXUP / LOCAL DEVELOPMENT</div><h2>{lang==='ru'?'Доступ к тестовой панели':lang==='uk'?'Доступ до тестової панелі':'Local admin access'}</h2><p>{lang==='ru'?'Этот код открывает только локальную панель на твоём устройстве. Публичную экономику он не защищает.':lang==='uk'?'Цей код відкриває лише локальну панель. Він не захищає серверну економіку.':'This code unlocks browser-only test tools. It is not server authentication.'}</p><label htmlFor="admin-code">ACCESS CODE</label><input id="admin-code" type="password" autoFocus value={adminCode} onChange={e=>setAdminCode(e.target.value)} placeholder="••••" maxLength={12}/>{adminError&&<span className="adminCodeError" role="alert">{adminError}</span>}<div className="adminLoginActions"><button type="button" className="secondaryBtn" onClick={()=>{setAdminLoginOpen(false);setAdminError('')}}>{lang==='ru'?'Отмена':lang==='uk'?'Скасувати':'Cancel'}</button><button type="submit" className="primary">{lang==='ru'?'Открыть':lang==='uk'?'Відкрити':'Unlock'}</button></div></form></div>}
 
       {activeCase !== null && (
         <div className="modalBackdrop caseBackdrop" onClick={closeCase}>

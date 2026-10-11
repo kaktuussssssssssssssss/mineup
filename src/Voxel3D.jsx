@@ -149,8 +149,58 @@ function makeBeacon(){
   return shapes
 }
 
+
+/* Built from separate solids instead of interpreting 2D item/entity sprites as cubes.
+ * Original game texture layout for Conduit and Ender Chest is not a square cube atlas.
+ * These authored voxel meshes have real depth from all angles, and never rely
+ * on an unavailable external entity texture download. */
+function makeConduit(){
+  const parts=[];const add=(...a)=>parts.push(...solidBox(...a))
+  // Dark prismarine cage; a hollow, interlocking ring with open spaces.
+  const frame='#244f59',lit='#72d5c2',edge='#417e85',bright='#b3fff2'
+  for(const y of [-7,6]){
+    add(-7,y,-7,7,y+1, -5, frame,edge,bright)
+    add(-7,y,5,7,y+1,7, frame,edge,bright)
+    add(-7,y,-5,-5,y+1,5,frame,edge,bright)
+    add(5,y,-5,7,y+1,5,frame,edge,bright)
+  }
+  for(const x of [-7,5])for(const z of [-7,5]){
+    add(x,-6,z,x+2,7,z+2,'#235d67','#234c59','#5cb4aa')
+    add(x-.4,-7.5,z-.4,x+2.4,-5.8,z+2.4,lit,edge,bright)
+    add(x-.4,5.8,z-.4,x+2.4,7.5,z+2.4,lit,edge,bright)
+  }
+  // Floating pearly core + inner eye, visible through the open sides.
+  add(-3.5,-3.5,-3.5,3.5,3.5,3.5,'#50b1c0','#267f92','#97f0e7')
+  add(-2.4,-4.5,-2.4,2.4,4.5,2.4,'#b0eec8','#5caeaf','#e4fff8')
+  add(-1.8,-1.8,3.6,1.8,1.8,4.3,'#0f2939','#112c37','#25536b')
+  add(-.9,-.9,4.35,.9,.9,4.55,'#f7d5a0','#8ed9c8','#ffffd8')
+  return parts
+}
+function makeEnderChest(){
+  const parts=[];const add=(...a)=>parts.push(...solidBox(...a))
+  // Body, openable top geometry and bevel-like turquoise reinforced seams.
+  add(-7,-3,-7,7,7,7,'#171925','#11131d','#2a2830')
+  add(-7.5,-7.5,-7.5,7.5,-2.2,7.5,'#282732','#181b26','#313140')
+  // Four-sided seam around the lid.
+  for(const y of [-7.6,-2.6]){
+    add(-7.7,y,-7.7,7.7,y+.8,-6.6,'#225b62','#12414b','#368a84')
+    add(-7.7,y,6.6,7.7,y+.8,7.7,'#326b6d','#16515c','#62bdb1')
+    add(-7.7,y,-6.6,-6.6,y+.8,6.6,'#265f68','#12414b','#42a5a0')
+    add(6.6,y,-6.6,7.7,y+.8,6.6,'#326f73','#174953','#42a5a0')
+  }
+  // Corner supports and embossed panels.
+  for(const x of [-7.6,6.7])for(const z of [-7.6,6.7])
+    add(x,-3,z,x+.9,7.6,z+.9,'#235459','#143a42','#37948e')
+  add(-5,-1,7.15,5,5.5,7.35,'#171c29','#1a2530','#253e46')
+  // Brass latch and the emerald dot on front.
+  add(-1.7,-2.1,7.7,1.7,1.5,8.5,'#b4ab84','#777453','#e3dba6')
+  add(-.7,-1.2,8.56,.7,.4,8.75,'#3acc9c','#217865','#80f1bf')
+  return parts
+}
 async function getMesh(id,src,blockIds){
   if(meshCache.has(id))return meshCache.get(id)
+  if(id==='conduit'){const mesh=makeConduit();meshCache.set(id,mesh);return mesh}
+  if(id==='ender_chest'){const mesh=makeEnderChest();meshCache.set(id,mesh);return mesh}
   if(id==='beacon'){
     const mesh=makeBeacon();meshCache.set(id,mesh);return mesh
   }
