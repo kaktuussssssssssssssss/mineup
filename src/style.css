@@ -193,3 +193,38 @@
 @media(max-width:700px){.profileStats{grid-template-columns:repeat(2,minmax(0,1fr))}.upCollections{grid-template-columns:1fr}.upItemList{grid-template-columns:repeat(2,minmax(0,1fr))}.upItem{min-height:137px}.catalogControls{grid-template-columns:1fr 1fr}.catalogSearch{grid-column:1/-1}.upCollectionSide{min-width:0}.backupPanel{padding:21px}}
 @media(max-width:400px){.profileStats{grid-template-columns:1fr 1fr}.catalogControls{grid-template-columns:1fr}.catalogCountBadge{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.upWheel.wheelRolling,.upWheel.wheelRolling::after,.resultReveal,.dropReveal{animation:none!important}}
+
+/* STAGE 10.1 — Smooth upgrade pointer / GPU compositor only */
+.upWheelShell{display:flex;align-items:center;flex-direction:column;gap:16px;width:100%;max-width:260px;position:relative}
+.upWheelV10{--trackThickness:22px;position:relative;width:222px;height:222px;padding:0;border-radius:50%;display:block;overflow:visible;background:conic-gradient(from 0deg,#47dfa6 0 var(--pct),#e56777 var(--pct) 100%);box-shadow:0 0 0 6px color-mix(in srgb,var(--primary),transparent 92%),0 0 38px #090b0da6;isolation:isolate;flex:none;transform:none!important;animation:none!important}
+.upWheelV10::after,.upWheelV10::before{display:none!important}
+.upWheelV10>div{width:auto;height:auto;display:block;background:none;border-radius:0;gap:0;align-items:initial;justify-content:initial}
+.upWheelV10 .upWheelRingInsets{position:absolute;inset:6px;border:1px solid #ffffff2a;border-radius:50%;z-index:1;pointer-events:none;box-shadow:inset 0 0 20px #05060991}
+.upWheelV10 .upWheelCore{position:absolute;inset:var(--trackThickness);border-radius:50%;background:var(--panel);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;z-index:2;box-shadow:inset 0 0 30px #08090a4d;pointer-events:none}
+.upWheelV10 .upWheelCore strong{font:800 30px 'Space Grotesk',sans-serif;line-height:1.25;font-variant-numeric:tabular-nums;letter-spacing:-.7px;color:var(--text)}
+.upWheelV10 .upWheelCore span{font-size:10px;color:var(--muted);letter-spacing:.15px}
+.upWheelV10 .upWheelCore small{margin-top:7px;color:var(--primary);letter-spacing:2.1px;font-size:9px;font-weight:900}
+.upWheelV10 .upNeedle{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;z-index:5;pointer-events:none;border-radius:50%;background:transparent!important;transform:rotate(0deg);will-change:transform;transform-origin:50% 50%;backface-visibility:hidden}
+.upNeedleBody{position:absolute;left:calc(50% - 3px);top:49px;width:6px;height:62px;border-radius:7px;background:linear-gradient(90deg,#cc963f,#ffe3a1 40%,#f1b858 88%);box-shadow:0 0 12px #ffd17455,0 4px 14px #0708099c;transform:translateZ(0)}
+.upNeedleTip{position:absolute;left:calc(50% - 10px);top:13px;width:20px;height:44px;background:linear-gradient(90deg,#c88a34,#ffe0a0 50%,#bd8234);clip-path:polygon(50% 0,100% 95%,50% 78%,0 95%);filter:drop-shadow(0 0 7px #e5b35850)}
+.upNeedlePivot{position:absolute;left:calc(50% - 10px);top:calc(50% - 10px);width:20px;height:20px;border:4px solid var(--panel);border-radius:50%;background:linear-gradient(145deg,#ffe6a8,#d19b49);box-shadow:0 0 0 1px #f7d38f80,0 2px 10px #0009}
+.upWheelV10.upgradeWheelLive{box-shadow:0 0 0 7px var(--primarySoft),0 0 32px #e9b96739;animation:none!important}
+.upWheelLegend{display:flex;gap:19px;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:800;letter-spacing:.3px}
+.upWheelLegend span{display:flex;align-items:center;gap:7px}
+.upWheelLegend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.upLegendWin{background:#47dfa6}.upLegendLose{background:#e56777}
+.upChance .wheelInfo{line-height:1.65;min-height:30px;max-width:250px}
+.upChance .upgradeRun{position:relative;z-index:2;width:min(100%,235px);justify-content:center;font-size:12px;letter-spacing:.3px}
+.upSpinTiming{position:relative;width:min(100%,236px);padding-top:10px;display:flex;flex-direction:column;align-items:center;gap:9px;min-height:35px;font-size:10px;color:var(--muted);text-align:center}
+.upSpinBar{display:block;height:3px;border-radius:8px;background:var(--primary);width:100%;transform-origin:left center;animation:upProgressTrack var(--duration,5000ms) linear both}
+@keyframes upProgressTrack{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.upWheelV10.upgradeWheelLive .upWheelCore small{color:#47dfa6}
+.resultBanner.resultReveal.success{box-shadow:0 0 28px #39d49e17}
+.resultBanner.resultReveal.fail{box-shadow:0 0 22px #ec5d7110}
+@media(max-width:650px){.upWheelV10{width:196px;height:196px;--trackThickness:19px}.upNeedleBody{top:41px;height:58px}.upNeedleTip{top:11px;height:35px}.upWheelV10 .upWheelCore strong{font-size:26px}.upWheelLegend{gap:13px}}
+@media(prefers-reduced-motion:reduce){.upWheelV10.upgradeWheelLive{animation:none!important}.upSpinBar{animation:none!important;transform:scaleX(1)}}
+/* Keep probability readable: the needle orbits the rim, not through the number. */
+.upWheelV10 .upNeedleBody{top:44px;height:31px}
+.upWheelV10 .upNeedleTip{top:12px;height:39px}
+.upWheelV10 .upNeedlePivot{display:none}
+@media(max-width:650px){.upWheelV10 .upNeedleBody{top:39px;height:27px}.upWheelV10 .upNeedleTip{top:10px;height:34px}}

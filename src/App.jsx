@@ -361,6 +361,90 @@ function findNearestTarget(sourceValue, multiplier) {
   return options.reduce((a, b) => (Math.abs(a.value - targetValue) < Math.abs(b.value - targetValue) ? a : b), options[0])
 }
 
+
+// Upgrade 10.1: the cursor is a single GPU-composited transform.
+// Probability and final angle share ONE random number: [0, chance) = success.
+// No React setState calls occur on animation frames.
+function UpgradeWheel({ chance, spinning, spinPlan, caption, winLabel, loseLabel }) {
+  const needle = useRef(null)
+  const angle = useRef(0)
+  React.useLayoutEffect(() => {
+    if (!spinPlan || !needle.current) return
+    const el = needle.current
+    const start = angle.current
+    const normalized = ((start % 360) + 360) % 360
+    const delta = ((spinPlan.finalAngle - normalized) + 360) % 360
+    const end = start + 360 * 7 + delta
+    angle.current = end
+    const from = `rotate(${start}deg)`
+    const to = `rotate(${end}deg)`
+    el.style.transform = from
+    if (typeof el.animate !== 'function') {
+      // Fallback for older browsers; Chrome/Firefox use WAAPI above.
+      el.style.transition = `transform ${spinPlan.duration}ms cubic-bezier(.32,0,.12,1)`
+      requestAnimationFrame(() => { el.style.transform = to })
+      return () => { el.style.transition = 'none'; el.style.transform = to }
+    }
+    const anim = el.animate(
+      [{ transform: from }, { transform: to }],
+      { duration: spinPlan.duration, easing: 'cubic-bezier(.32, 0, .12, 1)', fill: 'forwards' }
+    )
+    anim.onfinish = () => {
+      el.style.transform = to
+      anim.cancel()
+      spinPlan.onFinished?.()
+    }
+    return () => {
+      anim.onfinish = null
+      el.style.transform = to
+      anim.cancel()
+    }
+  }, [spinPlan?.id])
+  return <div className="upWheelShell" aria-label={`${caption}: ${chance.toFixed(2)}%`}>
+    <div className={'upWheel upWheelV10' + (spinning ? ' upgradeWheelLive' : '')} style={{ '--pct': `${chance}%` }}>
+      <div className="upWheelRingInsets" aria-hidden="true" />
+      <div className="upWheelCore">
+        <strong>{chance.toFixed(2)}%</strong>
+        <span>{caption}</span>
+        <small>{spinning ? '● LIVE' : 'UPGRADE'}</small>
+      </div>
+      <div className="upNeedle" ref={needle} aria-hidden="true">
+        <div className="upNeedleBody" />
+        <div className="upNeedleTip" />
+        <div className="upNeedlePivot" />
+      </div>
+    </div>
+    <div className="upWheelLegend" aria-hidden="true"><span><i className="upLegendWin" />{winLabel}</span><span><i className="upLegendLose" />{loseLabel}</span></div>
+  </div>
+}
+
+function upgradeSound(kind) {
+  try {
+    const Audio = window.AudioContext || window.webkitAudioContext
+    if (!Audio) return
+    const ctx = new Audio()
+    const notes = kind === 'start' ? [370, 550] : kind === 'win' ? [520, 660, 850] : [410, 290]
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = kind === 'fail' ? 'triangle' : 'sine'
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09)
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime + idx * 0.09)
+      gain.gain.exponentialRampToValueAtTime(0.035, ctx.currentTime + idx * 0.09 + 0.012)
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.09 + 0.17)
+      osc.connect(gain).connect(ctx.destination)
+      osc.start(ctx.currentTime + idx * 0.09)
+      osc.stop(ctx.currentTime + idx * 0.09 + 0.18)
+    })
+    window.setTimeout(() => { void ctx.close().catch(() => {}) }, 1200)
+  } catch { /* Sounds are optional, gameplay never depends on audio. */ }
+}
+const upgradeWheelCopy = {
+  ru: { win: 'Успех', lose: 'Провал', spinning: 'СТРЕЛКА ВРАЩАЕТСЯ', duration: '5 секунд • плавное торможение', wait: 'Дождись остановки стрелки' },
+  uk: { win: 'Успіх', lose: 'Невдача', spinning: 'СТРІЛКА ОБЕРТАЄТЬСЯ', duration: '5 секунд • плавне гальмування', wait: 'Дочекайся зупинки стрілки' },
+  en: { win: 'Success', lose: 'Fail', spinning: 'POINTER SPINNING', duration: '5 seconds • smooth slowdown', wait: 'Wait for the pointer to stop' }
+}
+
 export default function App() {
   const [page, setPage] = useState('upgrade')
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
@@ -397,6 +481,8 @@ export default function App() {
   const [targetOrder,setTargetOrder]=useState('value_asc')
   const [targetRarity,setTargetRarity]=useState('all')
   const [upgradeBusy,setUpgradeBusy]=useState(false)
+  const [upgradeSpinPlan,setUpgradeSpinPlan]=useState(null)
+  const spinSerial=useRef(0)
   const [backupMessage,setBackupMessage]=useState('')
   const busyGuard=useRef(false)
   const upgradeTimer=useRef(null)
@@ -411,6 +497,7 @@ export default function App() {
   const t = labels[lang] || labels.ru
   const uc = chanceCopy[lang] || chanceCopy.ru
   const ex = extraCopy[lang] || extraCopy.ru
+  const wc = upgradeWheelCopy[lang] || upgradeWheelCopy.ru
   const source = useMemo(() => getItem(sourceId), [sourceId])
   const target = useMemo(() => getItem(targetId), [targetId])
   const ownedItems = previewItems.filter((item) => (inventory[item.id] || 0) > 0)
@@ -485,41 +572,54 @@ export default function App() {
   }
 
   function runUpgrade() {
-    if(!validTarget || busyGuard.current)return
-    const count=Number(inventory[source.id])||0
-    if(count<1){
-      setResult({type:'error',text:lang==='en'?'You do not own this item.':lang==='uk'?'У тебе немає цього предмета.':'У тебя нет этого предмета.'})
+    if (!validTarget || busyGuard.current) return
+    const count = Number(inventory[source.id]) || 0
+    if (count < 1) {
+      setResult({ type:'error', text:lang==='en'?'You do not own this item.':lang==='uk'?'У тебе немає цього предмета.':'У тебя нет этого предмета.' })
       return
     }
-    busyGuard.current=true
-    const success=secureRoll()*100<chance
-    const nextInventory={...inventory,[source.id]:count-1}
-    if(success)nextInventory[target.id]=(Number(nextInventory[target.id])||0)+1
-    const entry={id:Date.now()+secureRoll(),ok:success,source:source.id,target:target.id,chance:chance.toFixed(2),time:new Date().toLocaleTimeString(lang==='en'?'en-US':'ru-RU',{hour:'2-digit',minute:'2-digit'})}
-    const nextHistory=[entry,...history].slice(0,12)
-    // Commit rewards before the animation starts. A reload cannot reroll a result.
-    try{
-      localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))
-      localStorage.setItem('mineup-demo-history',JSON.stringify(nextHistory))
-    }catch{}
+    // The position under the pointer and the result use the very same roll.
+    // The green sector begins at 0 degrees (12 o'clock), clockwise.
+    const roll = secureRoll()
+    const success = roll < chance / 100
+    const finalAngle = roll * 360
+    busyGuard.current = true // set synchronously: double-click cannot make two attempts
+    const nextInventory = { ...inventory, [source.id]:count - 1 }
+    if (success) nextInventory[target.id] = (Number(nextInventory[target.id]) || 0) + 1
+    const entry = { id:Date.now()+secureRoll(), ok:success, source:source.id, target:target.id, chance:chance.toFixed(2), time:new Date().toLocaleTimeString(lang==='en'?'en-US':'ru-RU',{hour:'2-digit',minute:'2-digit'}) }
+    const nextHistory = [entry, ...history].slice(0, 12)
+    const nextStats = { cases:stats.cases||0, upgrades:(stats.upgrades||0)+1, wins:(stats.wins||0)+(success?1:0) }
+    // Commit transaction before the animation, so refresh cannot reroll/reclaim it.
+    try {
+      localStorage.setItem('mineup-demo-inventory', JSON.stringify(nextInventory))
+      localStorage.setItem('mineup-demo-history', JSON.stringify(nextHistory))
+      localStorage.setItem('mineup-demo-stats', JSON.stringify(nextStats))
+    } catch {}
     setInventory(nextInventory)
     setHistory(nextHistory)
-    const nextStats={cases:stats.cases||0,upgrades:(stats.upgrades||0)+1,wins:(stats.wins||0)+(success?1:0)}
-    try{localStorage.setItem('mineup-demo-stats',JSON.stringify(nextStats))}catch{}
     setStats(nextStats)
     setResult(null)
     setUpgradeBusy(true)
-    if(upgradeTimer.current)clearTimeout(upgradeTimer.current)
-    upgradeTimer.current=setTimeout(()=>{
-      busyGuard.current=false
+    const duration = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 450 : 5000
+    const finish = () => {
+      if (!busyGuard.current) return // WAAPI completion + timer fallback cannot double-finish.
+      busyGuard.current = false
+      if (upgradeTimer.current) window.clearTimeout(upgradeTimer.current)
+      upgradeTimer.current = null
       setUpgradeBusy(false)
-      setResult({type:success?'success':'fail',text:success?`${t.success} • ${source.name} → ${target.name}`:`${t.fail} • ${source.name}`})
-      upgradeTimer.current=null
-    },1600)
+      setUpgradeSpinPlan(null)
+      setResult({ type:success?'success':'fail', text:success?`${t.success} • ${source.name} → ${target.name}`:`${t.fail} • ${source.name}` })
+      if (sound === 'on') upgradeSound(success ? 'win' : 'fail')
+    }
+    setUpgradeSpinPlan({ id:++spinSerial.current, finalAngle, duration, onFinished:finish })
+    if (sound === 'on') upgradeSound('start')
+    if (upgradeTimer.current) window.clearTimeout(upgradeTimer.current)
+    // If an animation is paused by a browser/tab, don't lock the app forever.
+    upgradeTimer.current = window.setTimeout(finish, duration + 500)
   }
 
   function sellItem(id) {
-    if (!(inventory[id] > 0)) return
+    if (busyGuard.current || rollingGuard.current || !(inventory[id] > 0)) return
     const item = getItem(id)
     setInventory((prev) => ({ ...prev, [id]: prev[id] - 1 }))
     setCoins((prev) => prev + Math.floor(item.value * 0.85))
@@ -652,6 +752,7 @@ export default function App() {
   }
 
   function go(p) {
+    if (busyGuard.current) return
     setPage(p)
     setMenu(false)
     setActiveCase(null)
@@ -684,7 +785,7 @@ export default function App() {
         </div>
         <div className="sideBottom">
           <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">MINEUP <strong>ALPHA 0.4</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="stage">MINEUP <strong>ALPHA 0.5</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
@@ -701,7 +802,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP PROJECT — ALPHA 0.4</div>
+              <div className="eyebrow"><span className="dot" /> MINEUP PROJECT — ALPHA 0.5</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -714,7 +815,7 @@ export default function App() {
 
               <section className="upgradeLab" aria-label={uc.title}>
                 <div className="upgradeIntro">
-                  <div><div className="eyebrow">STAGE 09 / 100 ITEMS · SEARCH · 3D BEACON</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
+                  <div><div className="eyebrow">STAGE 10.1 / SMOOTH UPGRADE WHEEL</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
                   <span className="stamp"><ShieldCheck size={15} /> {t.demoMode}</span>
                 </div>
 
@@ -733,9 +834,10 @@ export default function App() {
                     <small className="ownedMark">{t.sourceOwned}: <b>{inventory[source.id] || 0}</b></small>
                   </div>
                   <div className="upChance">
-                    <div className={'upWheel '+(upgradeBusy?'wheelRolling':'')} style={{ '--pct': chance + '%' }}><div><strong>{chance.toFixed(2)}%</strong><span>{upgradeBusy?ex.spin:uc.chance}</span></div></div>
-                    <small>{uc.formula}</small>
-                    <button className="upgradeRun" onClick={runUpgrade} disabled={upgradeBusy || (inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {upgradeBusy?ex.spin:uc.run}</button>
+                    <UpgradeWheel chance={chance} spinning={upgradeBusy} spinPlan={upgradeSpinPlan} caption={uc.chance} winLabel={wc.win} loseLabel={wc.lose} />
+                    <small className="wheelInfo">{upgradeBusy ? wc.spinning : uc.formula}</small>
+                    <button className="upgradeRun" onClick={runUpgrade} disabled={upgradeBusy || (inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {upgradeBusy ? wc.spinning : uc.run}</button>
+                    <div className="upSpinTiming">{upgradeBusy ? <span className="upSpinBar" style={{'--duration':`${upgradeSpinPlan?.duration||5000}ms`}}/> : null}<span>{upgradeBusy ? wc.wait : wc.duration}</span></div>
                   </div>
                   <div className="upSlot">
                     <span className="upSlotLabel">02 / {uc.target}</span>
@@ -882,12 +984,12 @@ export default function App() {
                 <section className="settingBox"><div className="settingName"><Globe2 size={17} />{t.lang}</div><div className="choices">{[['ru', 'Русский'], ['uk', 'Українська'], ['en', 'English']].map(([id, name]) => <button className={lang === id ? 'chosen' : ''} key={id} onClick={() => setLang(id)}>{name}{lang === id && <Check size={15} />}</button>)}</div></section>
                 <section className="settingBox"><div className="settingName"><Layers3 size={17} />{t.theme}</div><div className="choices">{[['gold', 'Dark Gold'], ['violet', 'Deep Violet'], ['emerald', 'Emerald'], ['light', 'Light']].map(([id, name]) => <button className={theme === id ? 'chosen' : ''} key={id} onClick={() => setTheme(id)}>{name}{theme === id && <Check size={15} />}</button>)}</div></section>
                 <section className="settingBox"><div className="settingName"><SlidersHorizontal size={17} />{t.accent}</div><div className="choices">{[['amber', 'Amber'], ['mint', 'Mint'], ['blue', 'Blue']].map(([id, name]) => <button className={accent === id ? 'chosen' : ''} key={id} onClick={() => setAccent(id)}>{name}{accent === id && <Check size={15} />}</button>)}</div></section>
-                <section className="settingBox"><div className="settingName"><Settings2 size={17} />{t.sound}</div><div className="choices">{[['off', 'OFF'], ['on', 'ON (later)']].map(([id, name]) => <button className={sound === id ? 'chosen' : ''} key={id} onClick={() => setSound(id)}>{name}{sound === id && <Check size={15} />}</button>)}</div><small className="settingNote">{t.progress}</small></section>
+                <section className="settingBox"><div className="settingName"><Settings2 size={17} />{t.sound}</div><div className="choices">{[['off', 'OFF'], ['on', 'ON']].map(([id, name]) => <button className={sound === id ? 'chosen' : ''} key={id} onClick={() => setSound(id)}>{name}{sound === id && <Check size={15} />}</button>)}</div><small className="settingNote">{t.progress}</small></section>
               </div>
             </>
           )}
 
-          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.4 • LOCAL DEMO / 100 ITEMS + SEARCH</span></footer>
+          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.5 • LOCAL DEMO / 100 ITEMS + SEARCH</span></footer>
         </main>
       </div>
 
