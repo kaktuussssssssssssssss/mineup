@@ -228,3 +228,67 @@
 .upWheelV10 .upNeedleTip{top:12px;height:39px}
 .upWheelV10 .upNeedlePivot{display:none}
 @media(max-width:650px){.upWheelV10 .upNeedleBody{top:39px;height:27px}.upWheelV10 .upNeedleTip{top:10px;height:34px}}
+
+/* STAGE 10.2: clear result decision, economy and expanded personalization */
+:root{--vox-radius:12px;--vox-glow:.7}
+[data-theme='crimson']{color-scheme:dark;--bg:#150e14;--panel:#21151e;--panel2:#2a1c27;--line:#f19db51d;--text:#fff1f4;--muted:#baa0b0;--primary:#ee687b;--primarySoft:#ee687b24;--shadow:#0c070d}
+[data-theme='midnight']{color-scheme:dark;--bg:#0a1020;--panel:#111b30;--panel2:#1a2743;--line:#8ba5e924;--text:#eff3ff;--muted:#97a8cb;--primary:#9cacf9;--primarySoft:#9cacf925;--shadow:#080d1b}
+[data-theme='frost']{color-scheme:dark;--bg:#0b1820;--panel:#10242c;--panel2:#19313b;--line:#a5ebff25;--text:#e9fcff;--muted:#9bbdc4;--primary:#89def0;--primarySoft:#89def026;--shadow:#071419}
+[data-accent='pink']{--primary:#ed89c7;--primarySoft:#ed89c727}
+[data-accent='red']{--primary:#f27b80;--primarySoft:#f27b8028}
+[data-accent='white']{--primary:#d8e0ea;--primarySoft:#d8e0ea29}
+.hero,.upgradeLab,.upSlot,.caseCard,.caseModalV8,.invCard,.upItem,.settingBox,.caseSpinBtn,.primary,.sellBtn,.profileLead,.upCollectionSide,.resultBanner,.resourceStat,.backupPanel{border-radius:var(--vox-radius)!important}
+.caseGlow{opacity:var(--vox-glow-alpha,.12)}
+.heroOrb{opacity:var(--vox-glow)}
+.upWheelV10.upgradeWheelLive{box-shadow:0 0 0 7px var(--primarySoft),0 0 var(--vox-blur-size,26px) #e9b96739}
+[data-density='compact'] .caseCard{padding:10px}
+[data-density='compact'] .caseCard .caseArt{height:125px}
+[data-density='compact'] .upItem{min-height:118px;padding:8px 5px;gap:4px}
+[data-density='compact'] .upItem .voxel-thumb{height:54px}
+[data-density='compact'] .invCard{padding:9px;gap:5px}
+[data-density='compact'] .main{padding-top:25px}
+[data-motion='calm'] .heroItem,[data-motion='calm'] .caseGlow{animation-duration:12s!important}
+[data-motion='off'] .heroItem,[data-motion='off'] .heroOrb,[data-motion='off'] .caseArtModel,[data-motion='off'] .caseGlow{animation:none!important}
+[data-motion='off'] .caseCard,[data-motion='off'] .upItem{transition:none}
+.caseMinimum{color:var(--primary)!important;font-weight:800;display:block;margin-top:7px}
+.emptySourceSlot{display:flex;align-items:center;flex-direction:column;justify-content:center;gap:12px;height:180px;width:100%;max-width:320px;color:var(--muted);font-size:11px;text-align:center;line-height:1.6}
+.emptySourceSlot svg{color:var(--primary)}
+.voxResultBackdrop{position:fixed;inset:0;z-index:120;background:#03060ce8;backdrop-filter:blur(14px);display:grid;place-items:center;padding:24px;overflow-y:auto}
+.voxResultDialog{position:relative;isolation:isolate;overflow:hidden;width:min(100%,490px);max-height:min(95dvh,900px);overflow-y:auto;border:1px solid color-mix(in srgb,var(--primary),transparent 65%);background:radial-gradient(circle at 50% -15%,color-mix(in srgb,var(--primary),transparent 88%),transparent 62%),linear-gradient(165deg,var(--panel2),var(--panel));color:var(--text);border-radius:18px;padding:34px 28px 30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:13px;box-shadow:0 35px 130px #000c,0 0 45px color-mix(in srgb,var(--primary),transparent 92%);animation:voxResultEnter .42s cubic-bezier(.2,.8,.22,1) both}
+@keyframes voxResultEnter{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.voxResultMark{height:53px;width:53px;border-radius:17px;display:grid;place-items:center;background:var(--primarySoft);color:var(--primary);border:1px solid color-mix(in srgb,var(--primary),transparent 65%)}
+.voxResultEyebrow{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase}
+.voxResultDialog h2{font:900 clamp(25px,3vw,37px) 'Space Grotesk',Arial,sans-serif;letter-spacing:-1px;line-height:1.12;margin:1px 0 4px}
+.voxResultArt{--rarity:#efb857;width:100%;height:202px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--rarity),transparent 52%);background:radial-gradient(circle at center,color-mix(in srgb,var(--rarity),transparent 83%),transparent 70%);border-radius:14px;box-shadow:inset 0 0 25px #0006}
+.voxResultArt .voxel-viewer{max-width:100%}
+.voxResultArt .voxel-stage{height:164px}
+.voxResultItem{font:800 21px 'Space Grotesk',Arial,sans-serif;margin-top:2px}
+.voxResultValue{font-size:13px;color:var(--primary);font-weight:900}
+.voxResultOdds{border:1px solid color-mix(in srgb,var(--primary),transparent 60%);border-radius:7px;background:var(--primarySoft);padding:6px 10px;font-size:10px;font-weight:900;color:var(--primary);letter-spacing:1px}
+.voxResultDialog p{font-size:12px;line-height:1.7;color:var(--muted);max-width:370px;margin:5px 0 0}
+.voxResultActions{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;margin-top:10px}
+.voxResultActions button{min-height:52px;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:12px;border-radius:9px;white-space:normal}
+.voxSellNow{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.voxSellNow:hover{border-color:var(--primary);color:var(--primary)}
+.voxResultSafety{display:flex;align-items:center;justify-content:center;gap:7px;color:var(--muted);font-size:10px;line-height:1.5}
+.voxFailureSymbol{height:140px;width:140px;border:2px solid #d65c6a66;border-radius:50%;display:grid;place-items:center;color:#eb7988;background:radial-gradient(circle,#e35d7224,transparent 75%);margin:15px auto;box-shadow:0 0 75px #dd43552b}
+.voxContinue{min-width:220px;margin:12px 0 0}
+.voxJackpot{background:radial-gradient(circle at center,#4e341cbd,#03060cef 80%)}
+.voxJackpot .voxResultDialog{border-color:#e6bb66;box-shadow:0 0 130px #deb25f2b,0 35px 130px #000c}
+.voxJackpot h2{color:#ffd875;text-shadow:0 0 25px #f0b95380}
+.voxJackpotSparks{position:absolute;inset:0;pointer-events:none;z-index:-1}
+.voxJackpotSparks i{position:absolute;left:50%;top:40%;width:4px;height:11px;border-radius:3px;background:#ffd177;transform:rotate(calc(var(--n) * 20deg));animation:voxBurst 1.5s cubic-bezier(.1,.5,.2,1) forwards}
+@keyframes voxBurst{from{opacity:0;transform:rotate(calc(var(--n) * 20deg)) translateY(0) scale(.1)}20%{opacity:1}to{opacity:0;transform:rotate(calc(var(--n) * 20deg)) translateY(-240px) scale(1)}}
+.settingsGroupTitle{display:flex;align-items:center;gap:9px;color:var(--primary);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;margin:28px 0 13px}
+.themeSwatches .themeDot{width:13px;height:13px;box-shadow:inset 0 0 0 1px #ffffff66;border-radius:4px;flex:none}
+.settingBox .choices{gap:8px}
+.settingBox .choices button{display:flex;align-items:center;gap:9px}
+.settingBox .choices button svg{margin-left:auto}
+.settingBox input[type='range']{display:block;width:100%;margin:14px 0;accent-color:var(--primary);cursor:pointer}
+.rangeCaption{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;margin-top:18px}
+.rangeCaption b{color:var(--primary);font-size:13px}
+.radiusDemo{display:grid;place-items:center;padding:15px;border:1px dashed var(--line)}
+.radiusDemo span{padding:9px 25px;color:var(--text);background:var(--primarySoft);border:1px solid var(--primary);font-size:11px;font-weight:900}
+.glowDemo{margin:22px auto 10px;width:40%;height:13px;border-radius:20px;background:var(--primary)}
+@media(max-width:560px){.voxResultBackdrop{padding:12px}.voxResultDialog{padding:23px 17px 21px}.voxResultActions{grid-template-columns:1fr}.voxResultArt{height:175px}.voxResultArt .voxel-stage{height:137px}}
+@media(prefers-reduced-motion:reduce){.voxResultDialog,.voxJackpotSparks i{animation:none!important}}

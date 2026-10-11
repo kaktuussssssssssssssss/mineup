@@ -226,7 +226,7 @@ const previewItems = [
 ]
 const itemMap = Object.fromEntries(previewItems.map((item) => [item.id, item]))
 const rarityColors = { COMMON: '#9ba3b2', UNCOMMON: '#d6b069', RARE: '#5dd8c4', EPIC: '#7ca8ff', LEGENDARY: '#c89bff', MYTHIC: '#f070ff' }
-const casePools = [[["dirt",38],["stick",20],["cobblestone",12],["coal",7],["copper_ingot",5],["iron",2],["sand",3],["gravel",2],["snowball",3],["netherrack",2],["stone",1],["grass_block",1],["oak_log",1],["mud",1],["flint",1],["clay_ball",1]],[["oak_planks",10],["bread",22],["apple",25.5],["copper_ingot",13],["iron",10],["iron_pickaxe",3.5],["emerald",0.5],["wheat",3],["leather",3],["raw_copper",5],["feather",2],["string",1],["arrow",1],["bow",0.5]],[["coal",8],["raw_iron",19],["iron",26],["lapis",13],["iron_pickaxe",15],["emerald",5],["diamond",1],["raw_gold",3],["stone_pickaxe",3],["book",3],["torch",2],["crafting_table",1],["arrow",1]],[["iron_sword",15],["iron_pickaxe",16],["emerald",26],["obsidian",17],["diamond",11],["diamond_sword",2.5],["totem",0.5],["iron_axe",5],["iron_helmet",3],["book",2],["iron_chestplate",2]],[["gold",7],["emerald",25],["golden_apple",22],["diamond",19],["diamond_sword",12],["totem",1.8],["netherite",0.2],["golden_carrot",3],["quartz",2],["glass",2],["gunpowder",3],["glowstone_dust",1],["blaze_rod",1],["slime_ball",1]],[["lapis",8],["redstone",8],["diamond_ore",20],["diamond_pickaxe",25],["diamond_sword",17],["totem",7.5],["netherite",0.5],["amethyst_shard",4],["prismarine_shard",3],["prismarine_crystals",3],["ender_pearl",1],["nether_wart",1],["enchanting_table",1],["golden_sword",1]],[["diamond",8],["diamond_ore",10],["diamond_pickaxe",22],["diamond_sword",18],["totem",19],["ancient_debris",9],["netherite",1.9],["nether_star",0.1],["diamond_axe",3],["golden_pickaxe",3],["diamond_helmet",2],["diamond_chestplate",2],["magma_cream",1],["end_stone",1]],[["ender_eye",7],["ghast_tear",10],["crying_obsidian",13],["totem",30],["ancient_debris",11],["netherite",14],["netherite_sword",2.8],["nether_star",0.2],["sea_lantern",2],["tnt",2],["ender_chest",2],["gilded_blackstone",1],["netherite_pickaxe",2],["trident",1],["shulker_shell",1],["soul_sand",1]],[["totem",7],["ancient_debris",14],["netherite",30],["netherite_sword",26],["nether_star",10],["elytra",2.8],["dragon_egg",0.2],["netherite_pickaxe",3],["netherite_axe",3],["netherite_helmet",2],["echo_shard",2]],[["netherite_sword",16],["nether_star",21],["elytra",22],["netherite_chestplate",15],["beacon",9],["dragon_egg",3.7],["enchanted_apple",0.3],["music_disc_pigstep",4],["music_disc_13",4],["mace",2],["heavy_core",2],["heart_of_the_sea",1]],[["nether_star",7],["elytra",10],["netherite_chestplate",13],["beacon",19],["end_crystal",20],["dragon_egg",16],["enchanted_apple",5],["trial_key",2],["ominous_trial_key",2],["dragon_breath",2],["heavy_core",2],["mace",2]]]
+const casePools = [[["dirt",38.0],["stick",20.0],["sand",3.0],["cobblestone",12.0],["gravel",2.0],["netherrack",2.0],["stone",1.0],["grass_block",1.0],["oak_log",1.0],["mud",1.0],["snowball",3.0],["coal",7.0],["flint",1.0],["clay_ball",1.0],["copper_ingot",5.0],["iron",2.0]],[["oak_planks",11.82],["bread",24.03],["wheat",3.17],["apple",26.42],["leather",3.05],["feather",1.99],["string",0.98],["copper_ingot",12.44],["raw_copper",4.66],["iron",8.39],["bow",0.33],["arrow",0.64],["iron_pickaxe",1.58],["emerald",0.5]],[["feather",4.31],["string",4.34],["copper_ingot",4.39],["raw_copper",4.45],["raw_iron",14.27],["iron",20.32],["raw_gold",2.41],["stone_pickaxe",2.44],["lapis",10.78],["redstone",0.86],["arrow",0.89],["book",2.82],["torch",1.93],["iron_pickaxe",15.96],["crafting_table",1.15],["emerald",6.31],["diamond",2.37]],[["bow",4.63],["arrow",4.64],["iron_sword",11.62],["book",1.56],["gold",4.68],["torch",4.68],["iron_pickaxe",12.61],["iron_axe",3.96],["iron_helmet",2.39],["emerald",20.85],["iron_chestplate",1.64],["obsidian",14.15],["diamond",9.42],["diamond_sword",2.67],["totem",0.5]],[["iron_axe",4.79],["crafting_table",4.8],["iron_helmet",4.82],["emerald",20.15],["iron_chestplate",4.92],["golden_apple",18.06],["golden_carrot",2.5],["glass",1.68],["diamond",16.08],["quartz",1.71],["gunpowder",2.6],["glowstone_dust",0.9],["blaze_rod",0.91],["slime_ball",0.91],["diamond_sword",11.94],["totem",3.03],["netherite",0.2]],[["glass",5.55],["diamond",5.55],["quartz",5.55],["gunpowder",5.55],["diamond_ore",18.51],["ender_pearl",0.93],["nether_wart",0.93],["diamond_pickaxe",23.14],["amethyst_shard",3.7],["diamond_sword",15.73],["prismarine_shard",2.78],["enchanting_table",0.93],["prismarine_crystals",2.78],["golden_sword",0.93],["totem",6.94],["netherite",0.5]],[["ender_pearl",5.43],["nether_wart",5.44],["diamond_pickaxe",19.98],["amethyst_shard",5.47],["diamond_sword",16.45],["prismarine_shard",5.53],["golden_pickaxe",2.82],["magma_cream",0.95],["diamond_axe",2.87],["diamond_helmet",1.94],["end_stone",0.98],["totem",18.78],["diamond_chestplate",2.01],["ancient_debris",9.17],["netherite",2.08],["nether_star",0.1]],[["golden_sword",3.95],["ghast_tear",6.61],["golden_pickaxe",4.04],["ender_eye",4.78],["magma_cream",4.13],["diamond_axe",4.2],["crying_obsidian",9.35],["totem",23.0],["ancient_debris",9.14],["sea_lantern",1.7],["tnt",1.76],["trident",0.89],["ender_chest",1.86],["netherite",14.04],["gilded_blackstone",1.04],["shulker_shell",1.04],["soul_sand",1.14],["netherite_sword",3.79],["netherite_pickaxe",3.18],["nether_star",0.36]],[["totem",4.55],["diamond_chestplate",3.99],["ancient_debris",9.46],["sea_lantern",4.1],["tnt",4.18],["trident",4.19],["netherite",22.24],["netherite_sword",22.32],["netherite_pickaxe",2.78],["nether_star",9.84],["netherite_axe",3.16],["netherite_helmet",2.35],["echo_shard",2.64],["elytra",4.0],["dragon_egg",0.2]],[["netherite_sword",13.15],["netherite_pickaxe",4.96],["nether_star",17.41],["netherite_axe",4.99],["netherite_helmet",5.03],["elytra",18.66],["music_disc_pigstep",3.4],["music_disc_13",3.43],["netherite_chestplate",12.88],["heart_of_the_sea",0.87],["mace",1.74],["heavy_core",1.75],["beacon",7.94],["dragon_egg",3.49],["enchanted_apple",0.3]],[["echo_shard",4.1],["elytra",6.94],["music_disc_pigstep",4.21],["music_disc_13",4.29],["netherite_chestplate",9.37],["heart_of_the_sea",4.44],["mace",1.51],["heavy_core",1.53],["beacon",14.92],["trial_key",1.61],["end_crystal",16.77],["ominous_trial_key",1.76],["dragon_breath",1.83],["dragon_egg",15.55],["enchanted_apple",11.17]]]
 const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['settings', Settings2]]
 
 const labels = {
@@ -418,7 +418,7 @@ function UpgradeWheel({ chance, spinning, spinPlan, caption, winLabel, loseLabel
   </div>
 }
 
-function upgradeSound(kind) {
+function upgradeSound(kind,volume=0.55) {
   try {
     const Audio = window.AudioContext || window.webkitAudioContext
     if (!Audio) return
@@ -430,7 +430,7 @@ function upgradeSound(kind) {
       osc.type = kind === 'fail' ? 'triangle' : 'sine'
       osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09)
       gain.gain.setValueAtTime(0.0001, ctx.currentTime + idx * 0.09)
-      gain.gain.exponentialRampToValueAtTime(0.035, ctx.currentTime + idx * 0.09 + 0.012)
+      gain.gain.exponentialRampToValueAtTime(Math.max(.0001,0.06*volume), ctx.currentTime + idx * 0.09 + 0.012)
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.09 + 0.17)
       osc.connect(gain).connect(ctx.destination)
       osc.start(ctx.currentTime + idx * 0.09)
@@ -445,12 +445,67 @@ const upgradeWheelCopy = {
   en: { win: 'Success', lose: 'Fail', spinning: 'POINTER SPINNING', duration: '5 seconds • smooth slowdown', wait: 'Wait for the pointer to stop' }
 }
 
+
+const polishCopy = {
+ ru: { minDrop:'Минимальный дроп', averageDrop:'Средний дроп', caseEv:'Сбалансированные кейсы',
+  winTitle:'ВЫ ВЫИГРАЛИ!', loseTitle:'НЕУДАЧНЫЙ АПГРЕЙД', jackpotTitle:'JACKPOT!',
+  take:'ЗАБРАТЬ', sellNow:'ПРОДАТЬ', continue:'ПРОДОЛЖИТЬ', sold:'Продано',
+  resultDesc:'Выбери, что сделать с предметом. Награда сохранена, пока не заберёшь или не продашь её.',
+  failedDesc:'Исходный предмет потрачен. Следующую попытку можно сделать с другим предметом.',
+  dontLose:'Награда сохранится даже после обновления страницы.',
+  visualSettings:'Оформление', gameplaySettings:'Комфорт и эффекты', effects:'Визуальные эффекты',
+  radius:'Скругление элементов', glow:'Яркость свечения', volume:'Громкость', density:'Плотность карточек',
+  spacious:'Просторно', compact:'Компактно', motion:'Анимации интерфейса',
+  motionFull:'Полные', motionCalm:'Спокойные', motionOff:'Без эффектов',
+  rareEffects:'Эффекты JACKPOT', rareOn:'Включены', rareOff:'Выключены',
+  oddsGuarantee:'Цена и шансы каждого предмета доступны до открытия. Реальные ставки отсутствуют.',
+  sourceGone:'Нет предметов для апгрейда. Получи новый предмет из кейса.',
+  upgradeRunLocked:'Сначала выбери доступный предмет', pending:'Заверши предыдущий результат.',
+ },
+ uk: { minDrop:'Мінімальний дроп', averageDrop:'Середній дроп', caseEv:'Збалансовані кейси',
+  winTitle:'ТИ ВИГРАВ!', loseTitle:'НЕВДАЛИЙ АПГРЕЙД', jackpotTitle:'JACKPOT!',
+  take:'ЗАБРАТИ', sellNow:'ПРОДАТИ', continue:'ПРОДОВЖИТИ', sold:'Продано',
+  resultDesc:'Обери, що зробити з предметом. Нагорода збережеться, поки не забереш або не продаси її.',
+  failedDesc:'Початковий предмет витрачено. Наступну спробу можна зробити з іншим предметом.',
+  dontLose:'Нагорода залишиться після оновлення сторінки.',
+  visualSettings:'Оформлення', gameplaySettings:'Комфорт і ефекти', effects:'Візуальні ефекти',
+  radius:'Заокруглення елементів', glow:'Яскравість сяйва', volume:'Гучність', density:'Щільність карток',
+  spacious:'Просторо', compact:'Компактно', motion:'Анімації інтерфейсу',
+  motionFull:'Повні', motionCalm:'Спокійні', motionOff:'Без ефектів',
+  rareEffects:'Ефекти JACKPOT', rareOn:'Увімкнені', rareOff:'Вимкнені',
+  oddsGuarantee:'Ціна і шанс кожного предмета відомі до відкриття. Реальних ставок немає.',
+  sourceGone:'Немає предметів для апгрейду. Отримай новий предмет із кейса.',
+  upgradeRunLocked:'Спочатку обери доступний предмет', pending:'Заверши попередній результат.',
+ },
+ en: { minDrop:'Minimum drop', averageDrop:'Average drop', caseEv:'Rebalanced cases',
+  winTitle:'YOU WON!', loseTitle:'UPGRADE FAILED', jackpotTitle:'JACKPOT!',
+  take:'CLAIM', sellNow:'SELL', continue:'CONTINUE', sold:'Sold',
+  resultDesc:'Choose what to do with your item. This reward is saved until you claim or sell it.',
+  failedDesc:'The source item was consumed. Select another item to try again.',
+  dontLose:'Your reward remains saved if you reload the page.',
+  visualSettings:'Appearance', gameplaySettings:'Comfort and effects', effects:'Visual effects',
+  radius:'Corner roundness', glow:'Glow strength', volume:'Volume', density:'Card density',
+  spacious:'Spacious', compact:'Compact', motion:'Interface animations',
+  motionFull:'Full', motionCalm:'Calm', motionOff:'No effects',
+  rareEffects:'JACKPOT effects', rareOn:'Enabled', rareOff:'Disabled',
+  oddsGuarantee:'Prices and item odds are visible before opening. No real-money gambling.',
+  sourceGone:'No items left to upgrade. Get a new item from a case.',
+  upgradeRunLocked:'Choose an owned item first', pending:'Please finish the previous result.',
+ }
+}
 export default function App() {
   const [page, setPage] = useState('upgrade')
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
   const [theme, setTheme] = useState(() => stored('mineup-theme', 'gold'))
   const [accent, setAccent] = useState(() => stored('mineup-accent', 'amber'))
   const [sound, setSound] = useState(() => stored('mineup-sound', 'off'))
+  const [volume, setVolume] = useState(() => clamp(Number(stored('voxup-volume', 55)),0,100))
+  const [radius, setRadius] = useState(() => clamp(Number(stored('voxup-radius', 12)),4,24))
+  const [glow, setGlow] = useState(() => clamp(Number(stored('voxup-glow', 70)),0,100))
+  const [density, setDensity] = useState(() => stored('voxup-density', 'spacious'))
+  const [motion, setMotion] = useState(() => stored('voxup-motion', 'full'))
+  const [jackpotFx, setJackpotFx] = useState(() => stored('voxup-jackpot-fx', 'on'))
+  const [pendingReward, setPendingReward] = useState(() => stored('mineup-pending-reward',null))
   const [menu, setMenu] = useState(false)
   const [activeCase, setActiveCase] = useState(null)
 
@@ -485,6 +540,7 @@ export default function App() {
   const spinSerial=useRef(0)
   const [backupMessage,setBackupMessage]=useState('')
   const busyGuard=useRef(false)
+  const resolveGuard=useRef(false)
   const upgradeTimer=useRef(null)
   const backupInput=useRef(null)
   const reelTrack = useRef(null)
@@ -495,6 +551,7 @@ export default function App() {
   const SPIN_TIME = 5000
 
   const t = labels[lang] || labels.ru
+  const pc = polishCopy[lang] || polishCopy.ru
   const uc = chanceCopy[lang] || chanceCopy.ru
   const ex = extraCopy[lang] || extraCopy.ru
   const wc = upgradeWheelCopy[lang] || upgradeWheelCopy.ru
@@ -511,19 +568,35 @@ export default function App() {
   const filteredTargets=possibleTargets.filter(item=>matches(item,targetSearch)&&(targetRarity==='all'||item.rarity===targetRarity)).sort((a,b)=>bySort(a,b,targetOrder))
   const portfolioValue=previewItems.reduce((total,item)=>total+(Number(inventory[item.id])||0)*item.value,0)
   const totalItems=previewItems.reduce((total,item)=>total+(Number(inventory[item.id])||0),0)
+  const currentSourceOwned = (Number(inventory[source.id]) || 0) > 0
+  const displayClaim = pendingReward && !upgradeBusy && !caseRolling
+  const pendingItem = pendingReward?.itemId && itemMap[pendingReward.itemId] ? getItem(pendingReward.itemId) : null
   useEffect(()=>()=>{if(upgradeTimer.current)clearTimeout(upgradeTimer.current)},[])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
     document.documentElement.dataset.accent = accent
     document.documentElement.lang = lang
+    document.documentElement.dataset.density=density
+    document.documentElement.dataset.motion=motion
+    document.documentElement.dataset.fx=jackpotFx
+    document.documentElement.style.setProperty('--vox-radius', `${radius}px`)
+    document.documentElement.style.setProperty('--vox-glow',String(glow/100))
+    document.documentElement.style.setProperty('--vox-glow-alpha',String(.18*glow/100))
+    document.documentElement.style.setProperty('--vox-blur-size',`${Math.round(38*glow/100)}px`)
     try {
       localStorage.setItem('mineup-theme', JSON.stringify(theme))
       localStorage.setItem('mineup-language', JSON.stringify(lang))
       localStorage.setItem('mineup-accent', JSON.stringify(accent))
       localStorage.setItem('mineup-sound', JSON.stringify(sound))
+      localStorage.setItem('voxup-volume',JSON.stringify(volume))
+      localStorage.setItem('voxup-radius',JSON.stringify(radius))
+      localStorage.setItem('voxup-glow',JSON.stringify(glow))
+      localStorage.setItem('voxup-density',JSON.stringify(density))
+      localStorage.setItem('voxup-motion',JSON.stringify(motion))
+      localStorage.setItem('voxup-jackpot-fx',JSON.stringify(jackpotFx))
     } catch {}
-  }, [theme, lang, accent, sound])
+  }, [theme, lang, accent, sound, volume, radius, glow, density, motion, jackpotFx])
 
   useEffect(() => {
     try {
@@ -537,6 +610,28 @@ export default function App() {
       localStorage.setItem('mineup-demo-stats', JSON.stringify(stats))
     } catch {}
   }, [sourceId, targetId, multiplier, coins, inventory, history, caseHistory, stats])
+
+  useEffect(() => {
+    try {
+      if(pendingReward) localStorage.setItem('mineup-pending-reward',JSON.stringify(pendingReward))
+      else localStorage.removeItem('mineup-pending-reward')
+    } catch {}
+  },[pendingReward])
+
+  useEffect(() => {
+    if(upgradeBusy || pendingReward || rollingGuard.current) return
+    if((inventory[sourceId] || 0) > 0) return
+    const candidates = previewItems.filter(item => (inventory[item.id]||0)>0 && item.value<previewItems[previewItems.length-1].value)
+    if(!candidates.length) return
+    const current=getItem(sourceId)
+    const next=candidates.reduce((best,item)=>Math.abs(item.value-current.value)<Math.abs(best.value-current.value)?item:best,candidates[0])
+    setSourceId(next.id)
+    if(getItem(targetId).value<=next.value) {
+      const nextTarget=findNearestTarget(next.value,multiplier)
+      if(nextTarget)setTargetId(nextTarget.id)
+    }
+  },[inventory,sourceId,upgradeBusy,pendingReward])
+
 
   useEffect(() => {
     if (target.value <= source.value) {
@@ -572,7 +667,7 @@ export default function App() {
   }
 
   function runUpgrade() {
-    if (!validTarget || busyGuard.current) return
+    if (!validTarget || busyGuard.current || pendingReward || rollingGuard.current) return
     const count = Number(inventory[source.id]) || 0
     if (count < 1) {
       setResult({ type:'error', text:lang==='en'?'You do not own this item.':lang==='uk'?'У тебе немає цього предмета.':'У тебя нет этого предмета.' })
@@ -584,8 +679,9 @@ export default function App() {
     const success = roll < chance / 100
     const finalAngle = roll * 360
     busyGuard.current = true // set synchronously: double-click cannot make two attempts
+    resolveGuard.current=false
     const nextInventory = { ...inventory, [source.id]:count - 1 }
-    if (success) nextInventory[target.id] = (Number(nextInventory[target.id]) || 0) + 1
+    // Successful prize stays in escrow until the player chooses CLAIM or SELL.
     const entry = { id:Date.now()+secureRoll(), ok:success, source:source.id, target:target.id, chance:chance.toFixed(2), time:new Date().toLocaleTimeString(lang==='en'?'en-US':'ru-RU',{hour:'2-digit',minute:'2-digit'}) }
     const nextHistory = [entry, ...history].slice(0, 12)
     const nextStats = { cases:stats.cases||0, upgrades:(stats.upgrades||0)+1, wins:(stats.wins||0)+(success?1:0) }
@@ -598,6 +694,9 @@ export default function App() {
     setInventory(nextInventory)
     setHistory(nextHistory)
     setStats(nextStats)
+    const reward={txId:`u-${Date.now()}-${Math.round(secureRoll()*1e9)}`,kind:'upgrade',outcome:success?'win':'lose',itemId:success?target.id:null,sourceId:source.id,sourceName:source.name,targetName:target.name,chance:Number(chance.toFixed(2)),createdAt:Date.now()}
+    try{localStorage.setItem('mineup-pending-reward',JSON.stringify(reward))}catch{}
+    setPendingReward(reward)
     setResult(null)
     setUpgradeBusy(true)
     const duration = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 450 : 5000
@@ -608,25 +707,52 @@ export default function App() {
       upgradeTimer.current = null
       setUpgradeBusy(false)
       setUpgradeSpinPlan(null)
-      setResult({ type:success?'success':'fail', text:success?`${t.success} • ${source.name} → ${target.name}`:`${t.fail} • ${source.name}` })
-      if (sound === 'on') upgradeSound(success ? 'win' : 'fail')
+      setResult(null)
+      // The modal opens after wheel stops. No stale source model remains once resolved.
+      if (sound === 'on') upgradeSound(success ? 'win' : 'fail',volume/100)
     }
     setUpgradeSpinPlan({ id:++spinSerial.current, finalAngle, duration, onFinished:finish })
-    if (sound === 'on') upgradeSound('start')
+    if (sound === 'on') upgradeSound('start',volume/100)
     if (upgradeTimer.current) window.clearTimeout(upgradeTimer.current)
     // If an animation is paused by a browser/tab, don't lock the app forever.
     upgradeTimer.current = window.setTimeout(finish, duration + 500)
   }
 
   function sellItem(id) {
-    if (busyGuard.current || rollingGuard.current || !(inventory[id] > 0)) return
+    if (pendingReward || busyGuard.current || rollingGuard.current || !(inventory[id] > 0)) return
     const item = getItem(id)
     setInventory((prev) => ({ ...prev, [id]: prev[id] - 1 }))
     setCoins((prev) => prev + Math.floor(item.value * 0.85))
   }
 
+  function resolveReward(action) {
+    const reward=pendingReward
+    if(!reward || busyGuard.current || rollingGuard.current || resolveGuard.current) return
+    resolveGuard.current=true
+    if(reward.outcome==='win' && itemMap[reward.itemId]) {
+      if(action==='sell') {
+        const sale=Math.floor(getItem(reward.itemId).value*.85)
+        const nextCoins=coins+sale
+        try{localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))}catch{}
+        setCoins(nextCoins)
+      } else {
+        const nextInventory={...inventory,[reward.itemId]:(Number(inventory[reward.itemId])||0)+1}
+        try{localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))}catch{}
+        setInventory(nextInventory)
+      }
+    }
+    // Remove escrow only after applying the claim/sale. No duplicate reward on reload.
+    try{localStorage.removeItem('mineup-pending-reward')}catch{}
+    setPendingReward(null)
+    setResult(null)
+    if(reward.kind==='case') {
+      setCaseRollResult(null)
+      setCaseReel([])
+    }
+  }
+
   function resetDemo() {
-    if(busyGuard.current || rollingGuard.current)return
+    if(busyGuard.current || rollingGuard.current || pendingReward)return
     if(!window.confirm(ex.confirmReset))return
     setCoins(2500)
     setInventory({ ...defaultInventory })
@@ -637,10 +763,12 @@ export default function App() {
     setTargetId('diamond')
     setMultiplier(5.714)
     setResult(null)
+    setPendingReward(null)
+    try{localStorage.removeItem('mineup-pending-reward')}catch{}
   }
 
   function exportSave(){
-    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent}
+    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
     const file=new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
     const url=URL.createObjectURL(file)
     const a=document.createElement('a');a.href=url;a.download='voxup-save.json';document.body.appendChild(a);a.click();a.remove()
@@ -653,7 +781,7 @@ export default function App() {
       if(file.size>2*1024*1024)throw new Error('oversized')
       const data=JSON.parse(await file.text())
       if(data?.format!=='voxup-save'||data.version!==1||!data.inventory||typeof data.inventory!=='object'||!Number.isFinite(data.coins))throw new Error('invalid')
-      if(busyGuard.current||rollingGuard.current)throw new Error('busy')
+      if(busyGuard.current||rollingGuard.current||pendingReward)throw new Error('busy')
       const validInventory={}
       for(const item of previewItems){
         const count=Number(data.inventory[item.id]||0)
@@ -667,10 +795,20 @@ export default function App() {
       const nextMult=clamp(Number(data.multiplier)||5.714,1.01,900)
       const positiveInt=(v,fallback)=>Number.isSafeInteger(Number(v))&&Number(v)>=0&&Number(v)<=1e9?Number(v):fallback
       const nextStats={cases:positiveInt(data.stats?.cases,safeCaseHistory.length),upgrades:positiveInt(data.stats?.upgrades,safeHistory.length),wins:positiveInt(data.stats?.wins,safeHistory.filter(h=>h.ok).length)}
-      const writes={'mineup-demo-coins':safeCoins,'mineup-demo-inventory':validInventory,'mineup-demo-history':safeHistory,'mineup-case-history':safeCaseHistory,'mineup-preview-source':nextSource,'mineup-preview-target':nextTarget,'mineup-preview-multiplier':nextMult,'mineup-demo-stats':nextStats}
+      const safePending=data.pendingReward && typeof data.pendingReward==='object' && ['case','upgrade'].includes(data.pendingReward.kind) && ['win','lose'].includes(data.pendingReward.outcome) && (data.pendingReward.outcome==='lose'||itemMap[data.pendingReward.itemId]) ? data.pendingReward : null
+      const writes={'mineup-demo-coins':safeCoins,'mineup-demo-inventory':validInventory,'mineup-demo-history':safeHistory,'mineup-case-history':safeCaseHistory,'mineup-preview-source':nextSource,'mineup-preview-target':nextTarget,'mineup-preview-multiplier':nextMult,'mineup-demo-stats':nextStats,'mineup-pending-reward':safePending}
       Object.entries(writes).forEach(([key,val])=>localStorage.setItem(key,JSON.stringify(val)))
       setCoins(safeCoins);setInventory(validInventory);setHistory(safeHistory);setCaseHistory(safeCaseHistory);setStats(nextStats)
       setSourceId(nextSource);setTargetId(nextTarget);setMultiplier(nextMult)
+      setPendingReward(safePending)
+      const opts=data.settings||{}
+      if(Number.isFinite(Number(opts.volume)))setVolume(clamp(Number(opts.volume),0,100))
+      if(Number.isFinite(Number(opts.radius)))setRadius(clamp(Number(opts.radius),4,24))
+      if(Number.isFinite(Number(opts.glow)))setGlow(clamp(Number(opts.glow),0,100))
+      if(['spacious','compact'].includes(opts.density))setDensity(opts.density)
+      if(['full','calm','off'].includes(opts.motion))setMotion(opts.motion)
+      if(['on','off'].includes(opts.jackpotFx))setJackpotFx(opts.jackpotFx)
+      if(['on','off'].includes(opts.sound))setSound(opts.sound)
       setBackupMessage(ex.backupOk)
     }catch{setBackupMessage(ex.backupBad)}
     e.target.value=''
@@ -692,7 +830,8 @@ export default function App() {
   const caseEvs = casePools.map(pool => pool.reduce((sum,[id,pct])=>sum+getItem(id).value*pct/100,0))
 
   function openDemoCase() {
-    if(activeCase===null || rollingGuard.current)return
+    if(activeCase===null || rollingGuard.current || busyGuard.current || pendingReward)return
+    resolveGuard.current=false
     const idx=activeCase,price=cases[idx][2]
     if(coins<price){setCaseRollResult({error:true,text:lang==='en'?'Not enough MC Coins.':'Недостаточно MC Coins.'});return}
     const pool=casePools[idx]
@@ -701,19 +840,21 @@ export default function App() {
     // Charge AND deliver synchronously at click time. Both React state and local
     // persistent state receive the same transaction before animation begins.
     const nextCoins=coins-price
-    const nextInventory={...inventory,[won]:(inventory[won]||0)+1}
+    // Prize goes to persistent escrow, not directly into inventory.
     const nextHistory=[{id:Date.now()+secureRoll(),item:won,caseName:cases[idx][1],price,time:new Date().toLocaleString('ru-RU')},...caseHistory].slice(0,30)
     try{
       localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))
-      localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))
       localStorage.setItem('mineup-case-history',JSON.stringify(nextHistory))
     }catch{}
     setCoins(nextCoins)
-    setInventory(nextInventory)
     setCaseHistory(nextHistory)
     const nextStats={cases:(stats.cases||0)+1,upgrades:stats.upgrades||0,wins:stats.wins||0}
     try{localStorage.setItem('mineup-demo-stats',JSON.stringify(nextStats))}catch{}
     setStats(nextStats)
+    const odds=pool.find(([id])=>id===won)?.[1]||0
+    const reward={txId:`c-${Date.now()}-${Math.round(secureRoll()*1e9)}`,kind:'case',outcome:'win',itemId:won,caseIndex:idx,caseName:cases[idx][1],odds,price,createdAt:Date.now()}
+    try{localStorage.setItem('mineup-pending-reward',JSON.stringify(reward))}catch{}
+    setPendingReward(reward)
     rollingGuard.current=true
     setCaseRollResult(null)
     setCaseReel(reel)
@@ -734,25 +875,34 @@ export default function App() {
       {transform:`translate3d(${target}px,-50%,0)`}
     ],{duration:SPIN_TIME,easing:'cubic-bezier(.09,.68,.16,1)',fill:'forwards'})
     reelAnimation.current=animation
-    animation.onfinish=()=>{
+    let finished=false
+    let fallbackTimer=null
+    const complete=()=>{
+      if(finished)return
+      finished=true
+      if(fallbackTimer!==null)window.clearTimeout(fallbackTimer)
       reelAnimation.current=null
       rollingGuard.current=false
       setCaseRolling(false)
       setCaseRollResult({id:caseReel[WINNER_INDEX]})
     }
+    animation.onfinish=complete
+    // Browser background tabs sometimes pause WAAPI. Avoid a stuck locked case.
+    fallbackTimer=window.setTimeout(complete, SPIN_TIME+650)
     return()=>{
       animation.onfinish=null
+      if(fallbackTimer!==null)window.clearTimeout(fallbackTimer)
       animation.cancel()
       if(reelAnimation.current===animation)reelAnimation.current=null
     }
   },[caseSpinId])
   function closeCase(){
-    if(rollingGuard.current)return
+    if(rollingGuard.current || pendingReward)return
     setActiveCase(null);setCaseRollResult(null);setCaseReel([])
   }
 
   function go(p) {
-    if (busyGuard.current) return
+    if (busyGuard.current || pendingReward || rollingGuard.current) return
     setPage(p)
     setMenu(false)
     setActiveCase(null)
@@ -802,7 +952,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP PROJECT — ALPHA 0.5</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.6</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -815,7 +965,7 @@ export default function App() {
 
               <section className="upgradeLab" aria-label={uc.title}>
                 <div className="upgradeIntro">
-                  <div><div className="eyebrow">STAGE 10.1 / SMOOTH UPGRADE WHEEL</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
+                  <div><div className="eyebrow">STAGE 10.2 / ECONOMY + REWARDS</div><h2>{uc.title}</h2><p>{uc.desc}</p></div>
                   <span className="stamp"><ShieldCheck size={15} /> {t.demoMode}</span>
                 </div>
 
@@ -828,7 +978,7 @@ export default function App() {
                 <div className="upgradeTriad">
                   <div className="upSlot">
                     <span className="upSlotLabel">01 / {uc.source}</span>
-                    <VoxelViewer id={source.id} label={source.name} textureSource={textureSource} blockIds={blockIds} />
+                    {currentSourceOwned || upgradeBusy ? <VoxelViewer id={source.id} label={source.name} textureSource={textureSource} blockIds={blockIds} /> : <div className="emptySourceSlot"><Boxes size={39}/><span>{pc.sourceGone}</span></div>}
                     <strong>{source.name}</strong>
                     <span className="upValue">{formatCoins(source.value)} MC</span>
                     <small className="ownedMark">{t.sourceOwned}: <b>{inventory[source.id] || 0}</b></small>
@@ -836,7 +986,7 @@ export default function App() {
                   <div className="upChance">
                     <UpgradeWheel chance={chance} spinning={upgradeBusy} spinPlan={upgradeSpinPlan} caption={uc.chance} winLabel={wc.win} loseLabel={wc.lose} />
                     <small className="wheelInfo">{upgradeBusy ? wc.spinning : uc.formula}</small>
-                    <button className="upgradeRun" onClick={runUpgrade} disabled={upgradeBusy || (inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {upgradeBusy ? wc.spinning : uc.run}</button>
+                    <button className="upgradeRun" onClick={runUpgrade} disabled={upgradeBusy || Boolean(pendingReward) || (inventory[source.id] || 0) < 1 || !validTarget}><Swords size={16} /> {upgradeBusy ? wc.spinning : uc.run}</button>
                     <div className="upSpinTiming">{upgradeBusy ? <span className="upSpinBar" style={{'--duration':`${upgradeSpinPlan?.duration||5000}ms`}}/> : null}<span>{upgradeBusy ? wc.wait : wc.duration}</span></div>
                   </div>
                   <div className="upSlot">
@@ -854,7 +1004,7 @@ export default function App() {
                   <div><span>×1.01 • до 90%</span><span>×900 • до 0,1%</span></div>
                 </div>
 
-                {result && <div className={'resultBanner resultReveal ' + result.type} role="status"><span>{result.type==='success'?'✦':result.type==='fail'?'×':'!'}</span>{result.text}</div>}
+                {result?.type==='error' && <div className="resultBanner error" role="status">{result.text}</div>}
 
                 <div className="catalogCountBadge"><Gem size={15}/><b>{previewItems.length}</b> {ex.total} • {ex.showcase} <span>{ex.fair}</span></div>
                 <div className="upCollections">
@@ -977,19 +1127,28 @@ export default function App() {
 
           {page === 'settings' && (
             <>
-              <div className="eyebrow">MINEUP / PREFERENCES</div>
+              <div className="eyebrow">VOXUP / PREFERENCES</div>
               <h1 className="sectionTitle">{t.settings}</h1>
               <p className="settingsLead">{t.saved}</p>
+              <div className="settingsGroupTitle"><Sparkles size={18}/>{pc.visualSettings}</div>
               <div className="settingsGrid">
-                <section className="settingBox"><div className="settingName"><Globe2 size={17} />{t.lang}</div><div className="choices">{[['ru', 'Русский'], ['uk', 'Українська'], ['en', 'English']].map(([id, name]) => <button className={lang === id ? 'chosen' : ''} key={id} onClick={() => setLang(id)}>{name}{lang === id && <Check size={15} />}</button>)}</div></section>
-                <section className="settingBox"><div className="settingName"><Layers3 size={17} />{t.theme}</div><div className="choices">{[['gold', 'Dark Gold'], ['violet', 'Deep Violet'], ['emerald', 'Emerald'], ['light', 'Light']].map(([id, name]) => <button className={theme === id ? 'chosen' : ''} key={id} onClick={() => setTheme(id)}>{name}{theme === id && <Check size={15} />}</button>)}</div></section>
-                <section className="settingBox"><div className="settingName"><SlidersHorizontal size={17} />{t.accent}</div><div className="choices">{[['amber', 'Amber'], ['mint', 'Mint'], ['blue', 'Blue']].map(([id, name]) => <button className={accent === id ? 'chosen' : ''} key={id} onClick={() => setAccent(id)}>{name}{accent === id && <Check size={15} />}</button>)}</div></section>
-                <section className="settingBox"><div className="settingName"><Settings2 size={17} />{t.sound}</div><div className="choices">{[['off', 'OFF'], ['on', 'ON']].map(([id, name]) => <button className={sound === id ? 'chosen' : ''} key={id} onClick={() => setSound(id)}>{name}{sound === id && <Check size={15} />}</button>)}</div><small className="settingNote">{t.progress}</small></section>
+                <section className="settingBox"><div className="settingName"><Globe2 size={17}/>{t.lang}</div><div className="choices">{[['ru','Русский'],['uk','Українська'],['en','English']].map(([id,name])=><button className={lang===id?'chosen':''} key={id} onClick={()=>setLang(id)}>{name}{lang===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox"><div className="settingName"><Layers3 size={17}/>{t.theme}</div><div className="choices themeSwatches">{[['gold','Dark Gold','#e8b654'],['violet','Deep Violet','#bd9cff'],['emerald','Emerald','#70dbad'],['light','Light','#e6e8df'],['crimson','Crimson','#ee6778'],['midnight','Midnight','#7f9dfb'],['frost','Frost','#8fdcf1']].map(([id,name,col])=><button className={theme===id?'chosen':''} key={id} onClick={()=>setTheme(id)}><i className="themeDot" style={{background:col}}/>{name}{theme===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox"><div className="settingName"><SlidersHorizontal size={17}/>{t.accent}</div><div className="choices themeSwatches">{[['amber','Amber','#efb857'],['mint','Mint','#67dbbb'],['blue','Blue','#6baefd'],['pink','Pink','#ed89c7'],['red','Red','#f27b80'],['white','White','#d8e0ea']].map(([id,name,col])=><button className={accent===id?'chosen':''} key={id} onClick={()=>setAccent(id)}><i className="themeDot" style={{background:col}}/>{name}{accent===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox settingSliders"><div className="settingName"><SlidersHorizontal size={17}/>{pc.radius}</div><div className="rangeCaption"><span>4px</span><b>{radius}px</b><span>24px</span></div><input type="range" min="4" max="24" value={radius} onChange={e=>setRadius(Number(e.target.value))}/><div className="radiusDemo"><span style={{borderRadius:`${radius}px`}}>VOXUP</span></div></section>
+                <section className="settingBox settingSliders"><div className="settingName"><Sparkles size={17}/>{pc.glow}</div><div className="rangeCaption"><span>0%</span><b>{glow}%</b><span>100%</span></div><input type="range" min="0" max="100" value={glow} onChange={e=>setGlow(Number(e.target.value))}/><div className="glowDemo" style={{boxShadow:`0 0 ${glow/2}px color-mix(in srgb,var(--primary),transparent 38%)`}}/></section>
+              </div>
+              <div className="settingsGroupTitle"><Settings2 size={18}/>{pc.gameplaySettings}</div>
+              <div className="settingsGrid">
+                <section className="settingBox"><div className="settingName"><Volume2 size={17}/>{t.sound}</div><div className="choices">{[['off','OFF'],['on','ON']].map(([id,name])=><button className={sound===id?'chosen':''} key={id} onClick={()=>setSound(id)}>{name}{sound===id&&<Check size={15}/>}</button>)}</div><div className="rangeCaption"><span>{pc.volume}</span><b>{volume}%</b></div><input type="range" min="0" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></section>
+                <section className="settingBox"><div className="settingName"><Layers3 size={17}/>{pc.density}</div><div className="choices">{[['spacious',pc.spacious],['compact',pc.compact]].map(([id,name])=><button key={id} className={density===id?'chosen':''} onClick={()=>setDensity(id)}>{name}{density===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox"><div className="settingName"><Activity size={17}/>{pc.motion}</div><div className="choices">{[['full',pc.motionFull],['calm',pc.motionCalm],['off',pc.motionOff]].map(([id,name])=><button key={id} className={motion===id?'chosen':''} onClick={()=>setMotion(id)}>{name}{motion===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox"><div className="settingName"><Sparkles size={17}/>{pc.rareEffects}</div><div className="choices">{[['on',pc.rareOn],['off',pc.rareOff]].map(([id,name])=><button key={id} className={jackpotFx===id?'chosen':''} onClick={()=>setJackpotFx(id)}>{name}{jackpotFx===id&&<Check size={15}/>}</button>)}</div><small className="settingNote">{pc.oddsGuarantee}</small></section>
               </div>
             </>
           )}
 
-          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.5 • LOCAL DEMO / 100 ITEMS + SEARCH</span></footer>
+          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.6 • LOCAL DEMO / 100 ITEMS + BALANCED CASES</span></footer>
         </main>
       </div>
 
@@ -999,7 +1158,7 @@ export default function App() {
             <button className="modalClose" disabled={caseRolling} onClick={closeCase} aria-label="Закрыть"><X/></button>
             <div className="caseModalHeader">
               <div className="caseTitle"><span className="eyebrow">CASE / {String(activeCase+1).padStart(2,'0')} • LOCAL DEMO</span><h2>{cases[activeCase][1]}</h2><p>{cases[activeCase][4]}</p></div>
-              <div className="casePriceHead"><small>СТОИМОСТЬ ОТКРЫТИЯ</small><strong>{activeCase===0?'БЕСПЛАТНО':formatCoins(cases[activeCase][2])+' MC'}</strong><small>Баланс: {formatCoins(coins)} MC</small></div>
+              <div className="casePriceHead"><small>СТОИМОСТЬ ОТКРЫТИЯ</small><strong>{activeCase===0?'БЕСПЛАТНО':formatCoins(cases[activeCase][2])+' MC'}</strong><small>Баланс: {formatCoins(coins)} MC</small><small className="caseMinimum">{pc.minDrop}: {formatCoins(Math.min(...casePools[activeCase].map(([id])=>getItem(id).value)))} MC</small></div>
             </div>
             <div className="rouletteWrap">
               <div className="reelPointer" aria-hidden="true"/>
@@ -1011,16 +1170,39 @@ export default function App() {
               </div>
               <div className="rouletteBottom"><span>{caseRolling?'ПРОКРУТКА • 5 СЕКУНД':'СОДЕРЖИМОЕ КЕЙСА'}</span><span>{caseRolling?'● LIVE ROLL':caseRollResult?.id?'РЕЗУЛЬТАТ ПОЛУЧЕН':'ГОТОВ К ОТКРЫТИЮ'}</span></div>
             </div>
-            {caseRollResult?.id&&<div className="dropCelebration dropReveal" style={{'--rarity':rarityColors[getItem(caseRollResult.id).rarity]}}><VoxelThumbnail id={caseRollResult.id} textureSource={textureSource} blockIds={blockIds}/><div><small>ТВОЙ ДРОП • +1 В ИНВЕНТАРЬ</small><strong>{getItem(caseRollResult.id).name}</strong><span>{formatCoins(getItem(caseRollResult.id).value)} MC • {getItem(caseRollResult.id).rarity}</span></div></div>}
             {caseRollResult?.error&&<div className="resultBanner error">{caseRollResult.text}</div>}
-            <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling} onClick={openDemoCase}>{caseRolling?'ПРОКРУТКА...':caseRollResult?.id?'ОТКРЫТЬ ЕЩЁ':'ОТКРЫТЬ КЕЙС'} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз начисляется один раз при нажатии. Перезагрузка не уничтожит выигрыш.'}</span></div></div>
-            <section className="oddsSection"><div className="oddsHeader"><div><h3>ЧТО МОЖЕТ ВЫПАСТЬ</h3><p>Фиксированные вероятности, указаны для каждого предмета</p></div><span>СРЕДНИЙ ДРОП: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
+            <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling || Boolean(pendingReward)} onClick={openDemoCase}>{caseRolling?'ПРОКРУТКА...':caseRollResult?.id?'ОТКРЫТЬ ЕЩЁ':'ОТКРЫТЬ КЕЙС'} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз сохраняется до выбора «Забрать» или «Продать». Перезагрузка не уничтожит выигрыш.'}</span></div></div>
+            <section className="oddsSection"><div className="oddsHeader"><div><h3>ЧТО МОЖЕТ ВЫПАСТЬ</h3><p>Фиксированные вероятности, указаны для каждого предмета</p></div><span>{pc.averageDrop}: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
               <div className="oddsGrid">{casePools[activeCase].map(([id,p])=><div className="oddsItem" key={id} style={{'--rarity':rarityColors[getItem(id).rarity]}}><img src={textureSource(id)} alt=""/><div><strong>{getItem(id).name}</strong><small>{formatCoins(getItem(id).value)} MC</small></div><b>{Number(p).toLocaleString('ru-RU',{maximumFractionDigits:2})}%</b></div>)}</div>
               <div className="economyNote">Сумма вероятностей: 100%. Виртуальная валюта и предметы • расчёт дропа пока происходит в браузере. Показанный средний дроп — математическое ожидание стоимости, а не гарантированная награда.</div>
             </section>
           </div>
         </div>
       )}
+      {displayClaim && <div className={'voxResultBackdrop '+(pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on'?'voxJackpot':'')} role="presentation">
+        <section className="voxResultDialog" role="dialog" aria-modal="true" aria-labelledby="voxResultTitle">
+          {pendingReward.outcome==='win' && pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on' && <div className="voxJackpotSparks" aria-hidden="true">{Array.from({length:18},(_,i)=><i key={i} style={{'--n':i}}/>)}</div>}
+          <div className="voxResultMark">{pendingReward.outcome==='win'?<Sparkles size={25}/>:<X size={25}/>}</div>
+          <span className="voxResultEyebrow">{pendingReward.kind==='case'?`CASE DROP / ${pendingReward.caseName}`:'UPGRADE / RESULT'}</span>
+          <h2 id="voxResultTitle">{pendingReward.outcome==='lose'?pc.loseTitle:pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on'?pc.jackpotTitle:pc.winTitle}</h2>
+          {pendingReward.outcome==='win' && pendingItem ? <>
+            <div className="voxResultArt" style={{'--rarity':rarityColors[pendingItem.rarity]}}><VoxelViewer id={pendingItem.id} label={pendingItem.name} textureSource={textureSource} blockIds={blockIds}/></div>
+            <strong className="voxResultItem">{pendingItem.name}</strong>
+            <span className="voxResultValue">{formatCoins(pendingItem.value)} MC · {pendingItem.rarity}</span>
+            {pendingReward.kind==='case' && <span className="voxResultOdds">DROP RATE {Number(pendingReward.odds).toLocaleString('ru-RU')}%</span>}
+            <p>{pc.resultDesc}</p>
+            <div className="voxResultActions">
+              <button className="primary" onClick={()=>resolveReward('claim')}><Check size={18}/>{pc.take}</button>
+              <button className="voxSellNow" onClick={()=>resolveReward('sell')}><Coins size={18}/>{pc.sellNow} +{formatCoins(Math.floor(pendingItem.value*.85))} MC</button>
+            </div>
+            <small className="voxResultSafety"><ShieldCheck size={15}/>{pc.dontLose}</small>
+          </> : <>
+            <div className="voxFailureSymbol"><X size={44}/></div>
+            <p>{pc.failedDesc}</p>
+            <button className="primary voxContinue" onClick={()=>resolveReward('continue')}>{pc.continue}<ArrowUpRight size={18}/></button>
+          </>}
+        </section>
+      </div>}
     </div>
   )
 }
