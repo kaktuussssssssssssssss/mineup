@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {VoxelViewer, VoxelThumbnail} from './Voxel3D.jsx'
-import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2 } from 'lucide-react'
+import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2, Zap, Gamepad2, Timer, Target } from 'lucide-react'
 
 const mcTextureRoot = 'https://raw.githubusercontent.com/Faithful-Pack/Default-Java/1.21.8/assets/minecraft/textures/'
 const itemTextures = {
@@ -103,9 +103,59 @@ const itemTextures = {
   "heavy_core": "block/heavy_core.png",
   "trial_key": "item/trial_key.png",
   "ominous_trial_key": "item/ominous_trial_key.png",
-  "dragon_breath": "item/dragon_breath.png"
+  "dragon_breath": "item/dragon_breath.png",
+  "wooden_sword": "item/wooden_sword.png",
+  "wooden_pickaxe": "item/wooden_pickaxe.png",
+  "beetroot": "item/beetroot.png",
+  "potato": "item/potato.png",
+  "carrot": "item/carrot.png",
+  "bone": "item/bone.png",
+  "rotten_flesh": "item/rotten_flesh.png",
+  "egg": "item/egg.png",
+  "melon_slice": "item/melon_slice.png",
+  "cooked_chicken": "item/cooked_chicken.png",
+  "cooked_beef": "item/cooked_beef.png",
+  "pumpkin_pie": "item/pumpkin_pie.png",
+  "paper": "item/paper.png",
+  "fishing_rod": "item/fishing_rod.png",
+  "saddle": "item/saddle.png",
+  "leather_boots": "item/leather_boots.png",
+  "shield": "item/shield.png",
+  "shears": "item/shears.png",
+  "chainmail_helmet": "item/chainmail_helmet.png",
+  "clock": "item/clock_00.png",
+  "compass": "item/compass_00.png",
+  "map": "item/map.png",
+  "bucket": "item/bucket.png",
+  "water_bucket": "item/water_bucket.png",
+  "fire_charge": "item/fire_charge.png",
+  "crossbow": "item/crossbow_standby.png",
+  "spyglass": "item/spyglass.png",
+  "golden_helmet": "item/golden_helmet.png",
+  "diamond_boots": "item/diamond_boots.png",
+  "diamond_leggings": "item/diamond_leggings.png",
+  "golden_chestplate": "item/golden_chestplate.png",
+  "diamond_horse_armor": "item/diamond_horse_armor.png",
+  "turtle_scute": "item/turtle_scute.png",
+  "turtle_helmet": "item/turtle_helmet.png",
+  "phantom_membrane": "item/phantom_membrane.png",
+  "nautilus_shell": "item/nautilus_shell.png",
+  "spectral_arrow": "item/spectral_arrow.png",
+  "experience_bottle": "item/experience_bottle.png",
+  "enchanted_book": "item/enchanted_book.png",
+  "netherite_leggings": "item/netherite_leggings.png",
+  "netherite_boots": "item/netherite_boots.png",
+  "conduit": "entity/conduit/base.png",
+  "blue_ice": "block/blue_ice.png",
+  "wind_charge": "item/wind_charge.png",
+  "netherite_shovel": "item/netherite_shovel.png",
+  "netherite_hoe": "item/netherite_hoe.png",
+  "netherite_scrap": "item/netherite_scrap.png",
+  "breeze_rod": "item/breeze_rod.png",
+  "music_disc_relic": "item/music_disc_relic.png",
+  "music_disc_creator": "item/music_disc_creator.png"
 }
-const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon", "sand", "gravel", "netherrack", "grass_block", "oak_log", "mud", "glass", "sea_lantern", "tnt", "ender_chest", "gilded_blackstone", "soul_sand"]
+const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon", "sand", "gravel", "netherrack", "grass_block", "oak_log", "mud", "glass", "sea_lantern", "tnt", "ender_chest", "gilded_blackstone", "soul_sand", "conduit", "blue_ice"]
 const textureSource = (id) => mcTextureRoot + (itemTextures[id] || itemTextures.diamond)
 
 const cases = [
@@ -120,7 +170,17 @@ const cases = [
   ['NETHERITE', 'Незеритовый', 25000, '#ae89cd', 'Незеритовое снаряжение'],
   ['THE END', 'Энд', 60000, '#bd9bdc', 'Редкие находки Энда'],
   ['LEGENDARY', 'Легендарный', 150000, '#f4cf80', 'Легендарные предметы']
-]
+,
+  ["FARM", "Фермерский", 160, "#a6cf78", "Пища, урожай и редкие находки"],
+  ["RANGER", "Следопыт", 500, "#94c8a2", "Лук, карта и инструменты"],
+  ["EXPLORER", "Исследователь", 1100, "#8fa8d7", "Компас, книги и сокровища"],
+  ["ALCHEMY", "Алхимик", 2200, "#b398e0", "Магия и редкие материалы"],
+  ["ADVENTURE", "Приключение", 4500, "#edab81", "Экипировка и артефакты"],
+  ["OCEAN", "Океан", 9000, "#6bd8d9", "Морские ценности"],
+  ["DUNGEON", "Подземелье", 18000, "#c59b81", "Снаряжение и награды"],
+  ["TRIALS", "Испытания", 40000, "#e5b459", "Опасные находки испытаний"],
+  ["STORM", "Шторм", 85000, "#91a9fc", "Стихии и редкости"],
+  ["RELICS", "Реликвии", 210000, "#e28ec9", "Коллекционные реликвии"]]
 
 const previewItems = [
   {id: "dirt", name: "Земля", value: 8, rarity: "COMMON"},
@@ -223,15 +283,76 @@ const previewItems = [
   {id: "dragon_breath", name: "Драконье дыхание", value: 120000, rarity: "MYTHIC"},
   {id: "dragon_egg", name: "Яйцо дракона", value: 135000, rarity: "MYTHIC"},
   {id: "enchanted_apple", name: "Зачарованное золотое яблоко", value: 350000, rarity: "MYTHIC"}
-]
+,
+  {id: "wooden_sword", name: "Деревянный меч", value: 42, rarity: "COMMON"},
+  {id: "wooden_pickaxe", name: "Деревянная кирка", value: 49, rarity: "COMMON"},
+  {id: "beetroot", name: "Свёкла", value: 57, rarity: "COMMON"},
+  {id: "potato", name: "Картофель", value: 63, rarity: "COMMON"},
+  {id: "carrot", name: "Морковь", value: 70, rarity: "COMMON"},
+  {id: "bone", name: "Кость", value: 78, rarity: "COMMON"},
+  {id: "rotten_flesh", name: "Гнилая плоть", value: 85, rarity: "COMMON"},
+  {id: "egg", name: "Яйцо", value: 92, rarity: "COMMON"},
+  {id: "melon_slice", name: "Ломтик арбуза", value: 99, rarity: "COMMON"},
+  {id: "cooked_chicken", name: "Жареная курица", value: 142, rarity: "UNCOMMON"},
+  {id: "cooked_beef", name: "Стейк", value: 165, rarity: "UNCOMMON"},
+  {id: "pumpkin_pie", name: "Тыквенный пирог", value: 188, rarity: "UNCOMMON"},
+  {id: "paper", name: "Бумага", value: 215, rarity: "UNCOMMON"},
+  {id: "fishing_rod", name: "Удочка", value: 285, rarity: "UNCOMMON"},
+  {id: "saddle", name: "Седло", value: 355, rarity: "UNCOMMON"},
+  {id: "leather_boots", name: "Кожаные ботинки", value: 440, rarity: "UNCOMMON"},
+  {id: "shield", name: "Щит", value: 630, rarity: "RARE"},
+  {id: "shears", name: "Ножницы", value: 765, rarity: "RARE"},
+  {id: "chainmail_helmet", name: "Кольчужный шлем", value: 980, rarity: "RARE"},
+  {id: "clock", name: "Часы", value: 1180, rarity: "RARE"},
+  {id: "compass", name: "Компас", value: 1420, rarity: "RARE"},
+  {id: "map", name: "Карта", value: 1560, rarity: "RARE"},
+  {id: "bucket", name: "Ведро", value: 1760, rarity: "RARE"},
+  {id: "water_bucket", name: "Ведро воды", value: 2080, rarity: "RARE"},
+  {id: "fire_charge", name: "Огненный заряд", value: 2410, rarity: "EPIC"},
+  {id: "crossbow", name: "Арбалет", value: 2920, rarity: "EPIC"},
+  {id: "spyglass", name: "Подзорная труба", value: 3460, rarity: "EPIC"},
+  {id: "golden_helmet", name: "Золотой шлем", value: 4250, rarity: "EPIC"},
+  {id: "diamond_boots", name: "Алмазные ботинки", value: 6150, rarity: "EPIC"},
+  {id: "diamond_leggings", name: "Алмазные поножи", value: 8050, rarity: "EPIC"},
+  {id: "golden_chestplate", name: "Золотой нагрудник", value: 9250, rarity: "LEGENDARY"},
+  {id: "diamond_horse_armor", name: "Алмазная конская броня", value: 11200, rarity: "LEGENDARY"},
+  {id: "turtle_scute", name: "Черепаший щиток", value: 12300, rarity: "LEGENDARY"},
+  {id: "turtle_helmet", name: "Черепаший панцирь", value: 14300, rarity: "LEGENDARY"},
+  {id: "phantom_membrane", name: "Мембрана фантома", value: 17100, rarity: "LEGENDARY"},
+  {id: "nautilus_shell", name: "Раковина наутилуса", value: 18700, rarity: "LEGENDARY"},
+  {id: "spectral_arrow", name: "Спектральная стрела", value: 21500, rarity: "LEGENDARY"},
+  {id: "experience_bottle", name: "Пузырёк опыта", value: 24600, rarity: "LEGENDARY"},
+  {id: "enchanted_book", name: "Зачарованная книга", value: 29800, rarity: "LEGENDARY"},
+  {id: "netherite_leggings", name: "Незеритовые поножи", value: 35200, rarity: "LEGENDARY"},
+  {id: "netherite_boots", name: "Незеритовые ботинки", value: 41600, rarity: "MYTHIC"},
+  {id: "conduit", name: "Морской проводник", value: 50500, rarity: "MYTHIC"},
+  {id: "blue_ice", name: "Синий лёд", value: 59400, rarity: "MYTHIC"},
+  {id: "wind_charge", name: "Заряд ветра", value: 68200, rarity: "MYTHIC"},
+  {id: "netherite_shovel", name: "Незеритовая лопата", value: 85200, rarity: "MYTHIC"},
+  {id: "netherite_hoe", name: "Незеритовая мотыга", value: 95700, rarity: "MYTHIC"},
+  {id: "netherite_scrap", name: "Незеритовый скрап", value: 123000, rarity: "MYTHIC"},
+  {id: "breeze_rod", name: "Стержень бриза", value: 146000, rarity: "MYTHIC"},
+  {id: "music_disc_relic", name: "Пластинка Relic", value: 171000, rarity: "MYTHIC"},
+  {id: "music_disc_creator", name: "Пластинка Creator", value: 198000, rarity: "MYTHIC"}]
 const itemMap = Object.fromEntries(previewItems.map((item) => [item.id, item]))
 const rarityColors = { COMMON: '#9ba3b2', UNCOMMON: '#d6b069', RARE: '#5dd8c4', EPIC: '#7ca8ff', LEGENDARY: '#c89bff', MYTHIC: '#f070ff' }
-const casePools = [[["dirt",38.0],["stick",20.0],["sand",3.0],["cobblestone",12.0],["gravel",2.0],["netherrack",2.0],["stone",1.0],["grass_block",1.0],["oak_log",1.0],["mud",1.0],["snowball",3.0],["coal",7.0],["flint",1.0],["clay_ball",1.0],["copper_ingot",5.0],["iron",2.0]],[["oak_planks",11.82],["bread",24.03],["wheat",3.17],["apple",26.42],["leather",3.05],["feather",1.99],["string",0.98],["copper_ingot",12.44],["raw_copper",4.66],["iron",8.39],["bow",0.33],["arrow",0.64],["iron_pickaxe",1.58],["emerald",0.5]],[["feather",4.31],["string",4.34],["copper_ingot",4.39],["raw_copper",4.45],["raw_iron",14.27],["iron",20.32],["raw_gold",2.41],["stone_pickaxe",2.44],["lapis",10.78],["redstone",0.86],["arrow",0.89],["book",2.82],["torch",1.93],["iron_pickaxe",15.96],["crafting_table",1.15],["emerald",6.31],["diamond",2.37]],[["bow",4.63],["arrow",4.64],["iron_sword",11.62],["book",1.56],["gold",4.68],["torch",4.68],["iron_pickaxe",12.61],["iron_axe",3.96],["iron_helmet",2.39],["emerald",20.85],["iron_chestplate",1.64],["obsidian",14.15],["diamond",9.42],["diamond_sword",2.67],["totem",0.5]],[["iron_axe",4.79],["crafting_table",4.8],["iron_helmet",4.82],["emerald",20.15],["iron_chestplate",4.92],["golden_apple",18.06],["golden_carrot",2.5],["glass",1.68],["diamond",16.08],["quartz",1.71],["gunpowder",2.6],["glowstone_dust",0.9],["blaze_rod",0.91],["slime_ball",0.91],["diamond_sword",11.94],["totem",3.03],["netherite",0.2]],[["glass",5.55],["diamond",5.55],["quartz",5.55],["gunpowder",5.55],["diamond_ore",18.51],["ender_pearl",0.93],["nether_wart",0.93],["diamond_pickaxe",23.14],["amethyst_shard",3.7],["diamond_sword",15.73],["prismarine_shard",2.78],["enchanting_table",0.93],["prismarine_crystals",2.78],["golden_sword",0.93],["totem",6.94],["netherite",0.5]],[["ender_pearl",5.43],["nether_wart",5.44],["diamond_pickaxe",19.98],["amethyst_shard",5.47],["diamond_sword",16.45],["prismarine_shard",5.53],["golden_pickaxe",2.82],["magma_cream",0.95],["diamond_axe",2.87],["diamond_helmet",1.94],["end_stone",0.98],["totem",18.78],["diamond_chestplate",2.01],["ancient_debris",9.17],["netherite",2.08],["nether_star",0.1]],[["golden_sword",3.95],["ghast_tear",6.61],["golden_pickaxe",4.04],["ender_eye",4.78],["magma_cream",4.13],["diamond_axe",4.2],["crying_obsidian",9.35],["totem",23.0],["ancient_debris",9.14],["sea_lantern",1.7],["tnt",1.76],["trident",0.89],["ender_chest",1.86],["netherite",14.04],["gilded_blackstone",1.04],["shulker_shell",1.04],["soul_sand",1.14],["netherite_sword",3.79],["netherite_pickaxe",3.18],["nether_star",0.36]],[["totem",4.55],["diamond_chestplate",3.99],["ancient_debris",9.46],["sea_lantern",4.1],["tnt",4.18],["trident",4.19],["netherite",22.24],["netherite_sword",22.32],["netherite_pickaxe",2.78],["nether_star",9.84],["netherite_axe",3.16],["netherite_helmet",2.35],["echo_shard",2.64],["elytra",4.0],["dragon_egg",0.2]],[["netherite_sword",13.15],["netherite_pickaxe",4.96],["nether_star",17.41],["netherite_axe",4.99],["netherite_helmet",5.03],["elytra",18.66],["music_disc_pigstep",3.4],["music_disc_13",3.43],["netherite_chestplate",12.88],["heart_of_the_sea",0.87],["mace",1.74],["heavy_core",1.75],["beacon",7.94],["dragon_egg",3.49],["enchanted_apple",0.3]],[["echo_shard",4.1],["elytra",6.94],["music_disc_pigstep",4.21],["music_disc_13",4.29],["netherite_chestplate",9.37],["heart_of_the_sea",4.44],["mace",1.51],["heavy_core",1.53],["beacon",14.92],["trial_key",1.61],["end_crystal",16.77],["ominous_trial_key",1.76],["dragon_breath",1.83],["dragon_egg",15.55],["enchanted_apple",11.17]]]
-const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['settings', Settings2]]
+const casePools = [[["dirt",38.0],["stick",20.0],["sand",3.0],["cobblestone",12.0],["gravel",2.0],["netherrack",2.0],["stone",1.0],["grass_block",1.0],["oak_log",1.0],["mud",1.0],["snowball",3.0],["coal",7.0],["flint",1.0],["clay_ball",1.0],["copper_ingot",5.0],["iron",2.0]],[["oak_planks",11.82],["bread",24.03],["wheat",3.17],["apple",26.42],["leather",3.05],["feather",1.99],["string",0.98],["copper_ingot",12.44],["raw_copper",4.66],["iron",8.39],["bow",0.33],["arrow",0.64],["iron_pickaxe",1.58],["emerald",0.5]],[["feather",4.31],["string",4.34],["copper_ingot",4.39],["raw_copper",4.45],["raw_iron",14.27],["iron",20.32],["raw_gold",2.41],["stone_pickaxe",2.44],["lapis",10.78],["redstone",0.86],["arrow",0.89],["book",2.82],["torch",1.93],["iron_pickaxe",15.96],["crafting_table",1.15],["emerald",6.31],["diamond",2.37]],[["bow",4.63],["arrow",4.64],["iron_sword",11.62],["book",1.56],["gold",4.68],["torch",4.68],["iron_pickaxe",12.61],["iron_axe",3.96],["iron_helmet",2.39],["emerald",20.85],["iron_chestplate",1.64],["obsidian",14.15],["diamond",9.42],["diamond_sword",2.67],["totem",0.5]],[["iron_axe",4.79],["crafting_table",4.8],["iron_helmet",4.82],["emerald",20.15],["iron_chestplate",4.92],["golden_apple",18.06],["golden_carrot",2.5],["glass",1.68],["diamond",16.08],["quartz",1.71],["gunpowder",2.6],["glowstone_dust",0.9],["blaze_rod",0.91],["slime_ball",0.91],["diamond_sword",11.94],["totem",3.03],["netherite",0.2]],[["glass",5.55],["diamond",5.55],["quartz",5.55],["gunpowder",5.55],["diamond_ore",18.51],["ender_pearl",0.93],["nether_wart",0.93],["diamond_pickaxe",23.14],["amethyst_shard",3.7],["diamond_sword",15.73],["prismarine_shard",2.78],["enchanting_table",0.93],["prismarine_crystals",2.78],["golden_sword",0.93],["totem",6.94],["netherite",0.5]],[["ender_pearl",5.43],["nether_wart",5.44],["diamond_pickaxe",19.98],["amethyst_shard",5.47],["diamond_sword",16.45],["prismarine_shard",5.53],["golden_pickaxe",2.82],["magma_cream",0.95],["diamond_axe",2.87],["diamond_helmet",1.94],["end_stone",0.98],["totem",18.78],["diamond_chestplate",2.01],["ancient_debris",9.17],["netherite",2.08],["nether_star",0.1]],[["golden_sword",3.95],["ghast_tear",6.61],["golden_pickaxe",4.04],["ender_eye",4.78],["magma_cream",4.13],["diamond_axe",4.2],["crying_obsidian",9.35],["totem",23.0],["ancient_debris",9.14],["sea_lantern",1.7],["tnt",1.76],["trident",0.89],["ender_chest",1.86],["netherite",14.04],["gilded_blackstone",1.04],["shulker_shell",1.04],["soul_sand",1.14],["netherite_sword",3.79],["netherite_pickaxe",3.18],["nether_star",0.36]],[["totem",4.55],["diamond_chestplate",3.99],["ancient_debris",9.46],["sea_lantern",4.1],["tnt",4.18],["trident",4.19],["netherite",22.24],["netherite_sword",22.32],["netherite_pickaxe",2.78],["nether_star",9.84],["netherite_axe",3.16],["netherite_helmet",2.35],["echo_shard",2.64],["elytra",4.0],["dragon_egg",0.2]],[["netherite_sword",13.15],["netherite_pickaxe",4.96],["nether_star",17.41],["netherite_axe",4.99],["netherite_helmet",5.03],["elytra",18.66],["music_disc_pigstep",3.4],["music_disc_13",3.43],["netherite_chestplate",12.88],["heart_of_the_sea",0.87],["mace",1.74],["heavy_core",1.75],["beacon",7.94],["dragon_egg",3.49],["enchanted_apple",0.3]],[["echo_shard",4.1],["elytra",6.94],["music_disc_pigstep",4.21],["music_disc_13",4.29],["netherite_chestplate",9.37],["heart_of_the_sea",4.44],["mace",1.51],["heavy_core",1.53],["beacon",14.92],["trial_key",1.61],["end_crystal",16.77],["ominous_trial_key",1.76],["dragon_breath",1.83],["dragon_egg",15.55],["enchanted_apple",11.17]],
+  [["wooden_sword",2.6],["wooden_pickaxe",3.27],["beetroot",4.13],["potato",4.84],["carrot",5.75],["bone",6.91],["rotten_flesh",8.03],["egg",9.27],["melon_slice",10.62],["cooked_chicken",10.05],["cooked_beef",10.03],["pumpkin_pie",10.24],["paper",6.44],["fishing_rod",7.82]],
+  [["fishing_rod",12.25],["saddle",12.95],["leather_boots",11.12],["shield",5.46],["shears",5.08],["copper_ingot",3.19],["redstone",8.73],["gold",13.87],["iron_pickaxe",12.08],["emerald",10.04],["golden_apple",5.23]],
+  [["iron_pickaxe",18.28],["chainmail_helmet",11.46],["clock",7.23],["compass",2.61],["map",1.97],["bucket",1.35],["water_bucket",0.75],["golden_carrot",16.7],["obsidian",18.57],["diamond",10.92],["quartz",8.65],["blaze_rod",1.51]],
+  [["emerald",22.4],["bucket",18.14],["water_bucket",11.38],["fire_charge",7.24],["crossbow",2.26],["spyglass",1.17],["diamond_pickaxe",9.62],["diamond_sword",5.64],["amethyst_shard",6.86],["ender_pearl",14.73],["ghast_tear",0.56]],
+  [["ender_pearl",18.26],["spyglass",16.01],["golden_helmet",10.53],["diamond_boots",2.66],["diamond_leggings",1.26],["enchanting_table",17.55],["prismarine_crystals",14.81],["golden_sword",11.96],["diamond_axe",3.44],["diamond_helmet",2.13],["totem",1.39]],
+  [["golden_sword",28.3],["diamond_boots",25.3],["diamond_leggings",12.81],["golden_chestplate",8.64],["diamond_horse_armor",2.85],["turtle_scute",2.06],["turtle_helmet",1.18],["sea_lantern",6.03],["trident",2.61],["netherite",1.12],["ender_chest",1.84],["ancient_debris",7.26]],
+  [["totem",23.6],["turtle_scute",23.3],["turtle_helmet",16.77],["phantom_membrane",10.99],["nautilus_shell",8.75],["spectral_arrow",6.0],["experience_bottle",2.43],["enchanted_book",1.3],["netherite_sword",3.38],["netherite_pickaxe",2.05],["nether_star",1.43]],
+  [["spectral_arrow",17.45],["experience_bottle",18.86],["enchanted_book",14.06],["netherite_leggings",10.16],["netherite_boots",7.15],["conduit",2.76],["blue_ice",1.84],["netherite_axe",11.9],["netherite_helmet",8.68],["elytra",5.18],["netherite_chestplate",1.96]],
+  [["echo_shard",15.12],["conduit",16.37],["blue_ice",13.98],["wind_charge",10.73],["netherite_shovel",6.78],["netherite_hoe",5.23],["heavy_core",9.37],["beacon",7.75],["end_crystal",5.07],["trial_key",6.47],["dragon_breath",1.81],["dragon_egg",1.32]],
+  [["netherite_scrap",10.73],["breeze_rod",12.44],["music_disc_relic",12.59],["music_disc_creator",13.1],["ominous_trial_key",8.54],["dragon_breath",10.19],["dragon_egg",12.51],["enchanted_apple",13.22],["end_crystal",6.68]]
+]
+const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['arcade', Gamepad2], ['settings', Settings2]]
 
 const labels = {
   ru: {
-    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки',
+    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Аркада',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя коллекция. Твой риск. Твой следующий апгрейд.',
     explore: 'Посмотреть кейсы', demo: 'В разработке', hello: 'Основа будущей игровой платформы',
     catalog: 'КАТАЛОГ КЕЙСОВ', all: 'Все кейсы', free: 'За рекламу', balance: 'Баланс', guest: 'Гостевой режим',
@@ -251,7 +372,7 @@ const labels = {
     profileSoon: 'Позже здесь будут вход, облачное сохранение и статистика.'
   },
   uk: {
-    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування',
+    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Аркада',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя колекція. Твій ризик. Твій наступний апгрейд.',
     explore: 'Переглянути кейси', demo: 'У розробці', hello: 'Основа майбутньої ігрової платформи',
     catalog: 'КАТАЛОГ КЕЙСІВ', all: 'Усі кейси', free: 'За рекламу', balance: 'Баланс', guest: 'Гостьовий режим',
@@ -271,7 +392,7 @@ const labels = {
     profileSoon: 'Пізніше тут будуть вхід, хмарне збереження та статистика.'
   },
   en: {
-    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings',
+    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Arcade',
     head: 'MORE THAN LUCK.', sub: 'Your collection. Your risk. Your next upgrade.',
     explore: 'Explore cases', demo: 'In development', hello: 'The foundation of a new game platform',
     catalog: 'CASE COLLECTION', all: 'All cases', free: 'Watch an ad', balance: 'Balance', guest: 'Guest mode',
@@ -493,6 +614,305 @@ const polishCopy = {
   upgradeRunLocked:'Choose an owned item first', pending:'Please finish the previous result.',
  }
 }
+const detailedUI = {"ru": {"case_open": "ОТКРЫТЬ КЕЙС", "case_more": "ОТКРЫТЬ ЕЩЁ", "case_spinning": "ПРОКРУТКА...", "case_contents": "ЧТО МОЖЕТ ВЫПАСТЬ", "case_cost": "СТОИМОСТЬ ОТКРЫТИЯ", "free": "БЕСПЛАТНО", "drop_count": "Дропов", "inventory": "Инвентарь", "history": "ПОСЛЕДНИЕ ВЫПАДЕНИЯ", "filter_owned": "Показать только мои", "filter_active": "✓ Только мои предметы", "case_balance": "Баланс", "notEnough": "Недостаточно MC Coins.", "case_ev": "СРЕДНИЙ ДРОП", "cases_banner": "Экономика · демо: каждый кейс имеет собственную таблицу вероятностей. Покупки за игровые MC Coins.", "case_probability": "Фиксированные вероятности для каждого предмета."}, "uk": {"case_open": "ВІДКРИТИ КЕЙС", "case_more": "ВІДКРИТИ ЩЕ", "case_spinning": "ПРОКРУТКА...", "case_contents": "ЩО МОЖЕ ВИПАСТИ", "case_cost": "ВАРТІСТЬ ВІДКРИТТЯ", "free": "БЕЗКОШТОВНО", "drop_count": "Предметів", "inventory": "Інвентар", "history": "ОСТАННІ ВИПАДІННЯ", "filter_owned": "Показати лише мої", "filter_active": "✓ Лише мої предмети", "case_balance": "Баланс", "notEnough": "Недостатньо MC Coins.", "case_ev": "СЕРЕДНІЙ ДРОП", "cases_banner": "Економіка · демо: кожен кейс має власну таблицю шансів. Купівлі за ігрові MC Coins.", "case_probability": "Фіксовані ймовірності для кожного предмета."}, "en": {"case_open": "OPEN CASE", "case_more": "OPEN AGAIN", "case_spinning": "ROLLING...", "case_contents": "POSSIBLE DROPS", "case_cost": "OPEN PRICE", "free": "FREE", "drop_count": "Drops", "inventory": "Inventory", "history": "RECENT DROPS", "filter_owned": "Owned only", "filter_active": "✓ Owned only", "case_balance": "Balance", "notEnough": "Not enough MC Coins.", "case_ev": "AVERAGE DROP", "cases_banner": "Economy · demo: each case has its own drop table. Virtual MC Coins only.", "case_probability": "Fixed, disclosed probability for each item."}}
+const languageOptions = [["ru","Русский","🇷🇺"],["uk","Українська","🇺🇦"],["en","English","🇬🇧"],["de","Deutsch","🇩🇪"],["pl","Polski","🇵🇱"],["fr","Français","🇫🇷"],["es","Español","🇪🇸"],["pt","Português","🇵🇹"],["it","Italiano","🇮🇹"],["tr","Türkçe","🇹🇷"],["cs","Čeština","🇨🇿"],["ja","日本語","🇯🇵"],["ko","한국어","🇰🇷"],["zh","中文","🇨🇳"]]
+const localeExtras = {
+  "de": {
+    "upgrade": "Upgrader",
+    "cases": "Kisten",
+    "inventory": "Inventar",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "arcade": "Arcade",
+    "head": "MEHR ALS GLÜCK.",
+    "sub": "Deine Sammlung. Dein Risiko. Dein nächstes Upgrade.",
+    "explore": "Kisten ansehen",
+    "demo": "In Entwicklung",
+    "catalog": "KISTENKATALOG",
+    "balance": "Guthaben",
+    "guest": "Gastmodus",
+    "lang": "Sprache",
+    "theme": "Design",
+    "accent": "Akzentfarbe",
+    "sound": "Sound",
+    "take": "Sammeln",
+    "sell": "Verkaufen",
+    "play": "Spielen",
+    "start": "Start",
+    "best": "Beste Punktzahl",
+    "gameOver": "Spiel beenden"
+  },
+  "pl": {
+    "upgrade": "Ulepszanie",
+    "cases": "Skrzynki",
+    "inventory": "Ekwipunek",
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "arcade": "Salon gier",
+    "head": "WIĘCEJ NIŻ SZCZĘŚCIE.",
+    "sub": "Twoja kolekcja. Twoje ryzyko. Twój upgrade.",
+    "explore": "Zobacz skrzynki",
+    "demo": "W przygotowaniu",
+    "catalog": "KATALOG SKRZYNEK",
+    "balance": "Saldo",
+    "guest": "Tryb gościa",
+    "lang": "Język",
+    "theme": "Motyw",
+    "accent": "Kolor akcentu",
+    "sound": "Dźwięk",
+    "take": "Odbierz",
+    "sell": "Sprzedaj",
+    "play": "Graj",
+    "start": "Start",
+    "best": "Rekord",
+    "gameOver": "Koniec gry"
+  },
+  "fr": {
+    "upgrade": "Amélioration",
+    "cases": "Caisses",
+    "inventory": "Inventaire",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "arcade": "Arcade",
+    "head": "PLUS QUE DE LA CHANCE.",
+    "sub": "Ta collection. Ton risque. Ta prochaine amélioration.",
+    "explore": "Voir les caisses",
+    "demo": "En développement",
+    "catalog": "CATALOGUE DES CAISSES",
+    "balance": "Solde",
+    "guest": "Mode invité",
+    "lang": "Langue",
+    "theme": "Thème",
+    "accent": "Couleur",
+    "sound": "Son",
+    "take": "Récupérer",
+    "sell": "Vendre",
+    "play": "Jouer",
+    "start": "Démarrer",
+    "best": "Meilleur score",
+    "gameOver": "Partie terminée"
+  },
+  "es": {
+    "upgrade": "Mejoras",
+    "cases": "Cajas",
+    "inventory": "Inventario",
+    "profile": "Perfil",
+    "settings": "Ajustes",
+    "arcade": "Arcade",
+    "head": "MÁS QUE SUERTE.",
+    "sub": "Tu colección. Tu riesgo. Tu próxima mejora.",
+    "explore": "Ver cajas",
+    "demo": "En desarrollo",
+    "catalog": "CATÁLOGO DE CAJAS",
+    "balance": "Saldo",
+    "guest": "Modo invitado",
+    "lang": "Idioma",
+    "theme": "Tema",
+    "accent": "Color",
+    "sound": "Sonido",
+    "take": "Reclamar",
+    "sell": "Vender",
+    "play": "Jugar",
+    "start": "Empezar",
+    "best": "Récord",
+    "gameOver": "Juego terminado"
+  },
+  "pt": {
+    "upgrade": "Melhorias",
+    "cases": "Caixas",
+    "inventory": "Inventário",
+    "profile": "Perfil",
+    "settings": "Definições",
+    "arcade": "Arcade",
+    "head": "MAIS DO QUE SORTE.",
+    "sub": "A tua coleção. O teu risco. A próxima melhoria.",
+    "explore": "Ver caixas",
+    "demo": "Em desenvolvimento",
+    "catalog": "CATÁLOGO DE CAIXAS",
+    "balance": "Saldo",
+    "guest": "Modo convidado",
+    "lang": "Idioma",
+    "theme": "Tema",
+    "accent": "Cor",
+    "sound": "Som",
+    "take": "Receber",
+    "sell": "Vender",
+    "play": "Jogar",
+    "start": "Começar",
+    "best": "Recorde",
+    "gameOver": "Fim do jogo"
+  },
+  "it": {
+    "upgrade": "Potenziamenti",
+    "cases": "Casse",
+    "inventory": "Inventario",
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "arcade": "Arcade",
+    "head": "PIÙ CHE FORTUNA.",
+    "sub": "La tua collezione. Il tuo rischio. Il tuo potenziamento.",
+    "explore": "Mostra casse",
+    "demo": "In sviluppo",
+    "catalog": "CATALOGO CASSE",
+    "balance": "Saldo",
+    "guest": "Ospite",
+    "lang": "Lingua",
+    "theme": "Tema",
+    "accent": "Colore",
+    "sound": "Audio",
+    "take": "Riscatta",
+    "sell": "Vendi",
+    "play": "Gioca",
+    "start": "Inizia",
+    "best": "Record",
+    "gameOver": "Partita finita"
+  },
+  "tr": {
+    "upgrade": "Yükseltme",
+    "cases": "Kasalar",
+    "inventory": "Envanter",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "arcade": "Arcade",
+    "head": "ŞANSTAN DA FAZLASI.",
+    "sub": "Koleksiyonun. Riskin. Sonraki yükseltmen.",
+    "explore": "Kasaları gör",
+    "demo": "Geliştiriliyor",
+    "catalog": "KASA KATALOĞU",
+    "balance": "Bakiye",
+    "guest": "Misafir modu",
+    "lang": "Dil",
+    "theme": "Tema",
+    "accent": "Vurgu rengi",
+    "sound": "Ses",
+    "take": "Al",
+    "sell": "Sat",
+    "play": "Oyna",
+    "start": "Başlat",
+    "best": "Rekor",
+    "gameOver": "Oyun bitti"
+  },
+  "cs": {
+    "upgrade": "Vylepšování",
+    "cases": "Bedny",
+    "inventory": "Inventář",
+    "profile": "Profil",
+    "settings": "Nastavení",
+    "arcade": "Arkádové hry",
+    "head": "VÍC NEŽ ŠTĚSTÍ.",
+    "sub": "Tvá sbírka. Tvé riziko. Tvé další vylepšení.",
+    "explore": "Zobrazit bedny",
+    "demo": "Ve vývoji",
+    "catalog": "KATALOG BEDEN",
+    "balance": "Zůstatek",
+    "guest": "Režim hosta",
+    "lang": "Jazyk",
+    "theme": "Motiv",
+    "accent": "Barva",
+    "sound": "Zvuk",
+    "take": "Vyzvednout",
+    "sell": "Prodat",
+    "play": "Hrát",
+    "start": "Start",
+    "best": "Rekord",
+    "gameOver": "Konec hry"
+  },
+  "ja": {
+    "upgrade": "アップグレード",
+    "cases": "ケース",
+    "inventory": "インベントリ",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "arcade": "アーケード",
+    "head": "運だけじゃない。",
+    "sub": "コレクションとリスク、次のアップグレード。",
+    "explore": "ケースを見る",
+    "demo": "開発中",
+    "catalog": "ケース一覧",
+    "balance": "残高",
+    "guest": "ゲストモード",
+    "lang": "言語",
+    "theme": "テーマ",
+    "accent": "アクセントカラー",
+    "sound": "音",
+    "take": "受け取る",
+    "sell": "売却",
+    "play": "プレイ",
+    "start": "開始",
+    "best": "最高記録",
+    "gameOver": "終了"
+  },
+  "ko": {
+    "upgrade": "업그레이드",
+    "cases": "케이스",
+    "inventory": "인벤토리",
+    "profile": "프로필",
+    "settings": "설정",
+    "arcade": "아케이드",
+    "head": "운 그 이상.",
+    "sub": "나의 컬렉션, 나의 선택, 다음 업그레이드.",
+    "explore": "케이스 보기",
+    "demo": "개발 중",
+    "catalog": "케이스 목록",
+    "balance": "잔액",
+    "guest": "게스트 모드",
+    "lang": "언어",
+    "theme": "테마",
+    "accent": "강조 색상",
+    "sound": "소리",
+    "take": "받기",
+    "sell": "판매",
+    "play": "게임",
+    "start": "시작",
+    "best": "최고 점수",
+    "gameOver": "게임 종료"
+  },
+  "zh": {
+    "upgrade": "升级",
+    "cases": "宝箱",
+    "inventory": "库存",
+    "profile": "个人资料",
+    "settings": "设置",
+    "arcade": "街机",
+    "head": "不止是运气。",
+    "sub": "你的收藏，你的选择，你的下一次升级。",
+    "explore": "查看宝箱",
+    "demo": "开发中",
+    "catalog": "宝箱目录",
+    "balance": "余额",
+    "guest": "访客模式",
+    "lang": "语言",
+    "theme": "主题",
+    "accent": "强调色",
+    "sound": "声音",
+    "take": "领取",
+    "sell": "出售",
+    "play": "开始游戏",
+    "start": "开始",
+    "best": "最高纪录",
+    "gameOver": "游戏结束"
+  }
+}
+
+function ReflexArcade({lang='ru',langText}){
+  const [active,setActive]=React.useState(false)
+  const [time,setTime]=React.useState(20)
+  const [score,setScore]=React.useState(0)
+  const [target,setTarget]=React.useState(5)
+  const [hits,setHits]=React.useState(0)
+  const [best,setBest]=React.useState(()=>{try{return Number(localStorage.getItem('voxup-arcade-best')||0)}catch{return 0}})
+  const clockRef=React.useRef(null)
+  const activeRef=React.useRef(false)
+  const targetRef=React.useRef(5)
+  const scoreRef=React.useRef(0)
+  const t=lang==='ru'?{title:'РЕАКТОР РУДЫ',sub:'Найди светящийся алмаз раньше, чем истечёт время. На карте 16 ячеек — реагируй быстро!',start:'ИГРАТЬ · 20 СЕКУНД',time:'Время',score:'Очки',best:'Рекорд',end:'Время вышло!',again:'Попробовать снова',hint:'Кликай по светящемуся алмазу. Это игра на реакцию — MC Coins не расходуются и не начисляются.'}:lang==='uk'?{title:'РУДНИЙ РЕАКТОР',sub:'Знайди сяючий діамант до завершення часу. 16 клітинок — реагуй швидко!',start:'ГРАТИ · 20 СЕКУНД',time:'Час',score:'Бали',best:'Рекорд',end:'Час вийшов!',again:'Спробувати ще',hint:'Натискай на сяючий діамант. MC Coins не витрачаються і не нараховуються.'}:{title:'ORE REACTOR',sub:'Find the glowing diamond before time runs out. Sixteen cells — react fast!',start:'PLAY · 20 SECONDS',time:'Time',score:'Score',best:'Best',end:'Time is up!',again:'Play again',hint:'Hit the glowing diamond. Pure skill game; no MC Coins are spent or awarded.'}
+  React.useEffect(()=>{if(!active)return;clockRef.current=window.setInterval(()=>setTime(v=>Math.max(0,v-1)),1000);return()=>window.clearInterval(clockRef.current)},[active])
+  React.useEffect(()=>{if(active&&time===0){activeRef.current=false;setActive(false)}},[active,time])
+  const begin=()=>{window.clearInterval(clockRef.current);scoreRef.current=0;setTime(20);setScore(0);setHits(0);const i=Math.floor(Math.random()*16);targetRef.current=i;setTarget(i);activeRef.current=true;setActive(true)}
+  const hit=(i)=>{if(!activeRef.current||i!==targetRef.current)return;const n=scoreRef.current+10;scoreRef.current=n;setScore(n);setHits(v=>v+1);if(n>best){setBest(n);try{localStorage.setItem('voxup-arcade-best',String(n))}catch{}}let next=Math.floor(Math.random()*15);if(next>=targetRef.current)next++;targetRef.current=next;setTarget(next)}
+  return <section className="arcadeArena"><div className="arcadeHeading"><div className="eyebrow">VOXUP / SKILL MODE</div><h2>{t.title}</h2><p>{t.sub}</p></div><div className="arcadeStats"><div><small>{t.time}</small><strong>{time}s</strong></div><div><small>{t.score}</small><strong>{score}</strong></div><div><small>{t.best}</small><strong>{best}</strong></div></div><div className="arcadeGame"><div className="arcadeCells">{Array.from({length:16},(_,i)=><button aria-label={i===target&&active?'Diamond target':'Empty cell'} key={i} onClick={()=>hit(i)} className={'arcadeCell '+(i===target&&active?'hasGem':'')} disabled={!active}>{i===target&&active?<span>◆</span>:<span className="arcadeStone">▪</span>}</button>)}</div><aside className="arcadeInstructions"><div className="arcadeDoodle">✦</div><p>{active?t.hint:time===0?t.end:t.hint}</p><button className="primary arcadeStart" onClick={begin}>{hits||time===0?t.again:t.start} <Zap size={17}/></button><small>{lang==='ru'?'Рекорд сохраняется только в этом браузере.':lang==='uk'?'Рекорд зберігається лише у цьому браузері.':'Best score is stored on this device.'}</small></aside></div></section>
+}
+
 export default function App() {
   const [page, setPage] = useState('upgrade')
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
@@ -550,11 +970,13 @@ export default function App() {
   const WINNER_INDEX = 43
   const SPIN_TIME = 5000
 
-  const t = labels[lang] || labels.ru
-  const pc = polishCopy[lang] || polishCopy.ru
-  const uc = chanceCopy[lang] || chanceCopy.ru
-  const ex = extraCopy[lang] || extraCopy.ru
-  const wc = upgradeWheelCopy[lang] || upgradeWheelCopy.ru
+  const t = lang in labels ? labels[lang] : {...labels.en,...localeExtras[lang]}
+  const L = detailedUI[lang] || detailedUI.en
+  const caseTitle = (idx) => ['ru','uk'].includes(lang) ? cases[idx][1] : cases[idx][0]
+  const pc = polishCopy[lang] || polishCopy.en
+  const uc = chanceCopy[lang] || chanceCopy.en
+  const ex = extraCopy[lang] || extraCopy.en
+  const wc = upgradeWheelCopy[lang] || upgradeWheelCopy.en
   const source = useMemo(() => getItem(sourceId), [sourceId])
   const target = useMemo(() => getItem(targetId), [targetId])
   const ownedItems = previewItems.filter((item) => (inventory[item.id] || 0) > 0)
@@ -621,7 +1043,7 @@ export default function App() {
   useEffect(() => {
     if(upgradeBusy || pendingReward || rollingGuard.current) return
     if((inventory[sourceId] || 0) > 0) return
-    const candidates = previewItems.filter(item => (inventory[item.id]||0)>0 && item.value<previewItems[previewItems.length-1].value)
+    const candidates = previewItems.filter(item => (inventory[item.id]||0)>0 && item.value<Math.max(...previewItems.map(item=>item.value)))
     if(!candidates.length) return
     const current=getItem(sourceId)
     const next=candidates.reduce((best,item)=>Math.abs(item.value-current.value)<Math.abs(best.value-current.value)?item:best,candidates[0])
@@ -833,7 +1255,7 @@ export default function App() {
     if(activeCase===null || rollingGuard.current || busyGuard.current || pendingReward)return
     resolveGuard.current=false
     const idx=activeCase,price=cases[idx][2]
-    if(coins<price){setCaseRollResult({error:true,text:lang==='en'?'Not enough MC Coins.':'Недостаточно MC Coins.'});return}
+    if(coins<price){setCaseRollResult({error:true,text:L.notEnough});return}
     const pool=casePools[idx]
     const won=pickPrize(pool)
     const reel=Array.from({length:60},(_,i)=>i===WINNER_INDEX?won:pickPrize(pool))
@@ -909,7 +1331,8 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const caseFeature = ['dirt','apple','iron_pickaxe','iron_sword','gold','redstone','diamond_sword','blaze_rod','netherite','dragon_egg','enchanted_apple']
+  const caseFeature = ['dirt','apple','iron_pickaxe','iron_sword','gold','redstone','diamond_sword','blaze_rod','netherite','dragon_egg','enchanted_apple','wheat','bow','compass','crossbow','golden_helmet','prismarine_shard','netherite_sword','mace','wind_charge','music_disc_creator']
+  const caseDisplayOrder = cases.map((_,i)=>i).sort((a,b)=>cases[a][2]-cases[b][2] || a-b)
   const caseArt = (i) => (
     <div className="caseArt caseArtPremium" style={{ '--tone': cases[i][3] }}>
       <span className="caseGlow" />
@@ -929,13 +1352,13 @@ export default function App() {
         <div className="navItems">
           {nav.map(([id, Icon]) => (
             <button key={id} className={'navItem ' + (page === id ? 'active' : '')} onClick={() => go(id)}>
-              <Icon size={19} /><span>{t[id]}</span>{id === 'cases' && <small>11</small>}
+              <Icon size={19} /><span>{t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
             </button>
           ))}
         </div>
         <div className="sideBottom">
           <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">MINEUP <strong>ALPHA 0.5</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="stage">MINEUP <strong>ALPHA 0.7</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
@@ -952,7 +1375,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.6</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.7</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -1073,15 +1496,15 @@ export default function App() {
 
           {page === 'cases' && (
             <>
-              <div className="eyebrow"><span className="dot" /> MINEUP / CASE COLLECTION · 11 CASES · 100 ITEMS</div>
+              <div className="eyebrow"><span className="dot" /> MINEUP / CASE COLLECTION · 21 CASES · 150 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
-              <div className="economyBanner"><div><strong>ЭКОНОМИКА / DEMO</strong><span>Открытия бесплатного кейса доступны для теста без рекламы. У платных кейсов свои таблицы шансов; все цены игровые.</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>Инвентарь <ArrowUpRight size={15}/></button></div>
-              <div className="caseGrid">{cases.map((c,i)=><button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
-                <span className="caseIndex">{String(i+1).padStart(2,'0')} / {c[0]}</span>{caseArt(i)}
-                <strong>{c[1]}</strong><div className="caseMeta"><span>Дропов: {casePools[i].length}</span><span>EV {formatCoins(Math.round(caseEvs[i]))} MC</span></div>
-                <div className="casePrice">{i===0?'БЕСПЛАТНО':formatCoins(c[2])+' MC'} <ArrowUpRight size={15}/></div>
-              </button>)}</div>
-              <section className="caseHistoryPanel"><h3>ПОСЛЕДНИЕ ВЫПАДЕНИЯ</h3>{caseHistory.length?<div className="caseHistoryGrid">{caseHistory.slice(0,8).map(entry=><div key={entry.id} className="dropHistory"><img src={textureSource(entry.item)} alt=""/><span><b>{getItem(entry.item).name}</b><small>{entry.caseName} • {entry.time}</small></span></div>)}</div>:<p>Пока не было открытий. Начни с бесплатного кейса.</p>}</section>
+              <div className="economyBanner"><div><strong>ECONOMY / DEMO</strong><span>{L.cases_banner}</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>{L.inventory} <ArrowUpRight size={15}/></button></div>
+              <div className="caseGrid">{caseDisplayOrder.map((i,orderIndex)=>{const c=cases[i];return <button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
+                <span className="caseIndex">{String(orderIndex+1).padStart(2,'0')} / {c[0]}</span>{caseArt(i)}
+                <strong>{caseTitle(i)}</strong><div className="caseMeta"><span>{L.drop_count}: {casePools[i].length}</span><span>EV {formatCoins(Math.round(caseEvs[i]))} MC</span></div>
+                <div className="casePrice">{i===0?L.free:formatCoins(c[2])+' MC'} <ArrowUpRight size={15}/></div>
+              </button>})}</div>
+              <section className="caseHistoryPanel"><h3>{L.history}</h3>{caseHistory.length?<div className="caseHistoryGrid">{caseHistory.slice(0,8).map(entry=><div key={entry.id} className="dropHistory"><img src={textureSource(entry.item)} alt=""/><span><b>{getItem(entry.item).name}</b><small>{entry.caseName} • {entry.time}</small></span></div>)}</div>:<p>Пока не было открытий. Начни с бесплатного кейса.</p>}</section>
             </>
           )}
 
@@ -1092,7 +1515,7 @@ export default function App() {
               <div className="inventoryMeta"><div className="notice"><Coins size={18} />{t.coinsInfo}</div><button className="secondaryBtn" onClick={resetDemo}><RotateCcw size={16} /> {t.resetDemo}</button></div>
               <div className="inventoryControls">
                 <label className="catalogSearch inventorySearch"><Search size={16}/><input type="search" placeholder={ex.search} value={inventorySearch} onChange={e=>setInventorySearch(e.target.value)} autoComplete="off"/></label>
-                <button className={'secondaryBtn '+(inventoryOnly?'inventoryControlActive':'')} onClick={()=>setInventoryOnly(v=>!v)}>{inventoryOnly?'✓ Только мои предметы':'Показать только мои'}</button>
+                <button className={'secondaryBtn '+(inventoryOnly?'inventoryControlActive':'')} onClick={()=>setInventoryOnly(v=>!v)}>{inventoryOnly?L.filter_active:L.filter_owned}</button>
                 <select value={inventoryOrder} onChange={e=>setInventoryOrder(e.target.value)} aria-label="Сортировать инвентарь"><option value="value_desc">{ex.sortExpensive}</option><option value="value_asc">{ex.sortCheap}</option><option value="name">{ex.sortName}</option></select>
               </div>
               <div className="inventoryGrid">
@@ -1109,6 +1532,8 @@ export default function App() {
             </>
           )}
 
+          {page === 'arcade' && <ReflexArcade lang={lang} />}
+
           {page === 'profile' && (
             <>
               <div className="eyebrow">MINEUP / USER</div>
@@ -1117,6 +1542,7 @@ export default function App() {
               <div className="profileStats">
                 {[ [ex.total,previewItems.length], [ex.myCollection,totalItems], [ex.profit,formatCoins(portfolioValue)+' MC'], [ex.casesOpened,stats.cases||0], [ex.upgrades,stats.upgrades||0], [ex.wins,stats.wins||0] ].map(([label,value],i)=><div className="profileStat" key={i}><span>{label}</span><strong>{value}</strong></div>)}
               </div>
+              <section className="cloudNextPanel"><div className="eyebrow">NEXT / CLOUD ACCOUNT</div><h3>{lang==='ru'?'Google-вход — следующий этап':lang==='uk'?'Вхід Google — наступний етап':'Google login — next milestone'}</h3><p>{lang==='ru'?'Для настоящих аккаунтов потребуется подключить Supabase. До этого монеты и предметы хранятся в браузере — скачай резервную копию ниже.':lang==='uk'?'Для акаунтів потрібно підключити Supabase. Наразі монети й предмети зберігаються в браузері — зроби резервну копію нижче.':'Real accounts require Supabase configuration. Until then, your coins and items stay in this browser: export a backup below.'}</p></section>
               <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
                 <button className="primary" onClick={exportSave}><Download size={17}/>{ex.download}</button>
                 <button className="secondaryBtn" onClick={()=>backupInput.current?.click()}><Upload size={17}/>{ex.upload}</button>
@@ -1132,7 +1558,7 @@ export default function App() {
               <p className="settingsLead">{t.saved}</p>
               <div className="settingsGroupTitle"><Sparkles size={18}/>{pc.visualSettings}</div>
               <div className="settingsGrid">
-                <section className="settingBox"><div className="settingName"><Globe2 size={17}/>{t.lang}</div><div className="choices">{[['ru','Русский'],['uk','Українська'],['en','English']].map(([id,name])=><button className={lang===id?'chosen':''} key={id} onClick={()=>setLang(id)}>{name}{lang===id&&<Check size={15}/>}</button>)}</div></section>
+                <section className="settingBox"><div className="settingName"><Globe2 size={17}/>{t.lang}</div><div className="languageChooser"><select aria-label={t.lang} value={lang} onChange={e=>setLang(e.target.value)}>{languageOptions.map(([code,name,flag])=><option key={code} value={code}>{flag} {name}</option>)}</select><div className="languageGrid">{languageOptions.map(([code,name,flag])=><button key={code} className={lang===code?'languageActive':''} onClick={()=>setLang(code)}>{flag} {name}{lang===code&&<Check size={14}/>}</button>)}</div><small className="languageNote">{lang==='ru'?'Переведены основные разделы; названия Minecraft-предметов пока на русском.':lang==='uk'?'Основні розділи перекладені; назви предметів ще російською.':'Core navigation translated; item names currently use Russian catalogue labels.'}</small></div></section>
                 <section className="settingBox"><div className="settingName"><Layers3 size={17}/>{t.theme}</div><div className="choices themeSwatches">{[['gold','Dark Gold','#e8b654'],['violet','Deep Violet','#bd9cff'],['emerald','Emerald','#70dbad'],['light','Light','#e6e8df'],['crimson','Crimson','#ee6778'],['midnight','Midnight','#7f9dfb'],['frost','Frost','#8fdcf1']].map(([id,name,col])=><button className={theme===id?'chosen':''} key={id} onClick={()=>setTheme(id)}><i className="themeDot" style={{background:col}}/>{name}{theme===id&&<Check size={15}/>}</button>)}</div></section>
                 <section className="settingBox"><div className="settingName"><SlidersHorizontal size={17}/>{t.accent}</div><div className="choices themeSwatches">{[['amber','Amber','#efb857'],['mint','Mint','#67dbbb'],['blue','Blue','#6baefd'],['pink','Pink','#ed89c7'],['red','Red','#f27b80'],['white','White','#d8e0ea']].map(([id,name,col])=><button className={accent===id?'chosen':''} key={id} onClick={()=>setAccent(id)}><i className="themeDot" style={{background:col}}/>{name}{accent===id&&<Check size={15}/>}</button>)}</div></section>
                 <section className="settingBox settingSliders"><div className="settingName"><SlidersHorizontal size={17}/>{pc.radius}</div><div className="rangeCaption"><span>4px</span><b>{radius}px</b><span>24px</span></div><input type="range" min="4" max="24" value={radius} onChange={e=>setRadius(Number(e.target.value))}/><div className="radiusDemo"><span style={{borderRadius:`${radius}px`}}>VOXUP</span></div></section>
@@ -1148,17 +1574,17 @@ export default function App() {
             </>
           )}
 
-          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.6 • LOCAL DEMO / 100 ITEMS + BALANCED CASES</span></footer>
+          <footer><span>© 2026 MINEUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.7 • LOCAL DEMO / 150 ITEMS · 21 CASES</span></footer>
         </main>
       </div>
 
       {activeCase !== null && (
         <div className="modalBackdrop caseBackdrop" onClick={closeCase}>
-          <div className="modal caseModalV8" role="dialog" aria-modal="true" aria-label={cases[activeCase][1]} onClick={e=>e.stopPropagation()}>
+          <div className="modal caseModalV8" role="dialog" aria-modal="true" aria-label={caseTitle(activeCase)} onClick={e=>e.stopPropagation()}>
             <button className="modalClose" disabled={caseRolling} onClick={closeCase} aria-label="Закрыть"><X/></button>
             <div className="caseModalHeader">
-              <div className="caseTitle"><span className="eyebrow">CASE / {String(activeCase+1).padStart(2,'0')} • LOCAL DEMO</span><h2>{cases[activeCase][1]}</h2><p>{cases[activeCase][4]}</p></div>
-              <div className="casePriceHead"><small>СТОИМОСТЬ ОТКРЫТИЯ</small><strong>{activeCase===0?'БЕСПЛАТНО':formatCoins(cases[activeCase][2])+' MC'}</strong><small>Баланс: {formatCoins(coins)} MC</small><small className="caseMinimum">{pc.minDrop}: {formatCoins(Math.min(...casePools[activeCase].map(([id])=>getItem(id).value)))} MC</small></div>
+              <div className="caseTitle"><span className="eyebrow">CASE / {String(caseDisplayOrder.indexOf(activeCase)+1).padStart(2,'0')} • LOCAL DEMO</span><h2>{caseTitle(activeCase)}</h2><p>{cases[activeCase][4]}</p></div>
+              <div className="casePriceHead"><small>{L.case_cost}</small><strong>{activeCase===0?L.free:formatCoins(cases[activeCase][2])+' MC'}</strong><small>{L.case_balance}: {formatCoins(coins)} MC</small><small className="caseMinimum">{pc.minDrop}: {formatCoins(Math.min(...casePools[activeCase].map(([id])=>getItem(id).value)))} MC</small></div>
             </div>
             <div className="rouletteWrap">
               <div className="reelPointer" aria-hidden="true"/>
@@ -1171,8 +1597,8 @@ export default function App() {
               <div className="rouletteBottom"><span>{caseRolling?'ПРОКРУТКА • 5 СЕКУНД':'СОДЕРЖИМОЕ КЕЙСА'}</span><span>{caseRolling?'● LIVE ROLL':caseRollResult?.id?'РЕЗУЛЬТАТ ПОЛУЧЕН':'ГОТОВ К ОТКРЫТИЮ'}</span></div>
             </div>
             {caseRollResult?.error&&<div className="resultBanner error">{caseRollResult.text}</div>}
-            <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling || Boolean(pendingReward)} onClick={openDemoCase}>{caseRolling?'ПРОКРУТКА...':caseRollResult?.id?'ОТКРЫТЬ ЕЩЁ':'ОТКРЫТЬ КЕЙС'} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз сохраняется до выбора «Забрать» или «Продать». Перезагрузка не уничтожит выигрыш.'}</span></div></div>
-            <section className="oddsSection"><div className="oddsHeader"><div><h3>ЧТО МОЖЕТ ВЫПАСТЬ</h3><p>Фиксированные вероятности, указаны для каждого предмета</p></div><span>{pc.averageDrop}: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
+            <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling || Boolean(pendingReward)} onClick={openDemoCase}>{caseRolling?L.case_spinning:caseRollResult?.id?L.case_more:L.case_open} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз сохраняется до выбора «Забрать» или «Продать». Перезагрузка не уничтожит выигрыш.'}</span></div></div>
+            <section className="oddsSection"><div className="oddsHeader"><div><h3>{L.case_contents}</h3><p>{L.case_probability}</p></div><span>{pc.averageDrop}: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
               <div className="oddsGrid">{casePools[activeCase].map(([id,p])=><div className="oddsItem" key={id} style={{'--rarity':rarityColors[getItem(id).rarity]}}><img src={textureSource(id)} alt=""/><div><strong>{getItem(id).name}</strong><small>{formatCoins(getItem(id).value)} MC</small></div><b>{Number(p).toLocaleString('ru-RU',{maximumFractionDigits:2})}%</b></div>)}</div>
               <div className="economyNote">Сумма вероятностей: 100%. Виртуальная валюта и предметы • расчёт дропа пока происходит в браузере. Показанный средний дроп — математическое ожидание стоимости, а не гарантированная награда.</div>
             </section>
