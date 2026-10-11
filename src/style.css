@@ -469,3 +469,26 @@ button{outline-offset:3px}input,select{color-scheme:dark}[data-theme='light'] in
 .adminFutureMode{background:linear-gradient(125deg,var(--panel),var(--panel2));border-style:dashed}.adminFutureTags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.adminFutureTags span{border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--muted);font-size:9px;letter-spacing:1px}
 @media(max-width:1200px){.adminPromoGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.adminPromoGrid .primary{grid-column:1/-1;justify-self:start}}
 @media(max-width:600px){.profilePromoToggle,.profilePromoBody{padding:16px}.profilePromoBody .promoRedeemForm button{width:100%}.adminPromoStudio,.adminFutureMode{padding:17px}.adminPromoGrid{grid-template-columns:1fr}.adminPromoGrid .primary{grid-column:1;width:100%}}
+
+/* STAGE 17 • Supabase identity; retain original VOXUP theme. */
+.onlineAccountPanel{margin:18px 0 20px;padding:24px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--vox-radius,14px);color:var(--text)}
+.onlineAccountHead{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--primary)}
+.onlineAccountHead h3{font:700 22px 'Space Grotesk',sans-serif;color:var(--text);margin:10px 0}
+.onlineAccountInfo{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;line-height:1.6;max-width:780px;margin:14px 0}
+.googleButton{margin:15px 0 4px;min-width:220px}
+.googleG{display:inline-grid;place-items:center;background:#fff;border-radius:5px;color:#4285f4;font-weight:900;font:800 17px Arial,sans-serif;width:24px;height:24px}
+.onlineAccountIdentity{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:14px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.onlineAccountIdentity>div{min-width:0;flex:1}.onlineAccountIdentity b{display:block;font-size:15px;overflow-wrap:anywhere}.onlineAccountIdentity small{display:block;color:var(--muted);font-size:11px;overflow-wrap:anywhere;margin-top:5px}
+.onlineAvatar{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--primarySoft);overflow:hidden;border:1px solid var(--line)}
+.onlineAvatar img{width:100%;height:100%;object-fit:cover}
+.onlineRole{display:inline-flex;align-items:center;gap:7px;font-size:10px;color:var(--primary);font-weight:800;border:1px solid var(--line);border-radius:8px;padding:8px}
+.onlineInfoRow{display:flex;align-items:center;gap:7px;font-size:12px;color:#70dbad}
+.onlineNicknameForm{display:grid;gap:10px;margin:16px 0}
+.onlineNicknameForm label{font-size:12px;font-weight:800}
+.onlineNickRow{display:flex;gap:10px;flex-wrap:wrap}
+.onlineNickRow input{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:13px;color:var(--text);font:inherit;min-width:160px;flex:1}
+.onlineNicknameForm small{font-size:11px;color:var(--muted)}
+.onlineAccountError{background:#74353534;border:1px solid #e8777744;color:#ee9595;padding:12px;border-radius:8px;font-size:12px;overflow-wrap:anywhere}
+.onlineNameBackdrop{z-index:200!important}.onlineNameModal{width:min(600px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;box-shadow:0 22px 70px #000b}
+.onlineNameModal .onlineAccountPanel{margin:0}.onlineNameModal .onlineAccountInfo{margin-top:12px}
+@media(max-width:530px){.onlineAccountPanel{padding:16px}.onlineNickRow{display:grid}.onlineNickRow .primary{width:100%}.onlineAccountHead h3{font-size:19px}.onlineAccountIdentity{gap:10px}.onlineRole{width:100%;justify-content:center}}

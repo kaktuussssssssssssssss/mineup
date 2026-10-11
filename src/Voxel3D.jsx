@@ -141,11 +141,12 @@ function makeShrieker(textures){
   return mesh
 }
 function makePiston(textures){
-  const mesh=makeSixFaceCube(textures)
-  // Wooden piston head protrudes only from the FRONT, not every side.
-  const head={...textures,front:textures.front,back:textures.front,left:textures.left,right:textures.right,top:textures.top,bottom:textures.bottom}
-  mesh.push(...scaleMesh(makeSixFaceCube(head),13,13,2.2,0,0,8.8))
-  return mesh
+  // Minecraft's *retracted* piston occupies one full 16x16x16 block.
+  // Its wooden head is FLUSH with the front face. The old extra head cuboid
+  // overlapped the iron casing, causing an unnatural doubled/striped surface.
+  // Texture orientation is distinct: one wooden front, iron side casing and
+  // a different back. Extended piston will be a separate item model later.
+  return makeSixFaceCube(textures)
 }
 function makeSprite(px){
   const out=[], isSolid=(x,y)=>x>=0&&x<16&&y>=0&&y<16&&pix(px,x,y)[3]>60
