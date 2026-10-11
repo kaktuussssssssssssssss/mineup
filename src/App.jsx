@@ -153,9 +153,59 @@ const itemTextures = {
   "netherite_scrap": "item/netherite_scrap.png",
   "breeze_rod": "item/breeze_rod.png",
   "music_disc_relic": "item/music_disc_relic.png",
-  "music_disc_creator": "item/music_disc_creator.png"
+  "music_disc_creator": "item/music_disc_creator.png",
+  "bamboo": "item/bamboo.png",
+  "sugar": "item/sugar.png",
+  "sweet_berries": "item/sweet_berries.png",
+  "glow_berries": "item/glow_berries.png",
+  "honey_bottle": "item/honey_bottle.png",
+  "dried_kelp": "item/dried_kelp.png",
+  "baked_potato": "item/baked_potato.png",
+  "cookie": "item/cookie.png",
+  "mushroom_stew": "item/mushroom_stew.png",
+  "rabbit_hide": "item/rabbit_hide.png",
+  "bone_meal": "item/bone_meal.png",
+  "ink_sac": "item/ink_sac.png",
+  "glow_ink_sac": "item/glow_ink_sac.png",
+  "honeycomb": "item/honeycomb.png",
+  "slime_block": "block/slime_block.png",
+  "copper_block": "block/copper_block.png",
+  "bell": "item/bell.png",
+  "lantern": "item/lantern.png",
+  "soul_lantern": "item/soul_lantern.png",
+  "iron_boots": "item/iron_boots.png",
+  "iron_leggings": "item/iron_leggings.png",
+  "name_tag": "item/name_tag.png",
+  "lead": "item/lead.png",
+  "recovery_compass": "item/recovery_compass_00.png",
+  "golden_boots": "item/golden_boots.png",
+  "golden_leggings": "item/golden_leggings.png",
+  "golden_horse_armor": "item/golden_horse_armor.png",
+  "pufferfish": "item/pufferfish.png",
+  "axolotl_bucket": "item/axolotl_bucket.png",
+  "tropical_fish_bucket": "item/tropical_fish_bucket.png",
+  "prismarine": "block/prismarine.png",
+  "amethyst_block": "block/amethyst_block.png",
+  "diamond_shovel": "item/diamond_shovel.png",
+  "diamond_hoe": "item/diamond_hoe.png",
+  "netherite_upgrade_smithing_template": "item/netherite_upgrade_smithing_template.png",
+  "tide_armor_trim_smithing_template": "item/tide_armor_trim_smithing_template.png",
+  "silence_armor_trim_smithing_template": "item/silence_armor_trim_smithing_template.png",
+  "sculk": "block/sculk.png",
+  "sculk_catalyst": "block/sculk_catalyst_side.png",
+  "sculk_shrieker": "block/sculk_shrieker_side.png",
+  "diamond_block": "block/diamond_block.png",
+  "emerald_block": "block/emerald_block.png",
+  "netherite_block": "block/netherite_block.png",
+  "music_disc_precipice": "item/music_disc_precipice.png",
+  "music_disc_otherside": "item/music_disc_otherside.png",
+  "prize_pottery_sherd": "item/prize_pottery_sherd.png",
+  "nether_brick": "item/nether_brick.png",
+  "furnace": "block/furnace_front.png",
+  "blast_furnace": "block/blast_furnace_front.png",
+  "smithing_table": "block/smithing_table_front.png"
 }
-const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon", "sand", "gravel", "netherrack", "grass_block", "oak_log", "mud", "glass", "sea_lantern", "tnt", "ender_chest", "gilded_blackstone", "soul_sand", "conduit", "blue_ice"]
+const blockIds = ["dirt", "cobblestone", "oak_planks", "stone", "crafting_table", "obsidian", "diamond_ore", "enchanting_table", "crying_obsidian", "end_stone", "ancient_debris", "beacon", "sand", "gravel", "netherrack", "grass_block", "oak_log", "mud", "glass", "sea_lantern", "tnt", "ender_chest", "gilded_blackstone", "soul_sand", "conduit", "blue_ice", "slime_block", "copper_block", "prismarine", "amethyst_block", "sculk", "sculk_catalyst", "sculk_shrieker", "diamond_block", "emerald_block", "netherite_block", "furnace", "blast_furnace", "smithing_table"]
 const textureSource = (id) => mcTextureRoot + (itemTextures[id] || itemTextures.diamond)
 
 const cases = [
@@ -333,28 +383,89 @@ const previewItems = [
   {id: "netherite_scrap", name: "Незеритовый скрап", value: 123000, rarity: "MYTHIC"},
   {id: "breeze_rod", name: "Стержень бриза", value: 146000, rarity: "MYTHIC"},
   {id: "music_disc_relic", name: "Пластинка Relic", value: 171000, rarity: "MYTHIC"},
-  {id: "music_disc_creator", name: "Пластинка Creator", value: 198000, rarity: "MYTHIC"}]
+  {id: "music_disc_creator", name: "Пластинка Creator", value: 198000, rarity: "MYTHIC"},
+  {id: "bamboo", name: "Бамбук", value: 24.37, rarity: "COMMON"},
+  {id: "sugar", name: "Сахар", value: 43.21, rarity: "COMMON"},
+  {id: "sweet_berries", name: "Сладкие ягоды", value: 61.47, rarity: "COMMON"},
+  {id: "glow_berries", name: "Светящиеся ягоды", value: 84.35, rarity: "COMMON"},
+  {id: "honey_bottle", name: "Бутылочка мёда", value: 115.15, rarity: "UNCOMMON"},
+  {id: "dried_kelp", name: "Сушёная ламинария", value: 35.75, rarity: "COMMON"},
+  {id: "baked_potato", name: "Печёный картофель", value: 58.49, rarity: "COMMON"},
+  {id: "cookie", name: "Печенье", value: 72.93, rarity: "COMMON"},
+  {id: "mushroom_stew", name: "Тушёные грибы", value: 97.15, rarity: "COMMON"},
+  {id: "rabbit_hide", name: "Кроличья шкурка", value: 126.45, rarity: "UNCOMMON"},
+  {id: "bone_meal", name: "Костная мука", value: 48.64, rarity: "COMMON"},
+  {id: "ink_sac", name: "Чернильный мешок", value: 92.29, rarity: "COMMON"},
+  {id: "glow_ink_sac", name: "Светящийся мешок", value: 212.34, rarity: "UNCOMMON"},
+  {id: "honeycomb", name: "Пчелиные соты", value: 175.75, rarity: "UNCOMMON"},
+  {id: "slime_block", name: "Блок слизи", value: 385.23, rarity: "UNCOMMON"},
+  {id: "copper_block", name: "Медный блок", value: 490.19, rarity: "UNCOMMON"},
+  {id: "bell", name: "Колокол", value: 654.43, rarity: "RARE"},
+  {id: "lantern", name: "Фонарь", value: 585.67, rarity: "RARE"},
+  {id: "soul_lantern", name: "Фонарь душ", value: 830.55, rarity: "RARE"},
+  {id: "iron_boots", name: "Железные ботинки", value: 710.59, rarity: "RARE"},
+  {id: "iron_leggings", name: "Железные поножи", value: 785.95, rarity: "RARE"},
+  {id: "name_tag", name: "Бирка", value: 349.84, rarity: "UNCOMMON"},
+  {id: "lead", name: "Поводок", value: 289.17, rarity: "UNCOMMON"},
+  {id: "recovery_compass", name: "Компас восстановления", value: 1610.65, rarity: "RARE"},
+  {id: "golden_boots", name: "Золотые ботинки", value: 2035.26, rarity: "RARE"},
+  {id: "golden_leggings", name: "Золотые поножи", value: 2398.77, rarity: "EPIC"},
+  {id: "golden_horse_armor", name: "Золотая конская броня", value: 2792.33, rarity: "EPIC"},
+  {id: "pufferfish", name: "Иглобрюх", value: 1111.39, rarity: "RARE"},
+  {id: "axolotl_bucket", name: "Аксолотль в ведре", value: 3290.81, rarity: "EPIC"},
+  {id: "tropical_fish_bucket", name: "Тропическая рыба в ведре", value: 1838.27, rarity: "RARE"},
+  {id: "prismarine", name: "Призмарин", value: 3499.48, rarity: "EPIC"},
+  {id: "amethyst_block", name: "Аметистовый блок", value: 3890.13, rarity: "EPIC"},
+  {id: "diamond_shovel", name: "Алмазная лопата", value: 4950.66, rarity: "EPIC"},
+  {id: "diamond_hoe", name: "Алмазная мотыга", value: 5802.45, rarity: "EPIC"},
+  {id: "netherite_upgrade_smithing_template", name: "Незеритовое улучшение", value: 16150.57, rarity: "LEGENDARY"},
+  {id: "tide_armor_trim_smithing_template", name: "Отделка «Прилив»", value: 16250.66, rarity: "LEGENDARY"},
+  {id: "silence_armor_trim_smithing_template", name: "Отделка «Тишина»", value: 52500.79, rarity: "MYTHIC"},
+  {id: "sculk", name: "Скалк", value: 8500.21, rarity: "LEGENDARY"},
+  {id: "sculk_catalyst", name: "Скалковый катализатор", value: 12500.47, rarity: "LEGENDARY"},
+  {id: "sculk_shrieker", name: "Скалковый крикун", value: 20500.85, rarity: "LEGENDARY"},
+  {id: "diamond_block", name: "Алмазный блок", value: 25800.11, rarity: "LEGENDARY"},
+  {id: "emerald_block", name: "Изумрудный блок", value: 34500.42, rarity: "LEGENDARY"},
+  {id: "netherite_block", name: "Незеритовый блок", value: 185000.74, rarity: "MYTHIC"},
+  {id: "music_disc_precipice", name: "Пластинка Precipice", value: 124000.37, rarity: "MYTHIC"},
+  {id: "music_disc_otherside", name: "Пластинка Otherside", value: 69000.61, rarity: "MYTHIC"},
+  {id: "prize_pottery_sherd", name: "Черепок «Приз»", value: 19999.63, rarity: "LEGENDARY"},
+  {id: "nether_brick", name: "Незерский кирпич", value: 715.13, rarity: "RARE"},
+  {id: "furnace", name: "Печь", value: 975.51, rarity: "RARE"},
+  {id: "blast_furnace", name: "Плавильная печь", value: 2381.61, rarity: "EPIC"},
+  {id: "smithing_table", name: "Стол кузнеца", value: 3695.19, rarity: "EPIC"}]
 const itemMap = Object.fromEntries(previewItems.map((item) => [item.id, item]))
 const rarityColors = { COMMON: '#9ba3b2', UNCOMMON: '#d6b069', RARE: '#5dd8c4', EPIC: '#7ca8ff', LEGENDARY: '#c89bff', MYTHIC: '#f070ff' }
-const casePools = [[["dirt",38.0],["stick",20.0],["sand",3.0],["cobblestone",12.0],["gravel",2.0],["netherrack",2.0],["stone",1.0],["grass_block",1.0],["oak_log",1.0],["mud",1.0],["snowball",3.0],["coal",7.0],["flint",1.0],["clay_ball",1.0],["copper_ingot",5.0],["iron",2.0]],[["oak_planks",11.82],["bread",24.03],["wheat",3.17],["apple",26.42],["leather",3.05],["feather",1.99],["string",0.98],["copper_ingot",12.44],["raw_copper",4.66],["iron",8.39],["bow",0.33],["arrow",0.64],["iron_pickaxe",1.58],["emerald",0.5]],[["feather",4.31],["string",4.34],["copper_ingot",4.39],["raw_copper",4.45],["raw_iron",14.27],["iron",20.32],["raw_gold",2.41],["stone_pickaxe",2.44],["lapis",10.78],["redstone",0.86],["arrow",0.89],["book",2.82],["torch",1.93],["iron_pickaxe",15.96],["crafting_table",1.15],["emerald",6.31],["diamond",2.37]],[["bow",4.63],["arrow",4.64],["iron_sword",11.62],["book",1.56],["gold",4.68],["torch",4.68],["iron_pickaxe",12.61],["iron_axe",3.96],["iron_helmet",2.39],["emerald",20.85],["iron_chestplate",1.64],["obsidian",14.15],["diamond",9.42],["diamond_sword",2.67],["totem",0.5]],[["iron_axe",4.79],["crafting_table",4.8],["iron_helmet",4.82],["emerald",20.15],["iron_chestplate",4.92],["golden_apple",18.06],["golden_carrot",2.5],["glass",1.68],["diamond",16.08],["quartz",1.71],["gunpowder",2.6],["glowstone_dust",0.9],["blaze_rod",0.91],["slime_ball",0.91],["diamond_sword",11.94],["totem",3.03],["netherite",0.2]],[["glass",5.55],["diamond",5.55],["quartz",5.55],["gunpowder",5.55],["diamond_ore",18.51],["ender_pearl",0.93],["nether_wart",0.93],["diamond_pickaxe",23.14],["amethyst_shard",3.7],["diamond_sword",15.73],["prismarine_shard",2.78],["enchanting_table",0.93],["prismarine_crystals",2.78],["golden_sword",0.93],["totem",6.94],["netherite",0.5]],[["ender_pearl",5.43],["nether_wart",5.44],["diamond_pickaxe",19.98],["amethyst_shard",5.47],["diamond_sword",16.45],["prismarine_shard",5.53],["golden_pickaxe",2.82],["magma_cream",0.95],["diamond_axe",2.87],["diamond_helmet",1.94],["end_stone",0.98],["totem",18.78],["diamond_chestplate",2.01],["ancient_debris",9.17],["netherite",2.08],["nether_star",0.1]],[["golden_sword",3.95],["ghast_tear",6.61],["golden_pickaxe",4.04],["ender_eye",4.78],["magma_cream",4.13],["diamond_axe",4.2],["crying_obsidian",9.35],["totem",23.0],["ancient_debris",9.14],["sea_lantern",1.7],["tnt",1.76],["trident",0.89],["ender_chest",1.86],["netherite",14.04],["gilded_blackstone",1.04],["shulker_shell",1.04],["soul_sand",1.14],["netherite_sword",3.79],["netherite_pickaxe",3.18],["nether_star",0.36]],[["totem",4.55],["diamond_chestplate",3.99],["ancient_debris",9.46],["sea_lantern",4.1],["tnt",4.18],["trident",4.19],["netherite",22.24],["netherite_sword",22.32],["netherite_pickaxe",2.78],["nether_star",9.84],["netherite_axe",3.16],["netherite_helmet",2.35],["echo_shard",2.64],["elytra",4.0],["dragon_egg",0.2]],[["netherite_sword",13.15],["netherite_pickaxe",4.96],["nether_star",17.41],["netherite_axe",4.99],["netherite_helmet",5.03],["elytra",18.66],["music_disc_pigstep",3.4],["music_disc_13",3.43],["netherite_chestplate",12.88],["heart_of_the_sea",0.87],["mace",1.74],["heavy_core",1.75],["beacon",7.94],["dragon_egg",3.49],["enchanted_apple",0.3]],[["echo_shard",4.1],["elytra",6.94],["music_disc_pigstep",4.21],["music_disc_13",4.29],["netherite_chestplate",9.37],["heart_of_the_sea",4.44],["mace",1.51],["heavy_core",1.53],["beacon",14.92],["trial_key",1.61],["end_crystal",16.77],["ominous_trial_key",1.76],["dragon_breath",1.83],["dragon_egg",15.55],["enchanted_apple",11.17]],
-  [["wooden_sword",2.6],["wooden_pickaxe",3.27],["beetroot",4.13],["potato",4.84],["carrot",5.75],["bone",6.91],["rotten_flesh",8.03],["egg",9.27],["melon_slice",10.62],["cooked_chicken",10.05],["cooked_beef",10.03],["pumpkin_pie",10.24],["paper",6.44],["fishing_rod",7.82]],
-  [["fishing_rod",12.25],["saddle",12.95],["leather_boots",11.12],["shield",5.46],["shears",5.08],["copper_ingot",3.19],["redstone",8.73],["gold",13.87],["iron_pickaxe",12.08],["emerald",10.04],["golden_apple",5.23]],
-  [["iron_pickaxe",18.28],["chainmail_helmet",11.46],["clock",7.23],["compass",2.61],["map",1.97],["bucket",1.35],["water_bucket",0.75],["golden_carrot",16.7],["obsidian",18.57],["diamond",10.92],["quartz",8.65],["blaze_rod",1.51]],
-  [["emerald",22.4],["bucket",18.14],["water_bucket",11.38],["fire_charge",7.24],["crossbow",2.26],["spyglass",1.17],["diamond_pickaxe",9.62],["diamond_sword",5.64],["amethyst_shard",6.86],["ender_pearl",14.73],["ghast_tear",0.56]],
-  [["ender_pearl",18.26],["spyglass",16.01],["golden_helmet",10.53],["diamond_boots",2.66],["diamond_leggings",1.26],["enchanting_table",17.55],["prismarine_crystals",14.81],["golden_sword",11.96],["diamond_axe",3.44],["diamond_helmet",2.13],["totem",1.39]],
+const casePools = [
+  [["dirt",38.0],["stick",20.0],["sand",3.0],["cobblestone",12.0],["gravel",2.0],["netherrack",1.82],["stone",1.0],["grass_block",1.0],["oak_log",1.0],["mud",1.0],["snowball",3.0],["coal",7.0],["flint",1.0],["clay_ball",1.0],["copper_ingot",5.0],["iron",2.0],["bamboo",0.18]],
+  [["oak_planks",11.82],["bread",23.58],["wheat",2.8847],["apple",25.97],["leather",2.7755],["feather",1.8109],["string",0.8918],["copper_ingot",12.44],["raw_copper",4.66],["iron",8.39],["bow",0.33],["arrow",0.64],["iron_pickaxe",1.58],["emerald",0.5],["sugar",0.3726],["sweet_berries",0.2596],["glow_berries",0.2745],["dried_kelp",0.0405],["baked_potato",0.0257],["cookie",0.45],["mushroom_stew",0.0882],["bone_meal",0.0369],["ink_sac",0.1791]],
+  [["feather",4.31],["string",4.34],["copper_ingot",4.39],["raw_copper",4.45],["raw_iron",14.27],["iron",20.32],["raw_gold",2.41],["stone_pickaxe",2.44],["lapis",10.78],["redstone",0.7826],["arrow",0.89],["book",2.5662],["torch",1.93],["iron_pickaxe",15.96],["crafting_table",1.15],["emerald",6.31],["diamond",2.37],["glow_ink_sac",0.0774],["lead",0.2538]],
+  [["bow",4.63],["arrow",4.64],["iron_sword",11.62],["book",1.56],["gold",4.68],["torch",4.68],["iron_pickaxe",12.61],["iron_axe",3.96],["iron_helmet",2.39],["emerald",20.85],["iron_chestplate",1.3581],["obsidian",14.15],["diamond",9.42],["diamond_sword",2.67],["totem",0.5],["bell",0.1343],["lantern",0.0133],["iron_boots",0.1222],["nether_brick",0.0121]],
+  [["iron_axe",4.79],["crafting_table",4.8],["iron_helmet",4.82],["emerald",20.15],["iron_chestplate",4.92],["golden_apple",18.06],["golden_carrot",2.5],["glass",1.68],["diamond",16.08],["quartz",1.5561],["gunpowder",2.6],["glowstone_dust",0.9],["blaze_rod",0.91],["slime_ball",0.91],["diamond_sword",11.94],["totem",3.03],["netherite",0.2],["pufferfish",0.1539]],
+  [["glass",5.55],["diamond",5.55],["quartz",5.55],["gunpowder",5.55],["diamond_ore",18.51],["ender_pearl",0.93],["nether_wart",0.93],["diamond_pickaxe",23.14],["amethyst_shard",3.367],["diamond_sword",15.28],["prismarine_shard",2.78],["enchanting_table",0.93],["prismarine_crystals",2.78],["golden_sword",0.93],["totem",6.94],["netherite",0.5],["golden_leggings",0.303],["golden_horse_armor",0.45],["blast_furnace",0.03]],
+  [["ender_pearl",5.43],["nether_wart",5.44],["diamond_pickaxe",19.98],["amethyst_shard",5.47],["diamond_sword",16.45],["prismarine_shard",5.53],["golden_pickaxe",2.82],["magma_cream",0.8645],["diamond_axe",2.6117],["diamond_helmet",1.94],["end_stone",0.98],["totem",18.78],["diamond_chestplate",2.01],["ancient_debris",9.17],["netherite",2.08],["nether_star",0.1],["diamond_shovel",0.0855],["diamond_hoe",0.2583]],
+  [["golden_sword",3.95],["ghast_tear",6.61],["golden_pickaxe",4.04],["ender_eye",4.78],["magma_cream",4.13],["diamond_axe",4.2],["crying_obsidian",9.35],["totem",22.55],["ancient_debris",9.14],["sea_lantern",1.7],["tnt",1.76],["trident",0.89],["ender_chest",1.86],["netherite",14.04],["gilded_blackstone",1.04],["shulker_shell",1.04],["soul_sand",1.14],["netherite_sword",3.79],["netherite_pickaxe",3.18],["nether_star",0.36],["sculk",0.45]],
+  [["totem",4.55],["diamond_chestplate",3.99],["ancient_debris",9.46],["sea_lantern",4.1],["tnt",4.18],["trident",4.19],["netherite",22.24],["netherite_sword",21.87],["netherite_pickaxe",2.78],["nether_star",9.84],["netherite_axe",3.16],["netherite_helmet",2.35],["echo_shard",2.64],["elytra",4.0],["dragon_egg",0.2],["sculk_shrieker",0.4095],["prize_pottery_sherd",0.0405]],
+  [["netherite_sword",13.15],["netherite_pickaxe",4.96],["nether_star",17.41],["netherite_axe",4.99],["netherite_helmet",5.03],["elytra",18.66],["music_disc_pigstep",3.094],["music_disc_13",3.43],["netherite_chestplate",12.88],["heart_of_the_sea",0.87],["mace",1.74],["heavy_core",1.75],["beacon",7.94],["dragon_egg",3.49],["enchanted_apple",0.3],["silence_armor_trim_smithing_template",0.306]],
+  [["echo_shard",4.1],["elytra",6.94],["music_disc_pigstep",4.21],["music_disc_13",4.29],["netherite_chestplate",9.37],["heart_of_the_sea",4.44],["mace",1.51],["heavy_core",1.53],["beacon",14.92],["trial_key",1.61],["end_crystal",16.77],["ominous_trial_key",1.76],["dragon_breath",1.6653],["dragon_egg",15.55],["enchanted_apple",11.17],["music_disc_precipice",0.1647]],
+  [["wooden_sword",2.6],["wooden_pickaxe",3.27],["beetroot",4.13],["potato",4.84],["carrot",5.75],["bone",6.91],["rotten_flesh",8.03],["egg",9.27],["melon_slice",10.17],["cooked_chicken",10.05],["cooked_beef",9.58],["pumpkin_pie",10.24],["paper",6.44],["fishing_rod",7.82],["honey_bottle",0.4095],["rabbit_hide",0.0405],["honeycomb",0.45]],
+  [["fishing_rod",12.25],["saddle",12.5],["leather_boots",11.12],["shield",5.46],["shears",5.08],["copper_ingot",3.19],["redstone",8.73],["gold",13.87],["iron_pickaxe",11.63],["emerald",9.59],["golden_apple",5.23],["slime_block",0.45],["copper_block",0.45],["name_tag",0.45]],
+  [["iron_pickaxe",18.28],["chainmail_helmet",11.01],["clock",7.23],["compass",2.61],["map",1.97],["bucket",1.35],["water_bucket",0.75],["golden_carrot",16.25],["obsidian",18.12],["diamond",10.92],["quartz",8.65],["blaze_rod",1.51],["soul_lantern",0.45],["iron_leggings",0.45],["furnace",0.45]],
+  [["emerald",22.4],["bucket",17.69],["water_bucket",10.93],["fire_charge",7.24],["crossbow",2.26],["spyglass",1.17],["diamond_pickaxe",9.62],["diamond_sword",5.64],["amethyst_shard",6.86],["ender_pearl",14.28],["ghast_tear",0.56],["recovery_compass",0.45],["golden_boots",0.45],["tropical_fish_bucket",0.45]],
+  [["ender_pearl",18.26],["spyglass",15.56],["golden_helmet",10.53],["diamond_boots",2.66],["diamond_leggings",1.26],["enchanting_table",17.1],["prismarine_crystals",14.36],["golden_sword",11.51],["diamond_axe",3.44],["diamond_helmet",2.13],["totem",1.39],["axolotl_bucket",0.45],["prismarine",0.45],["amethyst_block",0.45],["smithing_table",0.45]],
   [["golden_sword",28.3],["diamond_boots",25.3],["diamond_leggings",12.81],["golden_chestplate",8.64],["diamond_horse_armor",2.85],["turtle_scute",2.06],["turtle_helmet",1.18],["sea_lantern",6.03],["trident",2.61],["netherite",1.12],["ender_chest",1.84],["ancient_debris",7.26]],
-  [["totem",23.6],["turtle_scute",23.3],["turtle_helmet",16.77],["phantom_membrane",10.99],["nautilus_shell",8.75],["spectral_arrow",6.0],["experience_bottle",2.43],["enchanted_book",1.3],["netherite_sword",3.38],["netherite_pickaxe",2.05],["nether_star",1.43]],
-  [["spectral_arrow",17.45],["experience_bottle",18.86],["enchanted_book",14.06],["netherite_leggings",10.16],["netherite_boots",7.15],["conduit",2.76],["blue_ice",1.84],["netherite_axe",11.9],["netherite_helmet",8.68],["elytra",5.18],["netherite_chestplate",1.96]],
-  [["echo_shard",15.12],["conduit",16.37],["blue_ice",13.98],["wind_charge",10.73],["netherite_shovel",6.78],["netherite_hoe",5.23],["heavy_core",9.37],["beacon",7.75],["end_crystal",5.07],["trial_key",6.47],["dragon_breath",1.81],["dragon_egg",1.32]],
-  [["netherite_scrap",10.73],["breeze_rod",12.44],["music_disc_relic",12.59],["music_disc_creator",13.1],["ominous_trial_key",8.54],["dragon_breath",10.19],["dragon_egg",12.51],["enchanted_apple",13.22],["end_crystal",6.68]]
+  [["totem",23.6],["turtle_scute",22.85],["turtle_helmet",16.77],["phantom_membrane",10.54],["nautilus_shell",8.75],["spectral_arrow",6.0],["experience_bottle",2.43],["enchanted_book",1.3],["netherite_sword",3.38],["netherite_pickaxe",2.05],["nether_star",1.43],["netherite_upgrade_smithing_template",0.4095],["tide_armor_trim_smithing_template",0.0405],["sculk_catalyst",0.45]],
+  [["spectral_arrow",17.45],["experience_bottle",18.41],["enchanted_book",14.06],["netherite_leggings",9.71],["netherite_boots",7.15],["conduit",2.76],["blue_ice",1.84],["netherite_axe",11.9],["netherite_helmet",8.68],["elytra",5.18],["netherite_chestplate",1.96],["diamond_block",0.45],["emerald_block",0.45]],
+  [["echo_shard",15.12],["conduit",16.37],["blue_ice",13.98],["wind_charge",10.28],["netherite_shovel",6.78],["netherite_hoe",5.23],["heavy_core",9.37],["beacon",7.75],["end_crystal",5.07],["trial_key",6.47],["dragon_breath",1.81],["dragon_egg",1.32],["music_disc_otherside",0.45]],
+  [["netherite_scrap",10.73],["breeze_rod",12.44],["music_disc_relic",12.59],["music_disc_creator",12.65],["ominous_trial_key",8.54],["dragon_breath",10.19],["dragon_egg",12.51],["enchanted_apple",13.22],["end_crystal",6.68],["netherite_block",0.45]]
 ]
 const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['arcade', Gamepad2], ['settings', Settings2]]
 
 const labels = {
   ru: {
-    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Аркада',
+    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Платформа дропа',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя коллекция. Твой риск. Твой следующий апгрейд.',
-    explore: 'Посмотреть кейсы', demo: 'В разработке', hello: '150 предметов · 21 кейс · игровой инвентарь',
+    explore: 'Посмотреть кейсы', demo: 'В разработке', hello: '200 предметов · 21 кейс · игровой инвентарь',
     catalog: 'КАТАЛОГ КЕЙСОВ', all: 'Все кейсы', free: 'За рекламу', balance: 'Баланс', guest: 'Гостевой режим',
     ready: 'Первый этап готов', progress: 'Подключим на следующих этапах',
     intro: 'Мы строим настоящий игровой проект по частям. Сейчас доступны оформление, каталог и персональные настройки. А ниже уже появился первый тестовый игровой цикл: предметы, шанс, инвентарь и демо-апгрейд.',
@@ -372,9 +483,9 @@ const labels = {
     profileSoon: 'Позже здесь будут вход, облачное сохранение и статистика.'
   },
   uk: {
-    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Аркада',
+    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Платформа дропу',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя колекція. Твій ризик. Твій наступний апгрейд.',
-    explore: 'Переглянути кейси', demo: 'У розробці', hello: '150 предметів · 21 кейс · ігровий інвентар',
+    explore: 'Переглянути кейси', demo: 'У розробці', hello: '200 предметів · 21 кейс · ігровий інвентар',
     catalog: 'КАТАЛОГ КЕЙСІВ', all: 'Усі кейси', free: 'За рекламу', balance: 'Баланс', guest: 'Гостьовий режим',
     ready: 'Перший етап готовий', progress: 'Підключимо на наступних етапах',
     intro: 'Ми будуємо справжній ігровий проєкт поступово. Зараз доступні оформлення, каталог і персональні налаштування. Нижче вже є перший тестовий ігровий цикл: предмети, шанс, інвентар і демо-апгрейд.',
@@ -392,7 +503,7 @@ const labels = {
     profileSoon: 'Пізніше тут будуть вхід, хмарне збереження та статистика.'
   },
   en: {
-    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Arcade',
+    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Hourly Drop',
     head: 'MORE THAN LUCK.', sub: 'Your collection. Your risk. Your next upgrade.',
     explore: 'Explore cases', demo: 'In development', hello: '150 items · 21 cases · Minecraft collection',
     catalog: 'CASE COLLECTION', all: 'All cases', free: 'Watch an ad', balance: 'Balance', guest: 'Guest mode',
@@ -467,8 +578,17 @@ function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n))
 }
 
+function roundMC(value) {
+  return Math.round((Number(value) + Number.EPSILON) * 100) / 100
+}
 function formatCoins(value) {
-  return value.toLocaleString('ru-RU')
+  return new Intl.NumberFormat('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(roundMC(Number(value) || 0))
+}
+function parseMC(value) {
+  const cleaned=String(value).trim().replace(/\s/g,'').replace(',','.')
+  if(!/^\d+(?:\.\d{1,2})?$/.test(cleaned))return null
+  const n=Number(cleaned)
+  return Number.isFinite(n)?roundMC(n):null
 }
 
 function getItem(id) {
@@ -477,7 +597,7 @@ function getItem(id) {
 
 function findNearestTarget(sourceValue, multiplier) {
   const targetValue = sourceValue * multiplier
-  const options = previewItems.filter((x) => x.value > sourceValue)
+  const options = previewItems.filter((x) => x.value > sourceValue && x.value/sourceValue<=900)
   if (!options.length) return null
   return options.reduce((a, b) => (Math.abs(a.value - targetValue) < Math.abs(b.value - targetValue) ? a : b), options[0])
 }
@@ -901,74 +1021,67 @@ function shuffleCards(list){
  for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}
  return out;
 }
-function ItemMatchArcade({lang='ru',onComplete}){
- const phrases={
- ru:{title:'ПАРНЫЙ ДРОП',subtitle:'Найди 8 пар предметов Minecraft за 75 секунд. Карточки открываются по две — запоминай расположение и собирай коллекцию.',start:'НАЧАТЬ ИГРУ',again:'ИГРАТЬ ЕЩЁ',time:'ВРЕМЯ',moves:'ХОДЫ',matched:'НАЙДЕНО',best:'РЕКОРД',won:'КОЛЛЕКЦИЯ СОБРАНА',lost:'ВРЕМЯ ВЫШЛО',idle:'Готов к поиску?',hint:'Переворачивай карточки и находи два одинаковых предмета. Победа — все 8 пар до конца времени.',reward:'Награда дня',taken:'Сегодняшняя награда уже получена',free:'Первая победа дня даёт один небольшой предмет в инвентарь. Без реальных денег и рекламы.',noPrize:'Сегодняшний бонус уже получен. Играть на рекорд можно сколько угодно.'},
- uk:{title:'ПАРНИЙ ДРОП',subtitle:'Знайди 8 пар предметів Minecraft за 75 секунд. Відкривай дві картки та запам’ятовуй розташування.',start:'ПОЧАТИ ГРУ',again:'ГРАТИ ЩЕ',time:'ЧАС',moves:'ХОДИ',matched:'ЗНАЙДЕНО',best:'РЕКОРД',won:'КОЛЕКЦІЮ ЗІБРАНО',lost:'ЧАС ВИЙШОВ',idle:'Готовий до пошуку?',hint:'Знаходь дві однакові речі. Перемога — всі 8 пар до завершення часу.',reward:'Нагорода дня',taken:'Сьогодні нагороду вже отримано',free:'Перша перемога дня дає один недорогий предмет до інвентарю. Без реальних грошей і реклами.',noPrize:'Сьогодні бонус уже отримано. Грай на рекорд скільки завгодно.'},
- en:{title:'ITEM MATCH',subtitle:'Find 8 matching Minecraft item pairs in 75 seconds. Flip two cards at a time and remember their positions.',start:'START GAME',again:'PLAY AGAIN',time:'TIME',moves:'MOVES',matched:'MATCHED',best:'BEST SCORE',won:'COLLECTION COMPLETE',lost:'TIME IS UP',idle:'Ready to play?',hint:'Find two identical items. Match all 8 pairs before the countdown reaches zero.',reward:'Daily drop',taken:'Daily reward already claimed',free:'Your first win each day adds one small item to your demo inventory. No real money or ads.',noPrize:'You already claimed today’s bonus. Keep playing for a high score.'}
- };
- const t=phrases[lang]||phrases.en;
- const [phase,setPhase]=React.useState('idle');
- const [deck,setDeck]=React.useState([]);
- const [faceUp,setFaceUp]=React.useState([]);
- const [matched,setMatched]=React.useState([]);
- const [moves,setMoves]=React.useState(0);
- const [time,setTime]=React.useState(75);
- const [score,setScore]=React.useState(0);
- const [best,setBest]=React.useState(()=>Math.max(0,Number(stored('voxup-match-best',0))||0));
- const [prize,setPrize]=React.useState(null);
- const phaseRef=React.useRef('idle'),faceRef=React.useRef([]),matchRef=React.useRef(new Set()),busyRef=React.useRef(false),countRef=React.useRef(0),deadlineRef=React.useRef(0),timeouts=React.useRef([]);
- React.useEffect(()=>()=>{timeouts.current.forEach(clearTimeout);timeouts.current=[]},[]);
- React.useEffect(()=>{
-  if(phase!=='playing')return;
-  const interval=window.setInterval(()=>{
-   const left=Math.max(0,Math.ceil((deadlineRef.current-Date.now())/1000));setTime(left);
-   if(!left){phaseRef.current='lost';setPhase('lost');busyRef.current=true;timeouts.current.forEach(clearTimeout);timeouts.current=[]}
-  },180);
-  return()=>clearInterval(interval);
- },[phase]);
- function begin(){
-  timeouts.current.forEach(clearTimeout);timeouts.current=[];
-  const picks=shuffleCards(MATCH_ITEMS).slice(0,8);
-  const cards=shuffleCards([...picks,...picks].map((id,i)=>({id,uid:i})));
-  setDeck(cards);setFaceUp([]);setMatched([]);setMoves(0);setScore(0);setTime(75);setPrize(null);
-  faceRef.current=[];matchRef.current=new Set();busyRef.current=false;countRef.current=0;
-  deadlineRef.current=Date.now()+75000;phaseRef.current='playing';setPhase('playing');
+
+const HOUR_MS=60*60*1000
+const HOURLY_TIERS=[
+  {rarity:'COMMON',weight:65,label:'Обычные'},
+  {rarity:'UNCOMMON',weight:23,label:'Необычные'},
+  {rarity:'RARE',weight:8,label:'Редкие'},
+  {rarity:'EPIC',weight:3,label:'Эпические'},
+  {rarity:'LEGENDARY',weight:.9,label:'Легендарные'},
+  {rarity:'MYTHIC',weight:.1,label:'Мифические'}
+]
+const hourlyTiers=HOURLY_TIERS.map(t=>({...t,items:previewItems.filter(i=>i.rarity===t.rarity)}))
+function pickHourlyItem(roll){
+ let p=roll*100
+ for(const group of hourlyTiers){
+  if(p<group.weight){const idx=Math.min(group.items.length-1,Math.floor(p/group.weight*group.items.length));return group.items[idx]}
+  p-=group.weight
  }
- function flip(i){
-  if(phaseRef.current!=='playing'||busyRef.current||faceRef.current.includes(i)||matchRef.current.has(i)||!deck[i])return;
-  const next=[...faceRef.current,i];faceRef.current=next;setFaceUp(next);
-  if(next.length!==2)return;
-  busyRef.current=true;const [a,b]=next;setMoves(n=>n+1);countRef.current++;
-  const same=deck[a].id===deck[b].id;
-  const timer=window.setTimeout(()=>{
-   if(phaseRef.current!=='playing')return;
-   if(same){matchRef.current.add(a);matchRef.current.add(b);setMatched([...matchRef.current]);}
-   faceRef.current=[];setFaceUp([]);busyRef.current=false;
-   if(same&&matchRef.current.size===16){
-    phaseRef.current='won';setPhase('won');busyRef.current=true;
-    const remaining=Math.max(0,Math.ceil((deadlineRef.current-Date.now())/1000));
-    const finalScore=Math.max(100,1000+remaining*10-Math.max(0,countRef.current-8)*45);
-    setScore(finalScore);
-    if(finalScore>best){setBest(finalScore);try{localStorage.setItem('voxup-match-best',JSON.stringify(finalScore))}catch{}}
-    const earned=onComplete?.();setPrize(earned||null);
-   }
-  },same?320:700);
-  timeouts.current.push(timer);
+ return hourlyTiers.at(-1).items.at(-1)
+}
+function HourlyDropArcade({lang='ru',hourly,onDraw,textureSource}){
+ const text=lang==='uk'?{
+  name:'ПЛАТФОРМА ДРОПУ',sub:'Обери один із дев’яти слотів. Раз на 60 хвилин ти отримуєш випадковий предмет Minecraft прямо в інвентар. Усі предмети можуть випасти — шанси різні.',ready:'ВІДКРИТИ ПЛАТФОРМУ',wait:'НАСТУПНИЙ ДРОП ЧЕРЕЗ',collected:'ТИ ОТРИМАВ',claimed:'Предмет уже в інвентарі',rules:'ТАБЛИЦЯ ШАНСІВ',search:'Пошук предмета...',head:'Всі 200 предметів доступні',hint:'Натисни на будь-яку комірку: нагорода з’явиться одразу. Інші слоти не дають додаткових спроб.',limit:'Лише один дроп на годину',history:'ОСТАННІ ДРОПИ',odds:'Шанс кожного предмета',remaining:'Готово! Можна обирати клітинку.'}
+ :lang==='ru'?{
+  name:'ПЛАТФОРМА ДРОПА',sub:'Выбери одну из девяти клеток. Раз в 60 минут получаешь случайный Minecraft-предмет прямо в инвентарь. Выпасть может любой предмет, но шансы сильно различаются.',ready:'ОТКРЫТЬ ПЛАТФОРМУ',wait:'СЛЕДУЮЩИЙ ДРОП ЧЕРЕЗ',collected:'ТЕБЕ ВЫПАЛО',claimed:'Предмет уже в инвентаре',rules:'ТАБЛИЦА ШАНСОВ',search:'Поиск предмета...',head:'Все 200 предметов могут выпасть',hint:'Нажми на любую клетку — приз сразу попадёт в инвентарь. Другие клетки не дают дополнительных попыток.',limit:'Один дроп на час',history:'ПОСЛЕДНИЕ ДРОПЫ',odds:'Шанс каждого предмета',remaining:'Готово! Выбирай клетку.'}
+ :{
+  name:'HOURLY DROP PLATFORM',sub:'Choose one of nine cells. Once every 60 minutes you receive a random Minecraft item straight into your inventory. Every item is possible, with very different odds.',ready:'OPEN PLATFORM',wait:'NEXT DROP IN',collected:'YOU RECEIVED',claimed:'Item is already in your inventory',rules:'DROP PROBABILITIES',search:'Search item...',head:'All 200 items can drop',hint:'Pick any one cell. The item is added instantly. Other cells do not give extra chances.',limit:'One drop per hour',history:'RECENT DROPS',odds:'Exact per-item odds',remaining:'Ready! Choose a cell.'}
+ const [now,setNow]=React.useState(Date.now())
+ const [search,setSearch]=React.useState('')
+ const [oddsOpen,setOddsOpen]=React.useState(false)
+ const [reveal,setReveal]=React.useState(false)
+ const [selected,setSelected]=React.useState(null)
+ const guard=React.useRef(false)
+ const last=Number(hourly?.lastAt)||0
+ const remaining=Math.max(0,HOUR_MS-(now-last))
+ const ready=remaining===0
+ const formatTime=ms=>{const total=Math.ceil(ms/1000),h=Math.floor(total/3600),m=Math.floor(total%3600/60),sec=total%60;return [h,m,sec].map(v=>String(v).padStart(2,'0')).join(':')}
+ React.useEffect(()=>{const id=window.setInterval(()=>setNow(Date.now()),500);return()=>clearInterval(id)},[])
+ React.useEffect(()=>{if(ready){guard.current=false;setReveal(false);setSelected(null)}},[ready])
+ function openCell(index){
+  if(!ready||guard.current)return
+  guard.current=true
+  const prize=onDraw(index)
+  if(!prize){guard.current=false;return}
+  setSelected({index,itemId:prize.itemId})
+  setReveal(true)
+  setNow(Date.now())
  }
- const complete=matched.length/2;
- return <section className="matchArena" aria-label={t.title}>
-  <div className="matchHero"><div><div className="eyebrow">VOXUP / ITEM-BASED ARCADE</div><h2>{t.title}</h2><p>{t.subtitle}</p><div className="matchPill">✦ {t.free}</div></div><div className="matchHeroArt"><img src={textureSource('diamond')} alt=""/><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div></div>
-  <div className="matchCounters"><div><small>{t.time}</small><strong>{time}<em>s</em></strong></div><div><small>{t.moves}</small><strong>{moves}</strong></div><div><small>{t.matched}</small><strong>{complete}<em>/8</em></strong></div><div><small>{t.best}</small><strong>{best}</strong></div></div>
-  <div className="matchLayout"><div className="matchBoard">{Array.from({length:16},(_,i)=>{
-   const card=deck[i],revealed=faceUp.includes(i)||matched.includes(i);
-   return <button key={card?.uid??i} type="button" className={'matchCard '+(revealed?'flipped ':'')+(matched.includes(i)?'matched ':'')} onClick={()=>flip(i)} disabled={phase!=='playing'||matched.includes(i)} aria-label={revealed&&card?getItem(card.id).name:'Скрытая карточка '+(i+1)}>
-    <span className="matchCardInner"><span className="matchCardBack"><Gem size={25}/><small>VOXUP</small></span><span className="matchCardFront">{card&&<><img src={textureSource(card.id)} alt="" draggable="false"/><small>{getItem(card.id).name}</small></>}</span></span>
-   </button>
-  })}</div><aside className="matchSide"><div className="matchSideHead"><div className="eyebrow">SKIN MEMORY / 08 PAIRS</div><h3>{phase==='won'?t.won:phase==='lost'?t.lost:t.idle}</h3><p>{phase==='won'?(prize?.awarded?`${t.reward}: ${getItem(prize.id).name}`:t.noPrize):t.hint}</p></div>
-   <div className="matchRewardArt"><img src={textureSource(prize?.id||'diamond')} alt=""/><div><strong>{prize?.awarded?getItem(prize.id).name:t.reward}</strong><small>{prize?.awarded?`${getItem(prize.id).value} MC · ${t.reward}`:t.free}</small></div></div>
-   <button className="primary matchStart" onClick={begin}><Gamepad2 size={18}/>{phase==='idle'?t.start:t.again}</button><p className="matchFootnote">{t.taken}: {stored('voxup-match-last-reward-day','')===new Date().toLocaleDateString('sv-SE')?'✓':'—'}</p>
-  </aside></div>
+ const currentItem=(selected?.itemId||(!ready?hourly?.itemId:null))
+ const filtered=previewItems.filter(x=>`${x.name} ${x.id} ${x.rarity}`.toLowerCase().includes(search.trim().toLowerCase()))
+ const exactPct=item=>{const group=hourlyTiers.find(t=>t.rarity===item.rarity);return (group.weight/group.items.length).toLocaleString('ru-RU',{maximumFractionDigits:6})+'%'}
+ return <section className="hourlyArena" aria-label={text.name}>
+  <div className="hourlyHero"><div><div className="eyebrow">VOXUP / ITEM DROP · 60 MIN</div><h2>{text.name}</h2><p>{text.sub}</p><div className="hourlyTags"><span><Timer size={15}/>{text.limit}</span><span><Gem size={15}/>200 ITEMS</span></div></div><div className="hourlyHeroObj"><VoxelThumbnail id="diamond_block" textureSource={textureSource} blockIds={blockIds}/><VoxelThumbnail id="netherite" textureSource={textureSource} blockIds={blockIds}/></div></div>
+  <div className="hourlyLayout"><div className="hourlyBoardWrap"><div className="hourlyTopline"><span>{ready?text.remaining:text.wait}</span><strong className={ready?'hourlyReady':'hourlyWaiting'}>{ready?'● READY':formatTime(remaining)}</strong></div>
+    <div className={'hourlyBoard '+(!ready?'cooldown':'')}>{Array.from({length:9},(_,i)=>{const isSelected=(selected?.index??(!ready?hourly?.chosen:-1))===i;const itemId=isSelected?currentItem:null;return <button type="button" key={i} onClick={()=>openCell(i)} disabled={!ready} className={'hourlyCell '+(isSelected?'hourlyRevealed ':'')+(ready?'hourlyActive ':'')} aria-label={`${i+1} / ${text.ready}`}><span className="hourlyCellBorder"/><span className="hourlyCellIndex">0{i+1}</span>{itemId?<img src={textureSource(itemId)} alt="" draggable="false"/>:<Gem size={26} strokeWidth={1.4}/>}<span className="hourlyCellLabel">{itemId?getItem(itemId).name:'VOXUP'}</span></button>})}</div>
+    <div className="hourlyTip"><ShieldCheck size={17}/>{text.hint}</div></div>
+    <aside className="hourlyPrizeBox"><div className="eyebrow">DROP / REWARD</div>{currentItem?<><div className="hourlyPrizeArt"><VoxelThumbnail id={currentItem} textureSource={textureSource} blockIds={blockIds}/></div><div className="hourlyPrizeTag">{text.collected}</div><h3>{getItem(currentItem).name}</h3><div className="hourlyPrizePrice">{formatCoins(getItem(currentItem).value)} MC · {getItem(currentItem).rarity}</div><p className="hourlyAwarded"><Check size={17}/>{text.claimed}</p></>:<><div className="hourlyMystery"><Gem size={54}/></div><h3>???</h3><p>{text.head}</p></>}
+      <button className="secondaryBtn hourlyOddsToggle" onClick={()=>setOddsOpen(v=>!v)}><Layers3 size={17}/>{text.rules}<ChevronRight size={16}/></button><div className="hourlyLevelRates">{hourlyTiers.map(t=><div key={t.rarity}><span style={{color:rarityColors[t.rarity]}}>● {t.rarity}</span><strong>{String(t.weight).replace('.',',')}%</strong></div>)}</div>
+    </aside>
+  </div>
+  {oddsOpen&&<section className="hourlyOdds"><div className="hourlyOddsHead"><div><h3>{text.odds}</h3><p>{text.head} · {previewItems.length}</p></div><label className="catalogSearch"><Search size={16}/><input type="search" value={search} onChange={e=>setSearch(e.target.value)} placeholder={text.search}/></label></div><div className="hourlyOddsGrid">{filtered.map(item=><div key={item.id} className="hourlyOddsItem"><img src={textureSource(item.id)} alt=""/><span><strong>{item.name}</strong><small>{formatCoins(item.value)} MC</small></span><b style={{color:rarityColors[item.rarity]}}>{exactPct(item)}</b></div>)}</div></section>}
+  <section className="hourlyRecent"><div className="eyebrow">{text.history}</div>{hourly?.history?.length?<div className="hourlyRecentList">{hourly.history.slice(0,6).map((entry,i)=><div key={`${entry.at}-${i}`}><img src={textureSource(entry.itemId)} alt=""/><span>{getItem(entry.itemId).name}<small>{new Date(entry.at).toLocaleString(lang==='en'?'en-US':'ru-RU')}</small></span><b>{formatCoins(getItem(entry.itemId).value)} MC</b></div>)}</div>:<p>—</p>}</section>
  </section>
 }
 
@@ -976,11 +1089,11 @@ function AdminConsole({coins,onCoins,onItem,audit,onLock,blocked=false,lang='ru'
  const [amount,setAmount]=React.useState('10000');const [itemId,setItemId]=React.useState('diamond');const [qty,setQty]=React.useState('1');const [feedback,setFeedback]=React.useState('');
  const ru=lang==='ru',uk=lang==='uk';
  const txt=(r,u,e)=>ru?r:uk?u:e;
- function grantCoins(mode){const n=Number(amount);if(!Number.isSafeInteger(n)||n<1||n>1e8){setFeedback(txt('Введите целое число от 1 до 100 000 000','Введіть ціле число від 1 до 100 000 000','Enter an integer from 1 to 100,000,000'));return}if(blocked){setFeedback(txt('Заверши текущую игру/выигрыш','Заверши поточну гру/виграш','Finish the current reward first'));return}onCoins(n,mode);setFeedback(txt('Тестовая операция выполнена','Тестову операцію виконано','Local test balance updated'))}
+ function grantCoins(mode){const n=parseMC(amount);if(n===null||n<=0||n>1e8){setFeedback(txt('Введите сумму от 0,01 до 100 000 000 MC','Введіть суму від 0,01 до 100 000 000 MC','Enter an amount from 0.01 to 100,000,000 MC'));return}if(blocked){setFeedback(txt('Заверши текущую игру/выигрыш','Заверши поточну гру/виграш','Finish the current reward first'));return}onCoins(n,mode);setFeedback(txt('Тестовая операция выполнена','Тестову операцію виконано','Local test balance updated'))}
  function grantItem(){const n=Number(qty);if(!Number.isSafeInteger(n)||n<1||n>100){setFeedback(txt('Количество: от 1 до 100','Кількість: від 1 до 100','Quantity: 1–100'));return}if(blocked){setFeedback(txt('Заверши текущий выигрыш','Заверши поточний виграш','Finish the pending reward'));return}onItem(itemId,n);setFeedback(txt('Предметы добавлены в локальный инвентарь','Предмети додано до локального інвентарю','Items added to local inventory'))}
  return <section className="adminStudio"><div className="adminIntro"><div><div className="eyebrow">VOXUP LAB / LOCAL TEST ONLY</div><h2>{txt('Панель администратора','Панель адміністратора','Admin laboratory')}</h2><p>{txt('Здесь можно тестировать баланс и предметы именно в своём браузере. Код 1764 не защищает настоящую серверную валюту: для публичного сайта потребуется серверная авторизация.','Тут можна тестувати баланс і предмети лише у своєму браузері. Код 1764 не захищає серверну валюту.','This only changes the current browser’s local demo. Code 1764 does not secure real server balances.')}</p></div><button className="secondaryBtn" onClick={onLock}><LockKeyhole size={16}/>{txt('Закрыть панель','Закрити панель','Lock panel')}</button></div>
  <div className="adminBalance"><Coins size={26}/><div><small>{txt('Текущий локальный баланс','Поточний локальний баланс','Current local balance')}</small><strong>{formatCoins(coins)} <em>MC</em></strong></div><span>DEMO · NOT SERVER VERIFIED</span></div>
- <div className="adminGrid"><section className="adminCard"><div className="eyebrow">01 / MC COINS</div><h3>{txt('Выдать монеты','Видати монети','Grant coins')}</h3><label htmlFor="admin-coins">{txt('Количество MC','Кількість MC','Amount MC')}</label><input id="admin-coins" type="number" min="1" max="100000000" value={amount} onChange={e=>setAmount(e.target.value)} /><div className="adminPresets">{[1000,10000,50000,100000].map(n=><button key={n} onClick={()=>setAmount(String(n))}>+{formatCoins(n)}</button>)}</div><div className="adminActions"><button className="primary" onClick={()=>grantCoins('add')}><Coins size={16}/>{txt('Начислить','Нарахувати','Add')}</button><button className="secondaryBtn" onClick={()=>grantCoins('subtract')}>{txt('Списать','Списати','Subtract')}</button></div></section>
+ <div className="adminGrid"><section className="adminCard"><div className="eyebrow">01 / MC COINS</div><h3>{txt('Выдать монеты','Видати монети','Grant coins')}</h3><label htmlFor="admin-coins">{txt('Количество MC','Кількість MC','Amount MC')}</label><input id="admin-coins" type="text" inputMode="decimal" placeholder="1221,21" value={amount} onChange={e=>setAmount(e.target.value)} /><div className="adminPresets">{[1000,10000,50000,100000].map(n=><button key={n} onClick={()=>setAmount(String(n))}>+{formatCoins(n)}</button>)}</div><div className="adminActions"><button className="primary" onClick={()=>grantCoins('add')}><Coins size={16}/>{txt('Начислить','Нарахувати','Add')}</button><button className="secondaryBtn" onClick={()=>grantCoins('subtract')}>{txt('Списать','Списати','Subtract')}</button></div></section>
  <section className="adminCard"><div className="eyebrow">02 / ITEMS</div><h3>{txt('Выдать предметы','Видати предмети','Grant items')}</h3><label htmlFor="admin-item">{txt('Предмет из каталога','Предмет з каталогу','Catalogue item')}</label><select id="admin-item" value={itemId} onChange={e=>setItemId(e.target.value)}>{previewItems.map(i=><option key={i.id} value={i.id}>{i.name} — {formatCoins(i.value)} MC</option>)}</select><div className="adminChosen"><img src={textureSource(itemId)} alt=""/><span>{getItem(itemId).name}</span><small>{getItem(itemId).rarity}</small></div><label htmlFor="admin-qty">{txt('Количество','Кількість','Quantity')}</label><input id="admin-qty" type="number" min="1" max="100" value={qty} onChange={e=>setQty(e.target.value)}/><button className="primary" onClick={grantItem}><Gift size={16}/>{txt('Добавить в инвентарь','Додати до інвентарю','Grant item')}</button></section></div>
  <div className="adminLogs"><h3>{txt('История тестовых выдач','Історія тестових видач','Local activity log')}</h3>{audit.length?<div className="adminLogList">{audit.map(a=><div key={a.id}><span>{a.label}</span><small>{a.when}</small></div>)}</div>:<p>{txt('Пока операций нет','Операцій ще немає','No local actions yet')}</p>}</div>{feedback&&<div className="adminFeedback" role="status">{feedback}</div>}
  </section>
@@ -1006,11 +1119,12 @@ export default function App() {
   const [adminCode,setAdminCode]=useState('')
   const [adminError,setAdminError]=useState('')
   const [adminAudit,setAdminAudit]=useState(()=>stored('voxup-admin-audit',[]))
+  const [hourlyData,setHourlyData]=useState(()=>stored('voxup-hourly-state',{lastAt:0,itemId:null,chosen:-1,total:0,history:[]}))
 
   const [sourceId, setSourceId] = useState(() => stored('mineup-preview-source', 'iron'))
   const [targetId, setTargetId] = useState(() => stored('mineup-preview-target', 'diamond'))
   const [multiplier, setMultiplier] = useState(() => Number(stored('mineup-preview-multiplier', 5.714)) || 5.714)
-  const [coins, setCoins] = useState(() => { const n = Number(stored('mineup-demo-coins', 2500)); return Number.isFinite(n) && n >= 0 ? n : 2500 })
+  const [coins, setCoins] = useState(() => { const n = Number(stored('mineup-demo-coins', 2500)); return Number.isFinite(n) && n >= 0 ? roundMC(n) : 2500 })
   const [inventory, setInventory] = useState(() => ({ ...defaultInventory, ...stored('mineup-demo-inventory', defaultInventory) }))
   const [history, setHistory] = useState(() => stored('mineup-demo-history', []))
   const [result, setResult] = useState(null)
@@ -1058,8 +1172,8 @@ export default function App() {
   const source = useMemo(() => getItem(sourceId), [sourceId])
   const target = useMemo(() => getItem(targetId), [targetId])
   const ownedItems = previewItems.filter((item) => (inventory[item.id] || 0) > 0)
-  const possibleTargets = previewItems.filter((item) => item.value > source.value)
-  const validTarget = target.value > source.value
+  const possibleTargets = previewItems.filter((item) => item.value > source.value && item.value/source.value<=900)
+  const validTarget = target.value > source.value && target.value/source.value<=900
   const chance = validTarget ? clamp((source.value / target.value) * 90, 0.1, 90) : 0
   const sliderValue = clamp(Math.round((Math.log(clamp(multiplier,1.01,900) / 1.01) / Math.log(900 / 1.01)) * 1000),0,1000)
   const bySort=(a,b,order)=>order==='name'?a.name.localeCompare(b.name,'ru'):order==='value_desc'?b.value-a.value:a.value-b.value
@@ -1128,7 +1242,7 @@ export default function App() {
     const current=getItem(sourceId)
     const next=candidates.reduce((best,item)=>Math.abs(item.value-current.value)<Math.abs(best.value-current.value)?item:best,candidates[0])
     setSourceId(next.id)
-    if(getItem(targetId).value<=next.value) {
+    if(getItem(targetId).value<=next.value || getItem(targetId).value/next.value>900) {
       const nextTarget=findNearestTarget(next.value,multiplier)
       if(nextTarget)setTargetId(nextTarget.id)
     }
@@ -1136,7 +1250,7 @@ export default function App() {
 
 
   useEffect(() => {
-    if (target.value <= source.value) {
+    if (!validTarget) {
       const next = findNearestTarget(source.value, multiplier)
       if (next) setTargetId(next.id)
     }
@@ -1153,7 +1267,7 @@ export default function App() {
     if(busyGuard.current)return
     setSourceId(id)
     const item = getItem(id)
-    if (target.value <= item.value) {
+    if (target.value <= item.value || target.value/item.value>900) {
       const next = findNearestTarget(item.value, multiplier)
       if (next) setTargetId(next.id)
     }
@@ -1162,7 +1276,7 @@ export default function App() {
   function selectTarget(id){
     if(busyGuard.current)return
     const item=getItem(id)
-    if(item.value<=source.value)return
+    if(item.value<=source.value || item.value/source.value>900)return
     setTargetId(id)
     setMultiplier(clamp(item.value/source.value,1.01,900))
     setResult(null)
@@ -1221,10 +1335,15 @@ export default function App() {
   }
 
   function sellItem(id) {
-    if (pendingReward || busyGuard.current || rollingGuard.current || !(inventory[id] > 0)) return
-    const item = getItem(id)
-    setInventory((prev) => ({ ...prev, [id]: prev[id] - 1 }))
-    setCoins((prev) => prev + Math.floor(item.value * 0.85))
+    if (pendingReward || busyGuard.current || rollingGuard.current || !itemMap[id]) return
+    const current=stored('mineup-demo-inventory',inventory)
+    if (!(Number(current[id]) > 0)) return
+    const nextInventory={...current,[id]:Number(current[id])-1}
+    const savedCoins=Number(stored('mineup-demo-coins',coins))
+    const nextCoins=roundMC(clamp((Number.isFinite(savedCoins)?savedCoins:coins)+roundMC(getItem(id).value*.85),0,1e12))
+    try{localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory));localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))}catch{}
+    setInventory(nextInventory)
+    setCoins(nextCoins)
   }
 
   function resolveReward(action) {
@@ -1233,8 +1352,8 @@ export default function App() {
     resolveGuard.current=true
     if(reward.outcome==='win' && itemMap[reward.itemId]) {
       if(action==='sell') {
-        const sale=Math.floor(getItem(reward.itemId).value*.85)
-        const nextCoins=coins+sale
+        const sale=roundMC(getItem(reward.itemId).value*.85)
+        const nextCoins=roundMC(coins+sale)
         try{localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))}catch{}
         setCoins(nextCoins)
       } else {
@@ -1267,11 +1386,12 @@ export default function App() {
     setResult(null)
     setPendingReward(null)
     setAdminAudit([])
-    try{localStorage.removeItem('mineup-pending-reward');localStorage.removeItem('voxup-match-best');localStorage.removeItem('voxup-match-last-reward-day');localStorage.removeItem('voxup-admin-audit')}catch{}
+    setHourlyData({lastAt:0,itemId:null,chosen:-1,total:0,history:[]})
+    try{localStorage.removeItem('mineup-pending-reward');localStorage.removeItem('voxup-match-best');localStorage.removeItem('voxup-match-last-reward-day');localStorage.removeItem('voxup-hourly-state');localStorage.removeItem('voxup-admin-audit')}catch{}
   }
 
   function exportSave(){
-    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,extras:{matchBest:stored('voxup-match-best',0),matchLastRewardDay:stored('voxup-match-last-reward-day',''),adminAudit},settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
+    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,hourlyData,extras:{matchBest:stored('voxup-match-best',0),matchLastRewardDay:stored('voxup-match-last-reward-day',''),adminAudit},settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
     const file=new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
     const url=URL.createObjectURL(file)
     const a=document.createElement('a');a.href=url;a.download='voxup-save.json';document.body.appendChild(a);a.click();a.remove()
@@ -1290,7 +1410,7 @@ export default function App() {
         const count=Number(data.inventory[item.id]||0)
         validInventory[item.id]=Number.isSafeInteger(count)&&count>=0&&count<=1e7?count:0
       }
-      const safeCoins=clamp(Math.floor(data.coins),0,1e12)
+      const safeCoins=roundMC(clamp(data.coins,0,1e12))
       const safeHistory=Array.isArray(data.history)?data.history.filter(h=>h&&itemMap[h.source]&&itemMap[h.target]).slice(0,12):[]
       const safeCaseHistory=Array.isArray(data.caseHistory)?data.caseHistory.filter(h=>h&&itemMap[h.item]).slice(0,30):[]
       const nextSource=itemMap[data.sourceId]?data.sourceId:'iron'
@@ -1304,6 +1424,13 @@ export default function App() {
       setCoins(safeCoins);setInventory(validInventory);setHistory(safeHistory);setCaseHistory(safeCaseHistory);setStats(nextStats)
       setSourceId(nextSource);setTargetId(nextTarget);setMultiplier(nextMult)
       setPendingReward(safePending)
+      const importedHourly=data.hourlyData
+      if(importedHourly && typeof importedHourly==='object' && Number.isFinite(Number(importedHourly.lastAt))){
+        const at=clamp(Number(importedHourly.lastAt)||0,0,Date.now()+HOUR_MS)
+        const nextHourly={lastAt:at,itemId:itemMap[importedHourly.itemId]?importedHourly.itemId:null,chosen:clamp(Math.floor(Number(importedHourly.chosen)||0),-1,8),total:clamp(Math.floor(Number(importedHourly.total)||0),0,1e7),history:Array.isArray(importedHourly.history)?importedHourly.history.filter(e=>e&&itemMap[e.itemId]&&Number.isFinite(e.at)).slice(0,30):[]}
+        setHourlyData(nextHourly)
+        try{localStorage.setItem('voxup-hourly-state',JSON.stringify(nextHourly))}catch{}
+      }
       if(data.extras && typeof data.extras==='object'){
         const best=Number(data.extras.matchBest)
         const safeBest=Number.isSafeInteger(best)&&best>=0&&best<=1000000?best:0
@@ -1351,7 +1478,7 @@ export default function App() {
     const reel=Array.from({length:60},(_,i)=>i===WINNER_INDEX?won:pickPrize(pool))
     // Charge AND deliver synchronously at click time. Both React state and local
     // persistent state receive the same transaction before animation begins.
-    const nextCoins=coins-price
+    const nextCoins=roundMC(coins-price)
     // Prize goes to persistent escrow, not directly into inventory.
     const nextHistory=[{id:Date.now()+secureRoll(),item:won,caseName:cases[idx][1],price,time:new Date().toLocaleString('ru-RU')},...caseHistory].slice(0,30)
     try{
@@ -1424,8 +1551,8 @@ export default function App() {
   function appendAdminAudit(label){setAdminAudit(prev=>[{id:`a-${Date.now()}-${Math.random()}`,label,when:new Date().toLocaleString('ru-RU')},...prev].slice(0,30))}
   function changeAdminCoins(amount,mode){
     if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward)return;
-    if(!Number.isSafeInteger(amount)||amount<1||amount>1e8)return;
-    const next=clamp(coins+(mode==='subtract'?-amount:amount),0,1e12);
+    if(!Number.isFinite(amount)||amount<=0||amount>1e8)return;
+    const next=roundMC(clamp(coins+(mode==='subtract'?-amount:amount),0,1e12));
     try{localStorage.setItem('mineup-demo-coins',JSON.stringify(next))}catch{}
     setCoins(next);appendAdminAudit(`${mode==='subtract'?'-':'+'}${formatCoins(amount)} MC`);
   }
@@ -1440,15 +1567,21 @@ export default function App() {
     if(adminCode.trim()!=='1764'){setAdminError(lang==='ru'?'Неверный код':lang==='uk'?'Неправильний код':'Wrong code');return}
     setAdminUnlocked(true);setAdminLoginOpen(false);setAdminCode('');setAdminError('');go('admin');
   }
-  function awardMatchPrize(){
-    const day=new Date().toLocaleDateString('sv-SE')
-    if(stored('voxup-match-last-reward-day','')===day)return {awarded:false}
-    const itemId=MATCH_REWARD_ITEMS[Math.floor(secureRoll()*MATCH_REWARD_ITEMS.length)]
-    const next={...inventory,[itemId]:(Number(inventory[itemId])||0)+1}
-    // Commit inventory and one-time claim synchronously, before UI result.
-    try{localStorage.setItem('voxup-match-last-reward-day',JSON.stringify(day));localStorage.setItem('mineup-demo-inventory',JSON.stringify(next))}catch{}
-    setInventory(next)
-    return {awarded:true,id:itemId}
+  function awardHourlyDrop(cellIndex){
+    if(pendingReward||busyGuard.current||rollingGuard.current||upgradeBusy||caseRolling)return null
+    const now=Date.now()
+    const persisted=stored('voxup-hourly-state',null)
+    const last=Math.max(Number(hourlyData?.lastAt)||0,Number(persisted?.lastAt)||0)
+    if(last && now-last<HOUR_MS)return null
+    const item=pickHourlyItem(secureRoll())
+    if(!item)return null
+    const nextInventory={...inventory,[item.id]:(Number(inventory[item.id])||0)+1}
+    const nextHourly={lastAt:now,itemId:item.id,chosen:cellIndex,total:(Number(hourlyData?.total)||0)+1,history:[{at:now,itemId:item.id,cell:cellIndex},...(hourlyData?.history||[])].slice(0,30)}
+    // Save both immediately, before UI result, so refresh cannot generate a second drop.
+    try{localStorage.setItem('voxup-hourly-state',JSON.stringify(nextHourly));localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))}catch{}
+    setInventory(nextInventory)
+    setHourlyData(nextHourly)
+    return {itemId:item.id,at:now}
   }
   const caseFeature = ['dirt','apple','iron_pickaxe','iron_sword','gold','redstone','diamond_sword','blaze_rod','netherite','dragon_egg','enchanted_apple','wheat','bow','compass','crossbow','golden_helmet','prismarine_shard','netherite_sword','mace','wind_charge','music_disc_creator']
   const caseDisplayOrder = cases.map((_,i)=>i).sort((a,b)=>cases[a][2]-cases[b][2] || a-b)
@@ -1477,7 +1610,7 @@ export default function App() {
         </div>
         <div className="sideBottom">
           <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">VOXUP <strong>ALPHA 0.8</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="stage">VOXUP <strong>ALPHA 0.9</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
@@ -1494,7 +1627,7 @@ export default function App() {
         <main className="main">
           {page === 'upgrade' && (
             <>
-              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.8</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.9</div>
               <section className="hero">
                 <div className="heroContent">
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
@@ -1606,10 +1739,10 @@ export default function App() {
               </section>
 
               <section className="discoverSection">
-                <div className="discoverHeading"><div><div className="eyebrow">DISCOVER / VOXUP EXPERIENCE</div><h2>{lang==='ru'?'Твоя коллекция. Твои возможности.':lang==='uk'?'Твоя колекція. Твої можливості.':'Your inventory. More ways to play.'}</h2><p>{lang==='ru'?'Выбирай кейсы, собирай редкие предметы или играй в поиск пар. Вся игра строится вокруг Minecraft-предметов.':lang==='uk'?'Відкривай кейси, збирай рідкісні предмети або знаходь пари. Усе пов’язано з Minecraft-предметами.':'Collect items, open cases or match skins. Everything connects to your Minecraft collection.'}</p></div><span className="stamp"><Sparkles size={15}/> 150 ITEMS · 21 CASES</span></div>
+                <div className="discoverHeading"><div><div className="eyebrow">DISCOVER / VOXUP EXPERIENCE</div><h2>{lang==='ru'?'Твоя коллекция. Твои возможности.':lang==='uk'?'Твоя колекція. Твої можливості.':'Your inventory. More ways to play.'}</h2><p>{lang==='ru'?'Выбирай кейсы, собирай редкие предметы или играй в поиск пар. Вся игра строится вокруг Minecraft-предметов.':lang==='uk'?'Відкривай кейси, збирай рідкісні предмети або знаходь пари. Усе пов’язано з Minecraft-предметами.':'Collect items, open cases or match skins. Everything connects to your Minecraft collection.'}</p></div><span className="stamp"><Sparkles size={15}/> 200 ITEMS · 21 CASES</span></div>
                 <div className="discoverGrid">
                   <button className="discoverCard discoverCases" onClick={()=>go('cases')}><div className="eyebrow">01 / CASE COLLECTION</div><h3>{t.cases}</h3><p>{lang==='ru'?'21 тематический кейс и подробные таблицы вероятностей.':lang==='uk'?'21 тематичний кейс з відкритими шансами.':'21 themed cases with visible odds.'}</p><div className="discoverArt"><img src={textureSource('diamond')} alt=""/><img src={textureSource('totem')} alt=""/></div><span className="discoverLink">{t.explore} <ArrowUpRight size={16}/></span></button>
-                  <button className="discoverCard discoverArcade" onClick={()=>go('arcade')}><div className="eyebrow">02 / ITEM MATCH</div><h3>{t.arcade}</h3><p>{lang==='ru'?'Открой 16 карт и найди пары. Первый успех дня приносит предмет.':lang==='uk'?'Відкрий 16 карт і знайди пари. Перша перемога дня дає предмет.':'Match 16 item cards. First win of the day awards a demo item.'}</p><div className="discoverArt"><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Играть':lang==='uk'?'Грати':'Play'} <ArrowUpRight size={16}/></span></button>
+                  <button className="discoverCard discoverArcade" onClick={()=>go('arcade')}><div className="eyebrow">02 / HOURLY DROP</div><h3>{t.arcade}</h3><p>{lang==='ru'?'Нажми на любую клетку: раз в час можно выбить любой Minecraft-предмет.':lang==='uk'?'Відкрий 16 карт і знайди пари. Перша перемога дня дає предмет.':'Match 16 item cards. First win of the day awards a demo item.'}</p><div className="discoverArt"><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Играть':lang==='uk'?'Грати':'Play'} <ArrowUpRight size={16}/></span></button>
                   <button className="discoverCard discoverInventory" onClick={()=>go('inventory')}><div className="eyebrow">03 / YOUR COLLECTION</div><h3>{t.inventory}</h3><p>{totalItems} {lang==='ru'?'предметов в твоём инвентаре.':lang==='uk'?'предметів у твоєму інвентарі.':'items in your current inventory.'}</p><div className="discoverArt"><img src={textureSource('netherite_sword')} alt=""/><img src={textureSource('ender_pearl')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Открыть':lang==='uk'?'Відкрити':'Open'} <ArrowUpRight size={16}/></span></button>
                 </div>
               </section>
@@ -1618,12 +1751,12 @@ export default function App() {
 
           {page === 'cases' && (
             <>
-              <div className="eyebrow"><span className="dot" /> VOXUP / CASE COLLECTION · 21 CASES · 150 ITEMS</div>
+              <div className="eyebrow"><span className="dot" /> VOXUP / CASE COLLECTION · 21 CASES · 200 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
               <div className="economyBanner"><div><strong>ECONOMY / DEMO</strong><span>{L.cases_banner}</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>{L.inventory} <ArrowUpRight size={15}/></button></div>
               <div className="caseGrid">{caseDisplayOrder.map((i,orderIndex)=>{const c=cases[i];return <button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
                 <span className="caseIndex">{String(orderIndex+1).padStart(2,'0')} / {c[0]}</span>{caseArt(i)}
-                <strong>{caseTitle(i)}</strong><div className="caseMeta"><span>{L.drop_count}: {casePools[i].length}</span><span>EV {formatCoins(Math.round(caseEvs[i]))} MC</span></div>
+                <strong>{caseTitle(i)}</strong><div className="caseMeta"><span>{L.drop_count}: {casePools[i].length}</span><span>EV {formatCoins(caseEvs[i])} MC</span></div>
                 <div className="casePrice">{i===0?L.free:formatCoins(c[2])+' MC'} <ArrowUpRight size={15}/></div>
               </button>})}</div>
               <section className="caseHistoryPanel"><h3>{L.history}</h3>{caseHistory.length?<div className="caseHistoryGrid">{caseHistory.slice(0,8).map(entry=><div key={entry.id} className="dropHistory"><img src={textureSource(entry.item)} alt=""/><span><b>{getItem(entry.item).name}</b><small>{entry.caseName} • {entry.time}</small></span></div>)}</div>:<p>Пока не было открытий. Начни с бесплатного кейса.</p>}</section>
@@ -1647,14 +1780,14 @@ export default function App() {
                     <strong>{item.name}</strong>
                     <small>{formatCoins(item.value)} MC</small>
                     <div className="invMeta"><span className="invCount">×{inventory[item.id] || 0}</span><span style={{ color: rarityColors[item.rarity] }}>{item.rarity}</span></div>
-                    <button className="sellBtn" onClick={() => sellItem(item.id)} disabled={(inventory[item.id] || 0) < 1}>{t.sell} +{formatCoins(Math.floor(item.value * 0.85))}</button>
+                    <button className="sellBtn" onClick={() => sellItem(item.id)} disabled={(inventory[item.id] || 0) < 1}>{t.sell} +{formatCoins(roundMC(item.value * 0.85))}</button>
                   </div>
                 ))}
               </div>
             </>
           )}
 
-          {page === 'arcade' && <ItemMatchArcade lang={lang} onComplete={awardMatchPrize} />}
+          {page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
 
           {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} audit={adminAudit} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
 
@@ -1699,7 +1832,7 @@ export default function App() {
             </>
           )}
 
-          <footer><span>© 2026 VOXUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.8 • LOCAL DEMO / 150 ITEMS · 21 CASES</span></footer>
+          <footer><span>© 2026 VOXUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.9 • LOCAL DEMO / 200 ITEMS · 21 CASES</span></footer>
         </main>
       </div>
 
@@ -1725,7 +1858,7 @@ export default function App() {
             </div>
             {caseRollResult?.error&&<div className="resultBanner error">{caseRollResult.text}</div>}
             <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling || Boolean(pendingReward)} onClick={openDemoCase}>{caseRolling?L.case_spinning:caseRollResult?.id?L.case_more:L.case_open} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз сохраняется до выбора «Забрать» или «Продать». Перезагрузка не уничтожит выигрыш.'}</span></div></div>
-            <section className="oddsSection"><div className="oddsHeader"><div><h3>{L.case_contents}</h3><p>{L.case_probability}</p></div><span>{pc.averageDrop}: {formatCoins(Math.round(caseEvs[activeCase]))} MC</span></div>
+            <section className="oddsSection"><div className="oddsHeader"><div><h3>{L.case_contents}</h3><p>{L.case_probability}</p></div><span>{pc.averageDrop}: {formatCoins(caseEvs[activeCase])} MC</span></div>
               <div className="oddsGrid">{casePools[activeCase].map(([id,p])=><div className="oddsItem" key={id} style={{'--rarity':rarityColors[getItem(id).rarity]}}><img src={textureSource(id)} alt=""/><div><strong>{getItem(id).name}</strong><small>{formatCoins(getItem(id).value)} MC</small></div><b>{Number(p).toLocaleString('ru-RU',{maximumFractionDigits:2})}%</b></div>)}</div>
               <div className="economyNote">Сумма вероятностей: 100%. Виртуальная валюта и предметы • расчёт дропа пока происходит в браузере. Показанный средний дроп — математическое ожидание стоимости, а не гарантированная награда.</div>
             </section>
@@ -1746,7 +1879,7 @@ export default function App() {
             <p>{pc.resultDesc}</p>
             <div className="voxResultActions">
               <button className="primary" onClick={()=>resolveReward('claim')}><Check size={18}/>{pc.take}</button>
-              <button className="voxSellNow" onClick={()=>resolveReward('sell')}><Coins size={18}/>{pc.sellNow} +{formatCoins(Math.floor(pendingItem.value*.85))} MC</button>
+              <button className="voxSellNow" onClick={()=>resolveReward('sell')}><Coins size={18}/>{pc.sellNow} +{formatCoins(roundMC(pendingItem.value*.85))} MC</button>
             </div>
             <small className="voxResultSafety"><ShieldCheck size={15}/>{pc.dontLose}</small>
           </> : <>
