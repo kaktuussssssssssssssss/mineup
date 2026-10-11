@@ -463,7 +463,7 @@ const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile'
 
 const labels = {
   ru: {
-    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Платформа дропа',
+    upgrade: 'Апгрейдер', cases: 'Кейсы', inventory: 'Инвентарь', profile: 'Профиль', settings: 'Настройки', arcade: 'Тайники',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя коллекция. Твой риск. Твой следующий апгрейд.',
     explore: 'Посмотреть кейсы', demo: 'В разработке', hello: '200 предметов · 21 кейс · игровой инвентарь',
     catalog: 'КАТАЛОГ КЕЙСОВ', all: 'Все кейсы', free: 'За рекламу', balance: 'Баланс', guest: 'Гостевой режим',
@@ -483,7 +483,7 @@ const labels = {
     profileSoon: 'Позже здесь будут вход, облачное сохранение и статистика.'
   },
   uk: {
-    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Платформа дропу',
+    upgrade: 'Апгрейдер', cases: 'Кейси', inventory: 'Інвентар', profile: 'Профіль', settings: 'Налаштування', arcade: 'Схованки',
     head: 'НЕ ПРОСТО УДАЧА.', sub: 'Твоя колекція. Твій ризик. Твій наступний апгрейд.',
     explore: 'Переглянути кейси', demo: 'У розробці', hello: '200 предметів · 21 кейс · ігровий інвентар',
     catalog: 'КАТАЛОГ КЕЙСІВ', all: 'Усі кейси', free: 'За рекламу', balance: 'Баланс', guest: 'Гостьовий режим',
@@ -503,7 +503,7 @@ const labels = {
     profileSoon: 'Пізніше тут будуть вхід, хмарне збереження та статистика.'
   },
   en: {
-    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Hourly Drop',
+    upgrade: 'Upgrader', cases: 'Cases', inventory: 'Inventory', profile: 'Profile', settings: 'Settings', arcade: 'Vaults',
     head: 'MORE THAN LUCK.', sub: 'Your collection. Your risk. Your next upgrade.',
     explore: 'Explore cases', demo: 'In development', hello: '150 items · 21 cases · Minecraft collection',
     catalog: 'CASE COLLECTION', all: 'All cases', free: 'Watch an ad', balance: 'Balance', guest: 'Guest mode',
@@ -743,7 +743,7 @@ const localeExtras = {
     "inventory": "Inventar",
     "profile": "Profil",
     "settings": "Einstellungen",
-    "arcade": "Arcade",
+    "arcade": "Tresore",
     "head": "MEHR ALS GLÜCK.",
     "sub": "Deine Sammlung. Dein Risiko. Dein nächstes Upgrade.",
     "explore": "Kisten ansehen",
@@ -768,7 +768,7 @@ const localeExtras = {
     "inventory": "Ekwipunek",
     "profile": "Profil",
     "settings": "Ustawienia",
-    "arcade": "Salon gier",
+    "arcade": "Skrytki",
     "head": "WIĘCEJ NIŻ SZCZĘŚCIE.",
     "sub": "Twoja kolekcja. Twoje ryzyko. Twój upgrade.",
     "explore": "Zobacz skrzynki",
@@ -793,7 +793,7 @@ const localeExtras = {
     "inventory": "Inventaire",
     "profile": "Profil",
     "settings": "Paramètres",
-    "arcade": "Arcade",
+    "arcade": "Coffres",
     "head": "PLUS QUE DE LA CHANCE.",
     "sub": "Ta collection. Ton risque. Ta prochaine amélioration.",
     "explore": "Voir les caisses",
@@ -818,7 +818,7 @@ const localeExtras = {
     "inventory": "Inventario",
     "profile": "Perfil",
     "settings": "Ajustes",
-    "arcade": "Arcade",
+    "arcade": "Bóvedas",
     "head": "MÁS QUE SUERTE.",
     "sub": "Tu colección. Tu riesgo. Tu próxima mejora.",
     "explore": "Ver cajas",
@@ -843,7 +843,7 @@ const localeExtras = {
     "inventory": "Inventário",
     "profile": "Perfil",
     "settings": "Definições",
-    "arcade": "Arcade",
+    "arcade": "Cofres",
     "head": "MAIS DO QUE SORTE.",
     "sub": "A tua coleção. O teu risco. A próxima melhoria.",
     "explore": "Ver caixas",
@@ -868,7 +868,7 @@ const localeExtras = {
     "inventory": "Inventario",
     "profile": "Profilo",
     "settings": "Impostazioni",
-    "arcade": "Arcade",
+    "arcade": "Forzieri",
     "head": "PIÙ CHE FORTUNA.",
     "sub": "La tua collezione. Il tuo rischio. Il tuo potenziamento.",
     "explore": "Mostra casse",
@@ -893,7 +893,7 @@ const localeExtras = {
     "inventory": "Envanter",
     "profile": "Profil",
     "settings": "Ayarlar",
-    "arcade": "Arcade",
+    "arcade": "Kasalar",
     "head": "ŞANSTAN DA FAZLASI.",
     "sub": "Koleksiyonun. Riskin. Sonraki yükseltmen.",
     "explore": "Kasaları gör",
@@ -918,7 +918,7 @@ const localeExtras = {
     "inventory": "Inventář",
     "profile": "Profil",
     "settings": "Nastavení",
-    "arcade": "Arkádové hry",
+    "arcade": "Trezory",
     "head": "VÍC NEŽ ŠTĚSTÍ.",
     "sub": "Tvá sbírka. Tvé riziko. Tvé další vylepšení.",
     "explore": "Zobrazit bedny",
@@ -943,7 +943,7 @@ const localeExtras = {
     "inventory": "インベントリ",
     "profile": "プロフィール",
     "settings": "設定",
-    "arcade": "アーケード",
+    "arcade": "宝箱",
     "head": "運だけじゃない。",
     "sub": "コレクションとリスク、次のアップグレード。",
     "explore": "ケースを見る",
@@ -968,7 +968,7 @@ const localeExtras = {
     "inventory": "인벤토리",
     "profile": "프로필",
     "settings": "설정",
-    "arcade": "아케이드",
+    "arcade": "보관함",
     "head": "운 그 이상.",
     "sub": "나의 컬렉션, 나의 선택, 다음 업그레이드.",
     "explore": "케이스 보기",
@@ -993,7 +993,7 @@ const localeExtras = {
     "inventory": "库存",
     "profile": "个人资料",
     "settings": "设置",
-    "arcade": "街机",
+    "arcade": "宝库",
     "head": "不止是运气。",
     "sub": "你的收藏，你的选择，你的下一次升级。",
     "explore": "查看宝箱",
@@ -1041,51 +1041,50 @@ function pickHourlyItem(roll){
  return hourlyTiers.at(-1).items.at(-1)
 }
 function HourlyDropArcade({lang='ru',hourly,onDraw,textureSource}){
- const text=lang==='uk'?{
-  name:'ПЛАТФОРМА ДРОПУ',sub:'Обери один із дев’яти слотів. Раз на 60 хвилин ти отримуєш випадковий предмет Minecraft прямо в інвентар. Усі предмети можуть випасти — шанси різні.',ready:'ВІДКРИТИ ПЛАТФОРМУ',wait:'НАСТУПНИЙ ДРОП ЧЕРЕЗ',collected:'ТИ ОТРИМАВ',claimed:'Предмет уже в інвентарі',rules:'ТАБЛИЦЯ ШАНСІВ',search:'Пошук предмета...',head:'Всі 200 предметів доступні',hint:'Натисни на будь-яку комірку: нагорода з’явиться одразу. Інші слоти не дають додаткових спроб.',limit:'Лише один дроп на годину',history:'ОСТАННІ ДРОПИ',odds:'Шанс кожного предмета',remaining:'Готово! Можна обирати клітинку.'}
+ const tx=lang==='uk'?{
+  title:'ДЕВ’ЯТЬ СКРИНЬОК', intro:'Обери одну з дев’яти клітинок. Одна нагорода кожні 60 хвилин — прямо в інвентар. Після вибору побачиш і вміст інших восьми.',next:'НАСТУПНА СПРОБА ЧЕРЕЗ',ready:'ВИБЕРИ КЛІТИНКУ',won:'ТВІЙ ПРЕДМЕТ',all:'Що було в інших клітинках',info:'Правила ймовірностей',hide:'Згорнути таблицю',history:'ІСТОРІЯ ВІДКРИТТІВ',awarded:'Предмет уже в інвентарі',foot:'Інші вісім клітинок — альтернативні результати цього раунду. Лише обрана клітинка видає нагороду.',search:'Знайти предмет...',odds:'Повні шанси випадіння',noOdds:'Інформація про ймовірності доступна за бажанням.'}
  :lang==='ru'?{
-  name:'ПЛАТФОРМА ДРОПА',sub:'Выбери одну из девяти клеток. Раз в 60 минут получаешь случайный Minecraft-предмет прямо в инвентарь. Выпасть может любой предмет, но шансы сильно различаются.',ready:'ОТКРЫТЬ ПЛАТФОРМУ',wait:'СЛЕДУЮЩИЙ ДРОП ЧЕРЕЗ',collected:'ТЕБЕ ВЫПАЛО',claimed:'Предмет уже в инвентаре',rules:'ТАБЛИЦА ШАНСОВ',search:'Поиск предмета...',head:'Все 200 предметов могут выпасть',hint:'Нажми на любую клетку — приз сразу попадёт в инвентарь. Другие клетки не дают дополнительных попыток.',limit:'Один дроп на час',history:'ПОСЛЕДНИЕ ДРОПЫ',odds:'Шанс каждого предмета',remaining:'Готово! Выбирай клетку.'}
+  title:'ДЕВЯТЬ ТАЙНИКОВ', intro:'Выбери одну из девяти клеток. Одна награда каждые 60 минут — сразу в инвентарь. После выбора откроются и остальные восемь.',next:'СЛЕДУЮЩАЯ ПОПЫТКА ЧЕРЕЗ',ready:'ВЫБЕРИ КЛЕТКУ',won:'ТВОЙ ПРЕДМЕТ',all:'Что было в остальных клетках',info:'Правила и вероятности',hide:'Свернуть таблицу',history:'ИСТОРИЯ ОТКРЫТИЙ',awarded:'Предмет уже в инвентаре',foot:'Другие восемь клеток — альтернативные результаты этого раунда. Награду даёт только выбранная клетка.',search:'Найти предмет...',odds:'Полные вероятности выпадения',noOdds:'Вероятности не мешают игре, но всегда доступны в справке.'}
  :{
-  name:'HOURLY DROP PLATFORM',sub:'Choose one of nine cells. Once every 60 minutes you receive a random Minecraft item straight into your inventory. Every item is possible, with very different odds.',ready:'OPEN PLATFORM',wait:'NEXT DROP IN',collected:'YOU RECEIVED',claimed:'Item is already in your inventory',rules:'DROP PROBABILITIES',search:'Search item...',head:'All 200 items can drop',hint:'Pick any one cell. The item is added instantly. Other cells do not give extra chances.',limit:'One drop per hour',history:'RECENT DROPS',odds:'Exact per-item odds',remaining:'Ready! Choose a cell.'}
+  title:'NINE VAULTS', intro:'Pick one of nine vaults. One reward every 60 minutes goes straight into your inventory. Afterwards all eight alternatives are revealed.',next:'NEXT TURN IN',ready:'CHOOSE A VAULT',won:'YOUR REWARD',all:'Other eight possible rewards',info:'Rules and probabilities',hide:'Hide probability table',history:'RECENT REVEALS',awarded:'Already in your inventory',foot:'The other eight are alternative draws from the same round. Only your chosen vault awards an item.',search:'Search items...',odds:'Full item drop probabilities',noOdds:'Odds are tucked away but available any time.'}
  const [now,setNow]=React.useState(Date.now())
- const [search,setSearch]=React.useState('')
  const [oddsOpen,setOddsOpen]=React.useState(false)
- const [reveal,setReveal]=React.useState(false)
- const [selected,setSelected]=React.useState(null)
+ const [search,setSearch]=React.useState('')
  const guard=React.useRef(false)
  const last=Number(hourly?.lastAt)||0
  const remaining=Math.max(0,HOUR_MS-(now-last))
  const ready=remaining===0
- const formatTime=ms=>{const total=Math.ceil(ms/1000),h=Math.floor(total/3600),m=Math.floor(total%3600/60),sec=total%60;return [h,m,sec].map(v=>String(v).padStart(2,'0')).join(':')}
+ const slots=Array.isArray(hourly?.slots)&&hourly.slots.length===9?hourly.slots:null
+ const reveal=!ready && slots!==null
+ const chosen=Number(hourly?.chosen)
+ const wonItem=!ready && itemMap[hourly?.itemId]?getItem(hourly.itemId):null
+ const asClock=(ms)=>{const sec=Math.max(0,Math.ceil(ms/1000));return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(n=>String(n).padStart(2,'0')).join(':')}
  React.useEffect(()=>{const id=window.setInterval(()=>setNow(Date.now()),500);return()=>clearInterval(id)},[])
- React.useEffect(()=>{if(ready){guard.current=false;setReveal(false);setSelected(null)}},[ready])
- function openCell(index){
+ React.useEffect(()=>{if(ready)guard.current=false},[ready])
+ function choose(index){
   if(!ready||guard.current)return
   guard.current=true
-  const prize=onDraw(index)
-  if(!prize){guard.current=false;return}
-  setSelected({index,itemId:prize.itemId})
-  setReveal(true)
+  const outcome=onDraw(index)
+  if(!outcome){guard.current=false;return}
   setNow(Date.now())
  }
- const currentItem=(selected?.itemId||(!ready?hourly?.itemId:null))
- const filtered=previewItems.filter(x=>`${x.name} ${x.id} ${x.rarity}`.toLowerCase().includes(search.trim().toLowerCase()))
- const exactPct=item=>{const group=hourlyTiers.find(t=>t.rarity===item.rarity);return (group.weight/group.items.length).toLocaleString('ru-RU',{maximumFractionDigits:6})+'%'}
- return <section className="hourlyArena" aria-label={text.name}>
-  <div className="hourlyHero"><div><div className="eyebrow">VOXUP / ITEM DROP · 60 MIN</div><h2>{text.name}</h2><p>{text.sub}</p><div className="hourlyTags"><span><Timer size={15}/>{text.limit}</span><span><Gem size={15}/>200 ITEMS</span></div></div><div className="hourlyHeroObj"><VoxelThumbnail id="diamond_block" textureSource={textureSource} blockIds={blockIds}/><VoxelThumbnail id="netherite" textureSource={textureSource} blockIds={blockIds}/></div></div>
-  <div className="hourlyLayout"><div className="hourlyBoardWrap"><div className="hourlyTopline"><span>{ready?text.remaining:text.wait}</span><strong className={ready?'hourlyReady':'hourlyWaiting'}>{ready?'● READY':formatTime(remaining)}</strong></div>
-    <div className={'hourlyBoard '+(!ready?'cooldown':'')}>{Array.from({length:9},(_,i)=>{const isSelected=(selected?.index??(!ready?hourly?.chosen:-1))===i;const itemId=isSelected?currentItem:null;return <button type="button" key={i} onClick={()=>openCell(i)} disabled={!ready} className={'hourlyCell '+(isSelected?'hourlyRevealed ':'')+(ready?'hourlyActive ':'')} aria-label={`${i+1} / ${text.ready}`}><span className="hourlyCellBorder"/><span className="hourlyCellIndex">0{i+1}</span>{itemId?<img src={textureSource(itemId)} alt="" draggable="false"/>:<Gem size={26} strokeWidth={1.4}/>}<span className="hourlyCellLabel">{itemId?getItem(itemId).name:'VOXUP'}</span></button>})}</div>
-    <div className="hourlyTip"><ShieldCheck size={17}/>{text.hint}</div></div>
-    <aside className="hourlyPrizeBox"><div className="eyebrow">DROP / REWARD</div>{currentItem?<><div className="hourlyPrizeArt"><VoxelThumbnail id={currentItem} textureSource={textureSource} blockIds={blockIds}/></div><div className="hourlyPrizeTag">{text.collected}</div><h3>{getItem(currentItem).name}</h3><div className="hourlyPrizePrice">{formatCoins(getItem(currentItem).value)} MC · {getItem(currentItem).rarity}</div><p className="hourlyAwarded"><Check size={17}/>{text.claimed}</p></>:<><div className="hourlyMystery"><Gem size={54}/></div><h3>???</h3><p>{text.head}</p></>}
-      <button className="secondaryBtn hourlyOddsToggle" onClick={()=>setOddsOpen(v=>!v)}><Layers3 size={17}/>{text.rules}<ChevronRight size={16}/></button><div className="hourlyLevelRates">{hourlyTiers.map(t=><div key={t.rarity}><span style={{color:rarityColors[t.rarity]}}>● {t.rarity}</span><strong>{String(t.weight).replace('.',',')}%</strong></div>)}</div>
-    </aside>
+ const tierPct=(item)=>{const group=hourlyTiers.find(t=>t.rarity===item.rarity);return Number(group.weight/group.items.length).toLocaleString(lang==='en'?'en-US':'ru-RU',{maximumFractionDigits:7})+'%'}
+ const filtered=previewItems.filter(i=>`${i.name} ${i.id} ${i.rarity}`.toLowerCase().includes(search.trim().toLowerCase()))
+ return <section className="hourlyArena vaultMode" aria-label={tx.title}>
+  <header className="vaultHero"><div><div className="eyebrow">VOXUP / HOURLY VAULTS · 60 MINUTES</div><h2>{tx.title}</h2><p>{tx.intro}</p><div className="vaultTags"><span><Timer size={15}/> 01 / 60 MIN</span><span><Gem size={15}/> 200 ITEMS</span><span>LOCAL DEMO</span></div></div><div className="vaultHeroPreview" aria-hidden="true"><img src={textureSource('ender_chest')} alt=""/><img src={textureSource('dragon_egg')} alt=""/><img src={textureSource('diamond')} alt=""/></div></header>
+  <div className="hourlyLayout vaultLayout"><div className="hourlyBoardWrap vaultBoardWrap"><div className="hourlyTopline"><span>{ready?tx.ready:tx.next}</span><strong className={ready?'hourlyReady':'hourlyWaiting'}>{ready?'● READY':asClock(remaining)}</strong></div>
+    <div className={'hourlyBoard vaultBoard '+(reveal?'vaultOpened':'')}>{Array.from({length:9},(_,i)=>{const itemId=reveal?slots[i]:null;const won=reveal && chosen===i;const item=itemId?getItem(itemId):null;return <button type="button" key={i} disabled={!ready} onClick={()=>choose(i)} aria-label={(item?item.name:tx.ready)+' '+(i+1)} className={'hourlyCell vaultCell '+(won?'vaultWinner ':'')+(reveal?'vaultShown ':'')+(ready?'hourlyActive ':'')} style={{'--rarity':item?rarityColors[item.rarity]:undefined}}><span className="hourlyCellIndex">0{i+1}</span><span className="vaultCellArt">{item?<img src={textureSource(itemId)} alt="" draggable="false"/>:<Gem size={30} strokeWidth={1.5}/>}</span><span className="hourlyCellLabel">{item?item.name:'?'}</span>{won?<span className="vaultWonLabel">✓ YOUR DROP</span>:item?<span className="vaultAlternateMark">{formatCoins(item.value)} MC</span>:null}</button>})}</div>
+    {reveal?<div className="vaultRevealNote"><Check size={17}/><span><b>{tx.all}</b> — {tx.foot}</span></div>:<div className="hourlyTip"><ShieldCheck size={17}/>{tx.noOdds}</div>}
   </div>
-  {oddsOpen&&<section className="hourlyOdds"><div className="hourlyOddsHead"><div><h3>{text.odds}</h3><p>{text.head} · {previewItems.length}</p></div><label className="catalogSearch"><Search size={16}/><input type="search" value={search} onChange={e=>setSearch(e.target.value)} placeholder={text.search}/></label></div><div className="hourlyOddsGrid">{filtered.map(item=><div key={item.id} className="hourlyOddsItem"><img src={textureSource(item.id)} alt=""/><span><strong>{item.name}</strong><small>{formatCoins(item.value)} MC</small></span><b style={{color:rarityColors[item.rarity]}}>{exactPct(item)}</b></div>)}</div></section>}
-  <section className="hourlyRecent"><div className="eyebrow">{text.history}</div>{hourly?.history?.length?<div className="hourlyRecentList">{hourly.history.slice(0,6).map((entry,i)=><div key={`${entry.at}-${i}`}><img src={textureSource(entry.itemId)} alt=""/><span>{getItem(entry.itemId).name}<small>{new Date(entry.at).toLocaleString(lang==='en'?'en-US':'ru-RU')}</small></span><b>{formatCoins(getItem(entry.itemId).value)} MC</b></div>)}</div>:<p>—</p>}</section>
+  <aside className="hourlyPrizeBox vaultPrizeBox"><div className="eyebrow">01 / REWARD</div>{wonItem?<><div className="hourlyPrizeArt"><VoxelThumbnail id={wonItem.id} textureSource={textureSource} blockIds={blockIds}/></div><div className="hourlyPrizeTag">{tx.won}</div><h3>{wonItem.name}</h3><div className="hourlyPrizePrice">{formatCoins(wonItem.value)} MC · {wonItem.rarity}</div><p className="hourlyAwarded"><Check size={17}/>{tx.awarded}</p></>:<><div className="hourlyMystery"><Gem size={52}/></div><h3>UNKNOWN DROP</h3><p>200 Minecraft items · 9 vaults</p></>}
+    <div className="vaultStatus"><Timer size={18}/><span>{ready?tx.ready:asClock(remaining)}</span></div>
+  </aside></div>
+  <section className="vaultRules"><button type="button" className="vaultRulesToggle" aria-expanded={oddsOpen} onClick={()=>setOddsOpen(v=>!v)}><ShieldCheck size={17}/><span>{oddsOpen?tx.hide:tx.info}</span><ChevronRight size={16}/></button>{oddsOpen&&<div className="vaultRulesBody"><p>{tx.odds}. {lang==='uk'?'Тільки віртуальні нагороди. Імовірності однакові для всіх дев’яти клітинок.':lang==='ru'?'Только виртуальные предметы и валюта. Шансы одинаковы у всех девяти клеток.':'Virtual-only items and coins. Each of the nine vaults has the same drop probabilities.'}</p><div className="vaultTierPills">{hourlyTiers.map(t=><span key={t.rarity}><i style={{background:rarityColors[t.rarity]}}/>{t.rarity}: {String(t.weight).replace('.',',')}%</span>)}</div><label className="catalogSearch"><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} type="search" placeholder={tx.search}/></label><div className="hourlyOddsGrid">{filtered.map(item=><div className="hourlyOddsItem" key={item.id}><img src={textureSource(item.id)} alt=""/><span><strong>{item.name}</strong><small>{formatCoins(item.value)} MC</small></span><b style={{color:rarityColors[item.rarity]}}>{tierPct(item)}</b></div>)}</div></div>}</section>
+  <section className="hourlyRecent"><div className="eyebrow">{tx.history}</div>{hourly?.history?.length?<div className="hourlyRecentList">{hourly.history.slice(0,6).map((entry,i)=><div key={`${entry.at}-${i}`}><img src={textureSource(entry.itemId)} alt=""/><span>{getItem(entry.itemId).name}<small>{new Date(entry.at).toLocaleString(lang==='en'?'en-US':'ru-RU')}</small></span><b>{formatCoins(getItem(entry.itemId).value)} MC</b></div>)}</div>:<p>—</p>}</section>
  </section>
 }
 
-function AdminConsole({coins,onCoins,onItem,audit,onLock,blocked=false,lang='ru'}){
+function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,blocked=false,lang='ru'}){
  const [amount,setAmount]=React.useState('10000');const [itemId,setItemId]=React.useState('diamond');const [qty,setQty]=React.useState('1');const [feedback,setFeedback]=React.useState('');
  const ru=lang==='ru',uk=lang==='uk';
  const txt=(r,u,e)=>ru?r:uk?u:e;
@@ -1095,6 +1094,7 @@ function AdminConsole({coins,onCoins,onItem,audit,onLock,blocked=false,lang='ru'
  <div className="adminBalance"><Coins size={26}/><div><small>{txt('Текущий локальный баланс','Поточний локальний баланс','Current local balance')}</small><strong>{formatCoins(coins)} <em>MC</em></strong></div><span>DEMO · NOT SERVER VERIFIED</span></div>
  <div className="adminGrid"><section className="adminCard"><div className="eyebrow">01 / MC COINS</div><h3>{txt('Выдать монеты','Видати монети','Grant coins')}</h3><label htmlFor="admin-coins">{txt('Количество MC','Кількість MC','Amount MC')}</label><input id="admin-coins" type="text" inputMode="decimal" placeholder="1221,21" value={amount} onChange={e=>setAmount(e.target.value)} /><div className="adminPresets">{[1000,10000,50000,100000].map(n=><button key={n} onClick={()=>setAmount(String(n))}>+{formatCoins(n)}</button>)}</div><div className="adminActions"><button className="primary" onClick={()=>grantCoins('add')}><Coins size={16}/>{txt('Начислить','Нарахувати','Add')}</button><button className="secondaryBtn" onClick={()=>grantCoins('subtract')}>{txt('Списать','Списати','Subtract')}</button></div></section>
  <section className="adminCard"><div className="eyebrow">02 / ITEMS</div><h3>{txt('Выдать предметы','Видати предмети','Grant items')}</h3><label htmlFor="admin-item">{txt('Предмет из каталога','Предмет з каталогу','Catalogue item')}</label><select id="admin-item" value={itemId} onChange={e=>setItemId(e.target.value)}>{previewItems.map(i=><option key={i.id} value={i.id}>{i.name} — {formatCoins(i.value)} MC</option>)}</select><div className="adminChosen"><img src={textureSource(itemId)} alt=""/><span>{getItem(itemId).name}</span><small>{getItem(itemId).rarity}</small></div><label htmlFor="admin-qty">{txt('Количество','Кількість','Quantity')}</label><input id="admin-qty" type="number" min="1" max="100" value={qty} onChange={e=>setQty(e.target.value)}/><button className="primary" onClick={grantItem}><Gift size={16}/>{txt('Добавить в инвентарь','Додати до інвентарю','Grant item')}</button></section></div>
+ <div className="adminCooldownTool"><div><div className="eyebrow">03 / HOURLY VAULTS</div><h3>{txt('Сброс таймера тайников','Скидання таймера схованок','Reset vault cooldown')}</h3><p>{txt('Снимает часовое ожидание только в этом браузере. История и уже полученные предметы сохраняются.','Скасовує годинне очікування лише в цьому браузері. Історія й нагороди залишаються.','Removes the cooldown in this browser only. History and previously awarded items remain.')}</p><small>{hourly?.lastAt?new Date(hourly.lastAt).toLocaleString(lang==='en'?'en-US':'ru-RU'):'READY'}</small></div><button type="button" className="secondaryBtn" disabled={blocked} onClick={()=>{if(blocked)return;onResetHourly();setFeedback(txt('Таймер сброшен — клетки снова доступны','Таймер скинуто — клітинки знову доступні','Cooldown reset — vaults are ready'))}}><RotateCcw size={16}/>{txt('Сбросить кулдаун','Скинути кулдаун','Reset cooldown')}</button></div>
  <div className="adminLogs"><h3>{txt('История тестовых выдач','Історія тестових видач','Local activity log')}</h3>{audit.length?<div className="adminLogList">{audit.map(a=><div key={a.id}><span>{a.label}</span><small>{a.when}</small></div>)}</div>:<p>{txt('Пока операций нет','Операцій ще немає','No local actions yet')}</p>}</div>{feedback&&<div className="adminFeedback" role="status">{feedback}</div>}
  </section>
 }
@@ -1114,12 +1114,13 @@ export default function App() {
   const [pendingReward, setPendingReward] = useState(() => stored('mineup-pending-reward',null))
   const [menu, setMenu] = useState(false)
   const [activeCase, setActiveCase] = useState(null)
+  const [caseDetailsOpen, setCaseDetailsOpen] = useState(false)
   const [adminUnlocked,setAdminUnlocked]=useState(false)
   const [adminLoginOpen,setAdminLoginOpen]=useState(false)
   const [adminCode,setAdminCode]=useState('')
   const [adminError,setAdminError]=useState('')
   const [adminAudit,setAdminAudit]=useState(()=>stored('voxup-admin-audit',[]))
-  const [hourlyData,setHourlyData]=useState(()=>stored('voxup-hourly-state',{lastAt:0,itemId:null,chosen:-1,total:0,history:[]}))
+  const [hourlyData,setHourlyData]=useState(()=>stored('voxup-hourly-state',{lastAt:0,itemId:null,chosen:-1,slots:null,total:0,history:[]}))
 
   const [sourceId, setSourceId] = useState(() => stored('mineup-preview-source', 'iron'))
   const [targetId, setTargetId] = useState(() => stored('mineup-preview-target', 'diamond'))
@@ -1386,7 +1387,7 @@ export default function App() {
     setResult(null)
     setPendingReward(null)
     setAdminAudit([])
-    setHourlyData({lastAt:0,itemId:null,chosen:-1,total:0,history:[]})
+    setHourlyData({lastAt:0,itemId:null,chosen:-1,slots:null,total:0,history:[]})
     try{localStorage.removeItem('mineup-pending-reward');localStorage.removeItem('voxup-match-best');localStorage.removeItem('voxup-match-last-reward-day');localStorage.removeItem('voxup-hourly-state');localStorage.removeItem('voxup-admin-audit')}catch{}
   }
 
@@ -1427,7 +1428,7 @@ export default function App() {
       const importedHourly=data.hourlyData
       if(importedHourly && typeof importedHourly==='object' && Number.isFinite(Number(importedHourly.lastAt))){
         const at=clamp(Number(importedHourly.lastAt)||0,0,Date.now()+HOUR_MS)
-        const nextHourly={lastAt:at,itemId:itemMap[importedHourly.itemId]?importedHourly.itemId:null,chosen:clamp(Math.floor(Number(importedHourly.chosen)||0),-1,8),total:clamp(Math.floor(Number(importedHourly.total)||0),0,1e7),history:Array.isArray(importedHourly.history)?importedHourly.history.filter(e=>e&&itemMap[e.itemId]&&Number.isFinite(e.at)).slice(0,30):[]}
+        const nextHourly={lastAt:at,itemId:itemMap[importedHourly.itemId]?importedHourly.itemId:null,chosen:clamp(Math.floor(Number(importedHourly.chosen)||0),-1,8),slots:Array.isArray(importedHourly.slots)&&importedHourly.slots.length===9&&importedHourly.slots.every(id=>itemMap[id])?importedHourly.slots:null,total:clamp(Math.floor(Number(importedHourly.total)||0),0,1e7),history:Array.isArray(importedHourly.history)?importedHourly.history.filter(e=>e&&itemMap[e.itemId]&&Number.isFinite(e.at)).slice(0,30):[]}
         setHourlyData(nextHourly)
         try{localStorage.setItem('voxup-hourly-state',JSON.stringify(nextHourly))}catch{}
       }
@@ -1562,6 +1563,15 @@ export default function App() {
     try{localStorage.setItem('mineup-demo-inventory',JSON.stringify(next))}catch{}
     setInventory(next);appendAdminAudit(`+${qty} × ${itemMap[id].name}`);
   }
+  function resetHourlyCooldown(){
+    if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward || caseRolling || upgradeBusy)return
+    const current=stored('voxup-hourly-state',null)
+    const next={...hourlyData,...(current && typeof current==='object'?current:{}),lastAt:0,itemId:null,chosen:-1,slots:null}
+    // Commit immediately so a refresh cannot silently restore the old cooldown.
+    try{localStorage.setItem('voxup-hourly-state',JSON.stringify(next))}catch{}
+    setHourlyData(next)
+    appendAdminAudit('RESET hourly vault cooldown (local)')
+  }
   function unlockAdmin(e){
     e?.preventDefault?.();
     if(adminCode.trim()!=='1764'){setAdminError(lang==='ru'?'Неверный код':lang==='uk'?'Неправильний код':'Wrong code');return}
@@ -1573,10 +1583,11 @@ export default function App() {
     const persisted=stored('voxup-hourly-state',null)
     const last=Math.max(Number(hourlyData?.lastAt)||0,Number(persisted?.lastAt)||0)
     if(last && now-last<HOUR_MS)return null
-    const item=pickHourlyItem(secureRoll())
+    const slots=Array.from({length:9},()=>pickHourlyItem(secureRoll()).id)
+    const item=getItem(slots[cellIndex])
     if(!item)return null
     const nextInventory={...inventory,[item.id]:(Number(inventory[item.id])||0)+1}
-    const nextHourly={lastAt:now,itemId:item.id,chosen:cellIndex,total:(Number(hourlyData?.total)||0)+1,history:[{at:now,itemId:item.id,cell:cellIndex},...(hourlyData?.history||[])].slice(0,30)}
+    const nextHourly={lastAt:now,itemId:item.id,chosen:cellIndex,slots,total:(Number(hourlyData?.total)||0)+1,history:[{at:now,itemId:item.id,cell:cellIndex},...(hourlyData?.history||[])].slice(0,30)}
     // Save both immediately, before UI result, so refresh cannot generate a second drop.
     try{localStorage.setItem('voxup-hourly-state',JSON.stringify(nextHourly));localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))}catch{}
     setInventory(nextInventory)
@@ -1585,13 +1596,23 @@ export default function App() {
   }
   const caseFeature = ['dirt','apple','iron_pickaxe','iron_sword','gold','redstone','diamond_sword','blaze_rod','netherite','dragon_egg','enchanted_apple','wheat','bow','compass','crossbow','golden_helmet','prismarine_shard','netherite_sword','mace','wind_charge','music_disc_creator']
   const caseDisplayOrder = cases.map((_,i)=>i).sort((a,b)=>cases[a][2]-cases[b][2] || a-b)
-  const caseArt = (i) => (
-    <div className="caseArt caseArtPremium" style={{ '--tone': cases[i][3] }}>
-      <span className="caseGlow" />
-      <div className="caseArtModel"><VoxelThumbnail id={caseFeature[i]} textureSource={textureSource} blockIds={blockIds} /></div>
-      <span className="caseArtMiniLabel">{cases[i][0]}</span>
+  const caseArt = (i,compact=false) => {
+    const pool=casePools[i]
+    const feature=caseFeature[i]
+    const companions=pool.filter(([id])=>id!==feature).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([id])=>id)
+    const palette=['#d9bb83','#82a6ae','#c1b5aa','#c79d53','#d6a847','#d76560','#5ce1ed','#dd8363','#9b83db','#b49cd9','#ffcc68','#98c66b','#7ccbb7','#8cb5e8','#c4a0ff','#e5b05c','#6fcedc','#dd6c81','#d8c576','#88beef','#c59fff']
+    const tone=palette[i%palette.length]
+    const CaseGlyph=[Gem,Gift,Boxes,Swords,Coins,Zap,Sparkles,Target,ShieldCheck,Globe2,Gift,Gift,Search,Layers3,Target,Swords,Activity,ShieldCheck,TrendingUp,Sparkles,Gem][i]
+    return <div className={'caseDiorama '+(compact?'caseDioramaCompact':'')} style={{'--caseHue':tone,'--caseSeed':i+1}} aria-hidden="true">
+      <div className="caseDioramaLines"/><div className="caseDioramaHalo"/>
+      <div className="caseDioramaSide caseDioramaLeft"><img src={textureSource(companions[0]||'diamond')} alt="" loading="lazy"/></div>
+      <div className="caseDioramaSide caseDioramaRight"><img src={textureSource(companions[1]||'emerald')} alt="" loading="lazy"/></div>
+      <div className="caseDioramaCore"><span className="caseDioramaFrame"><span className="caseDioramaGlass"/><span className="caseDioramaFallback"><CaseGlyph size={50} strokeWidth={1.4}/></span><img src={textureSource(feature)} alt="" loading="lazy"/></span></div>
+      <span className="caseDioramaSerial">VX—{String(i+1).padStart(3,'0')}</span>
+      <span className="caseDioramaCaption">{cases[i][0]}</span>
     </div>
-  )
+  }
+
 
   return (
     <div className="app">
@@ -1742,7 +1763,7 @@ export default function App() {
                 <div className="discoverHeading"><div><div className="eyebrow">DISCOVER / VOXUP EXPERIENCE</div><h2>{lang==='ru'?'Твоя коллекция. Твои возможности.':lang==='uk'?'Твоя колекція. Твої можливості.':'Your inventory. More ways to play.'}</h2><p>{lang==='ru'?'Выбирай кейсы, собирай редкие предметы или играй в поиск пар. Вся игра строится вокруг Minecraft-предметов.':lang==='uk'?'Відкривай кейси, збирай рідкісні предмети або знаходь пари. Усе пов’язано з Minecraft-предметами.':'Collect items, open cases or match skins. Everything connects to your Minecraft collection.'}</p></div><span className="stamp"><Sparkles size={15}/> 200 ITEMS · 21 CASES</span></div>
                 <div className="discoverGrid">
                   <button className="discoverCard discoverCases" onClick={()=>go('cases')}><div className="eyebrow">01 / CASE COLLECTION</div><h3>{t.cases}</h3><p>{lang==='ru'?'21 тематический кейс и подробные таблицы вероятностей.':lang==='uk'?'21 тематичний кейс з відкритими шансами.':'21 themed cases with visible odds.'}</p><div className="discoverArt"><img src={textureSource('diamond')} alt=""/><img src={textureSource('totem')} alt=""/></div><span className="discoverLink">{t.explore} <ArrowUpRight size={16}/></span></button>
-                  <button className="discoverCard discoverArcade" onClick={()=>go('arcade')}><div className="eyebrow">02 / HOURLY DROP</div><h3>{t.arcade}</h3><p>{lang==='ru'?'Нажми на любую клетку: раз в час можно выбить любой Minecraft-предмет.':lang==='uk'?'Відкрий 16 карт і знайди пари. Перша перемога дня дає предмет.':'Match 16 item cards. First win of the day awards a demo item.'}</p><div className="discoverArt"><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Играть':lang==='uk'?'Грати':'Play'} <ArrowUpRight size={16}/></span></button>
+                  <button className="discoverCard discoverArcade" onClick={()=>go('arcade')}><div className="eyebrow">02 / HOURLY DROP</div><h3>{t.arcade}</h3><p>{lang==='ru'?'Девять тайников: выбери один, а после награды открой остальные восемь.':lang==='uk'?'Дев’ять схованок: обери одну, щоб побачити й інші вісім.':'Nine hidden vaults: pick one reward and reveal all eight alternatives.'}</p><div className="discoverArt"><img src={textureSource('emerald')} alt=""/><img src={textureSource('nether_star')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Играть':lang==='uk'?'Грати':'Play'} <ArrowUpRight size={16}/></span></button>
                   <button className="discoverCard discoverInventory" onClick={()=>go('inventory')}><div className="eyebrow">03 / YOUR COLLECTION</div><h3>{t.inventory}</h3><p>{totalItems} {lang==='ru'?'предметов в твоём инвентаре.':lang==='uk'?'предметів у твоєму інвентарі.':'items in your current inventory.'}</p><div className="discoverArt"><img src={textureSource('netherite_sword')} alt=""/><img src={textureSource('ender_pearl')} alt=""/></div><span className="discoverLink">{lang==='ru'?'Открыть':lang==='uk'?'Відкрити':'Open'} <ArrowUpRight size={16}/></span></button>
                 </div>
               </section>
@@ -1754,9 +1775,9 @@ export default function App() {
               <div className="eyebrow"><span className="dot" /> VOXUP / CASE COLLECTION · 21 CASES · 200 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
               <div className="economyBanner"><div><strong>ECONOMY / DEMO</strong><span>{L.cases_banner}</span></div><button className="secondaryBtn" onClick={()=>go('inventory')}>{L.inventory} <ArrowUpRight size={15}/></button></div>
-              <div className="caseGrid">{caseDisplayOrder.map((i,orderIndex)=>{const c=cases[i];return <button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseRollResult(null);setCaseReel([])}}>
+              <div className="caseGrid">{caseDisplayOrder.map((i,orderIndex)=>{const c=cases[i];return <button className="caseCard caseCardNew" key={i} onClick={()=>{setActiveCase(i);setCaseDetailsOpen(false);setCaseRollResult(null);setCaseReel([])}}>
                 <span className="caseIndex">{String(orderIndex+1).padStart(2,'0')} / {c[0]}</span>{caseArt(i)}
-                <strong>{caseTitle(i)}</strong><div className="caseMeta"><span>{L.drop_count}: {casePools[i].length}</span><span>EV {formatCoins(caseEvs[i])} MC</span></div>
+                <strong>{caseTitle(i)}</strong><div className="caseMeta"><span><Gem size={12}/> {casePools[i].length} ITEMS</span><span>VOXUP / DROP SERIES</span></div>
                 <div className="casePrice">{i===0?L.free:formatCoins(c[2])+' MC'} <ArrowUpRight size={15}/></div>
               </button>})}</div>
               <section className="caseHistoryPanel"><h3>{L.history}</h3>{caseHistory.length?<div className="caseHistoryGrid">{caseHistory.slice(0,8).map(entry=><div key={entry.id} className="dropHistory"><img src={textureSource(entry.item)} alt=""/><span><b>{getItem(entry.item).name}</b><small>{entry.caseName} • {entry.time}</small></span></div>)}</div>:<p>Пока не было открытий. Начни с бесплатного кейса.</p>}</section>
@@ -1789,7 +1810,7 @@ export default function App() {
 
           {page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
 
-          {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} audit={adminAudit} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
+          {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
 
           {page === 'profile' && (
             <>
@@ -1844,8 +1865,9 @@ export default function App() {
             <button className="modalClose" disabled={caseRolling} onClick={closeCase} aria-label="Закрыть"><X/></button>
             <div className="caseModalHeader">
               <div className="caseTitle"><span className="eyebrow">CASE / {String(caseDisplayOrder.indexOf(activeCase)+1).padStart(2,'0')} • LOCAL DEMO</span><h2>{caseTitle(activeCase)}</h2><p>{cases[activeCase][4]}</p></div>
-              <div className="casePriceHead"><small>{L.case_cost}</small><strong>{activeCase===0?L.free:formatCoins(cases[activeCase][2])+' MC'}</strong><small>{L.case_balance}: {formatCoins(coins)} MC</small><small className="caseMinimum">{pc.minDrop}: {formatCoins(Math.min(...casePools[activeCase].map(([id])=>getItem(id).value)))} MC</small></div>
+              <div className="casePriceHead"><small>{L.case_cost}</small><strong>{activeCase===0?L.free:formatCoins(cases[activeCase][2])+' MC'}</strong><small>{L.case_balance}: {formatCoins(coins)} MC</small></div>
             </div>
+            <div className="caseModalShowcase">{caseArt(activeCase,true)}<div><span>VOXUP / CASE COLLECTION</span><strong>{caseTitle(activeCase)}</strong><small>ORIGINAL MINECRAFT PIXEL ART · NO GENERATED IMAGES</small></div></div>
             <div className="rouletteWrap">
               <div className="reelPointer" aria-hidden="true"/>
               <div className="caseReelWindowV8" ref={reelWindow}>
@@ -1858,9 +1880,12 @@ export default function App() {
             </div>
             {caseRollResult?.error&&<div className="resultBanner error">{caseRollResult.text}</div>}
             <div className="caseActions"><button className="primary caseSpinBtn" disabled={caseRolling || Boolean(pendingReward)} onClick={openDemoCase}>{caseRolling?L.case_spinning:caseRollResult?.id?L.case_more:L.case_open} <Gift size={18}/></button><div className="caseSecurity"><ShieldCheck size={17}/><span>{activeCase===0?'Тестовый free case без рекламы. Рекламу подключим только после серверной части.':'Приз сохраняется до выбора «Забрать» или «Продать». Перезагрузка не уничтожит выигрыш.'}</span></div></div>
-            <section className="oddsSection"><div className="oddsHeader"><div><h3>{L.case_contents}</h3><p>{L.case_probability}</p></div><span>{pc.averageDrop}: {formatCoins(caseEvs[activeCase])} MC</span></div>
-              <div className="oddsGrid">{casePools[activeCase].map(([id,p])=><div className="oddsItem" key={id} style={{'--rarity':rarityColors[getItem(id).rarity]}}><img src={textureSource(id)} alt=""/><div><strong>{getItem(id).name}</strong><small>{formatCoins(getItem(id).value)} MC</small></div><b>{Number(p).toLocaleString('ru-RU',{maximumFractionDigits:2})}%</b></div>)}</div>
-              <div className="economyNote">Сумма вероятностей: 100%. Виртуальная валюта и предметы • расчёт дропа пока происходит в браузере. Показанный средний дроп — математическое ожидание стоимости, а не гарантированная награда.</div>
+            <section className="caseDetailsSection">
+              <button type="button" className="caseOddsDisclosure" onClick={()=>setCaseDetailsOpen(open=>!open)} aria-expanded={caseDetailsOpen}><ShieldCheck size={18}/><span>{lang==='ru'?'Содержимое и правила выпадения':lang==='uk'?'Вміст і правила випадіння':'Contents and drop probabilities'}</span><ChevronRight size={17}/></button>
+              {caseDetailsOpen&&<div className="oddsSection"><div className="oddsHeader"><div><h3>{L.case_contents}</h3><p>{L.case_probability}</p></div><span>{pc.averageDrop}: {formatCoins(caseEvs[activeCase])} MC</span></div>
+                <div className="oddsGrid">{casePools[activeCase].map(([id,p])=><div className="oddsItem" key={id} style={{'--rarity':rarityColors[getItem(id).rarity]}}><img src={textureSource(id)} alt=""/><div><strong>{getItem(id).name}</strong><small>{formatCoins(getItem(id).value)} MC</small></div><b>{Number(p).toLocaleString('ru-RU',{maximumFractionDigits:4})}%</b></div>)}</div>
+                <div className="economyNote">Сумма вероятностей: 100%. Только виртуальная валюта. Средний дроп — математическое ожидание, не гарантия выигрыша.</div>
+              </div>}
             </section>
           </div>
         </div>
@@ -1875,7 +1900,7 @@ export default function App() {
             <div className="voxResultArt" style={{'--rarity':rarityColors[pendingItem.rarity]}}><VoxelViewer id={pendingItem.id} label={pendingItem.name} textureSource={textureSource} blockIds={blockIds}/></div>
             <strong className="voxResultItem">{pendingItem.name}</strong>
             <span className="voxResultValue">{formatCoins(pendingItem.value)} MC · {pendingItem.rarity}</span>
-            {pendingReward.kind==='case' && <span className="voxResultOdds">DROP RATE {Number(pendingReward.odds).toLocaleString('ru-RU')}%</span>}
+            
             <p>{pc.resultDesc}</p>
             <div className="voxResultActions">
               <button className="primary" onClick={()=>resolveReward('claim')}><Check size={18}/>{pc.take}</button>
