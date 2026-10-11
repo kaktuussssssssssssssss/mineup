@@ -62,6 +62,91 @@ function makeCube(px,topPixels=null,bottomPixels=null){
   }
   return out
 }
+// Each block face gets its own texture. A dispenser has exactly ONE mouth;
+// the remaining faces cannot reuse its front icon.
+function makeSixFaceCube(textures){
+  const out=[]
+  for(let y=0;y<16;y++)for(let x=0;x<16;x++){
+    const a=x-8,b=a+1,c=y-8,d=c+1
+    out.push(face([[a,c,8],[b,c,8],[b,d,8],[a,d,8]],pix(textures.front,x,y),1))
+    out.push(face([[b,c,-8],[a,c,-8],[a,d,-8],[b,d,-8]],pix(textures.back,x,y),.57))
+    out.push(face([[-8,c,b],[-8,c,a],[-8,d,a],[-8,d,b]],pix(textures.left,x,y),.65))
+    out.push(face([[8,c,a],[8,c,b],[8,d,b],[8,d,a]],pix(textures.right,x,y),.84))
+    out.push(face([[a,-8,c],[b,-8,c],[b,-8,d],[a,-8,d]],pix(textures.top,x,y),1.12))
+    out.push(face([[a,8,d],[b,8,d],[b,8,c],[a,8,c]],pix(textures.bottom,x,y),.48))
+  }
+  return out
+}
+function scaleMesh(faces,w,h,d,x=0,y=0,z=0){
+  return faces.map(f=>({...f,points:f.points.map(p=>[p[0]*w/16+x,p[1]*h/16+y,p[2]*d/16+z])}))
+}
+// Minecraft Java 1.21.8 texture filenames, with front/back/top mapped separately.
+// Sources are relative to assets/minecraft/textures/block/.
+const blockFaceFiles={
+  dispenser:{front:'dispenser_front',back:'furnace_side',side:'furnace_side',top:'furnace_top',bottom:'furnace_top'},
+  dropper:{front:'dropper_front',back:'furnace_side',side:'furnace_side',top:'furnace_top',bottom:'furnace_top'},
+  observer:{front:'observer_front',back:'observer_back',side:'observer_side',top:'observer_top',bottom:'observer_top'},
+  piston:{front:'piston_top',back:'piston_bottom',side:'piston_side',top:'piston_side',bottom:'piston_side'},
+  beehive:{front:'beehive_front',back:'beehive_side',side:'beehive_side',top:'beehive_end',bottom:'beehive_end'},
+  bee_nest:{front:'bee_nest_front',back:'bee_nest_side',side:'bee_nest_side',top:'bee_nest_top',bottom:'bee_nest_bottom'},
+  sculk_shrieker:{front:'sculk_shrieker_side',back:'sculk_shrieker_side',side:'sculk_shrieker_side',top:'sculk_shrieker_top',bottom:'sculk_shrieker_bottom'},
+  sculk_catalyst:{front:'sculk_catalyst_side',back:'sculk_catalyst_side',side:'sculk_catalyst_side',top:'sculk_catalyst_top',bottom:'sculk_catalyst_bottom'},
+  hopper:{front:'hopper_outside',back:'hopper_outside',side:'hopper_outside',top:'hopper_top',bottom:'hopper_outside'},
+  furnace:{front:'furnace_front',back:'furnace_side',side:'furnace_side',top:'furnace_top',bottom:'furnace_top'},
+  blast_furnace:{front:'blast_furnace_front',back:'blast_furnace_side',side:'blast_furnace_side',top:'blast_furnace_top',bottom:'blast_furnace_top'},
+  smithing_table:{front:'smithing_table_front',back:'smithing_table_side',side:'smithing_table_side',top:'smithing_table_top',bottom:'smithing_table_top'},
+  enchanting_table:{front:'enchanting_table_side',back:'enchanting_table_side',side:'enchanting_table_side',top:'enchanting_table_top',bottom:'enchanting_table_bottom'},
+  respawn_anchor:{front:'respawn_anchor_side0',back:'respawn_anchor_side0',side:'respawn_anchor_side0',top:'respawn_anchor_top',bottom:'respawn_anchor_bottom'},
+  lodestone:{front:'lodestone_side',back:'lodestone_side',side:'lodestone_side',top:'lodestone_top',bottom:'lodestone_top'},
+  barrel:{front:'barrel_side',back:'barrel_side',side:'barrel_side',top:'barrel_top',bottom:'barrel_bottom'},
+  crafting_table:{front:'crafting_table_front',back:'crafting_table_side',side:'crafting_table_side',top:'crafting_table_top',bottom:'oak_planks'},
+  grass_block:{front:'grass_block_side',back:'grass_block_side',side:'grass_block_side',top:'grass_block_top',bottom:'dirt'},
+  oak_log:{front:'oak_log',back:'oak_log',side:'oak_log',top:'oak_log_top',bottom:'oak_log_top'},
+  bookshelf:{front:'bookshelf',back:'bookshelf',side:'bookshelf',top:'oak_planks',bottom:'oak_planks'},
+  tnt:{front:'tnt_side',back:'tnt_side',side:'tnt_side',top:'tnt_top',bottom:'tnt_bottom'},
+  ancient_debris:{front:'ancient_debris_side',back:'ancient_debris_side',side:'ancient_debris_side',top:'ancient_debris_top',bottom:'ancient_debris_top'}
+}
+async function getBlockFaceTextures(id,src){
+  const faces=blockFaceFiles[id]
+  if(!faces)return null
+  const blockRoot=src.slice(0,src.indexOf('/textures/')+10)+'block/'
+  const resolve=(s)=>loadPixels(`${id}:block:${s}`,`${blockRoot}${s}.png`)
+  const [front,back,left,right,top,bottom]=await Promise.all([
+    faces.front,faces.back,faces.left||faces.side,faces.right||faces.side,faces.top,faces.bottom
+  ].map(resolve))
+  return {front,back,left,right,top,bottom}
+}
+function makeHopper(textures){
+  const mesh=[]
+  const outside=pix(textures.front,7,8),sideCol=color(outside[0],outside[1],outside[2],.86)
+  const light=color(outside[0],outside[1],outside[2],1.18)
+  const dark=color(outside[0],outside[1],outside[2],.65)
+  const add=(x0,y0,z0,x1,y1,z1)=>mesh.push(...solidBox(x0,y0,z0,x1,y1,z1,sideCol,dark,light))
+  // Open rim: four narrow metal rails, not a painted closed top.
+  add(-8,-8,-8,8,-5.7,-6);add(-8,-8,6,8,-5.7,8)
+  add(-8,-8,-6,-6,-5.7,6);add(6,-8,-6,8,-5.7,6)
+  // Funnel below the open rim and its narrow outlet.
+  mesh.push(...scaleMesh(makeSixFaceCube(textures),13.5,6.5,13.5,0,-1.7,0))
+  add(-5.3,1.6,-5.3,5.3,4.5,5.3)
+  add(-2.9,4,-2.9,2.9,8,2.9)
+  return mesh
+}
+function makeShrieker(textures){
+  const mesh=scaleMesh(makeSixFaceCube(textures),16,13,16,0,1.4,0)
+  const edge=solidBox
+  mesh.push(...edge(-8,-8,-8,8,-5, -6.1,'#143038','#12353a','#315d60'))
+  mesh.push(...edge(-8,-8,6.1,8,-5,8,'#143038','#12353a','#315d60'))
+  mesh.push(...edge(-8,-8,-6,-6,-5,6,'#193842','#12353a','#315d60'))
+  mesh.push(...edge(6,-8,-6,8,-5,6,'#193842','#12353a','#315d60'))
+  return mesh
+}
+function makePiston(textures){
+  const mesh=makeSixFaceCube(textures)
+  // Wooden piston head protrudes only from the FRONT, not every side.
+  const head={...textures,front:textures.front,back:textures.front,left:textures.left,right:textures.right,top:textures.top,bottom:textures.bottom}
+  mesh.push(...scaleMesh(makeSixFaceCube(head),13,13,2.2,0,0,8.8))
+  return mesh
+}
 function makeSprite(px){
   const out=[], isSolid=(x,y)=>x>=0&&x<16&&y>=0&&y<16&&pix(px,x,y)[3]>60
   for(let y=0;y<16;y++)for(let x=0;x<16;x++){
@@ -203,6 +288,14 @@ async function getMesh(id,src,blockIds){
   if(id==='ender_chest'){const mesh=makeEnderChest();meshCache.set(id,mesh);return mesh}
   if(id==='beacon'){
     const mesh=makeBeacon();meshCache.set(id,mesh);return mesh
+  }
+  // Special-purpose machinery is not a six-sided copy of its front texture.
+  // Load independent Java textures before the general cube/sprite fallback.
+  if(blockFaceFiles[id]){
+    const textures=await getBlockFaceTextures(id,src)
+    const mesh=id==='hopper'?makeHopper(textures):id==='piston'?makePiston(textures):id==='sculk_shrieker'?makeShrieker(textures):makeSixFaceCube(textures)
+    meshCache.set(id,mesh)
+    return mesh
   }
   const px=await loadPixels(id,src)
   // Certain real Minecraft blocks have different top and bottom textures.

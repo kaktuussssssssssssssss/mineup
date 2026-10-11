@@ -450,3 +450,22 @@ button{outline-offset:3px}input,select{color-scheme:dark}[data-theme='light'] in
 .invFavoriteBtn{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);color:var(--muted);transition:color .16s,border-color .16s}
 .invFavoriteBtn:hover,.invFavoriteBtn.isFavorite{color:var(--primary);border-color:var(--primary)}
 .invCard .sellBtn:disabled{cursor:not-allowed}
+
+/* STAGE 16 — integrated account promo + local admin workspace */
+.profilePromoSection{margin:20px 0 22px;border:1px solid var(--line);background:linear-gradient(110deg,var(--panel),var(--panel2));border-radius:var(--card-radius,14px);overflow:hidden}
+.profilePromoToggle{width:100%;border:0;background:transparent;color:var(--text);padding:21px 22px;display:flex;align-items:center;justify-content:space-between;text-align:left;gap:16px}
+.profilePromoToggle>span{display:grid;grid-template-columns:22px 1fr;gap:3px 10px;align-items:center}
+.profilePromoToggle>span svg{color:var(--primary);grid-row:span 2}.profilePromoToggle b{font-size:14px}.profilePromoToggle small{grid-column:2;color:var(--muted);font-size:11px}
+.profilePromoToggle>svg{color:var(--primary);transition:transform .2s}.profilePromoToggle[aria-expanded="true"]>svg{transform:rotate(90deg)}
+.profilePromoBody{border-top:1px solid var(--line);padding:19px 22px 20px}.profilePromoBody .promoRedeemForm{max-width:630px;display:flex;gap:10px;flex-wrap:wrap}.profilePromoBody .promoRedeemForm input{flex:1 1 230px;min-width:0;text-transform:uppercase;color:var(--text);border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:14px;font-size:13px;outline:none}.profilePromoBody .promoRedeemForm input:focus{border-color:var(--primary)}
+.profilePromoBody .promoRedeemForm button{white-space:nowrap}.profilePromoBody .promoFeedback{margin:13px 0 0;padding:11px 14px;border:1px solid color-mix(in srgb,var(--primary),transparent 50%);border-radius:8px;color:var(--primary);font-weight:700;font-size:12px}.promoPrivacyNote{font-size:11px;color:var(--muted);line-height:1.6;margin:12px 0 0}
+.adminPromoStudio,.adminFutureMode{margin-top:20px;border:1px solid var(--line);background:var(--panel2);border-radius:15px;padding:25px}
+.adminPromoStudio h3,.adminFutureMode h3{font-size:20px;margin:13px 0}.adminPromoStudio p,.adminFutureMode p{font-size:12px;line-height:1.8;color:var(--muted);max-width:900px}
+.adminPromoGrid{display:grid;grid-template-columns:1.1fr .9fr 1.5fr .5fr auto;gap:11px;align-items:end;margin-top:18px}
+.adminPromoGrid label{display:flex;flex-direction:column;gap:9px;color:var(--muted);font-weight:800;font-size:10px;letter-spacing:.8px;min-width:0}
+.adminPromoGrid input,.adminPromoGrid select{width:100%;min-width:0;padding:12px 13px;border-radius:9px;background:var(--panel);border:1px solid var(--line);color:var(--text);font-size:12px}
+.adminPromoGrid input:focus,.adminPromoGrid select:focus{outline:1px solid var(--primary)}
+.adminPromoGrid .primary{min-height:44px;white-space:nowrap;padding:13px 15px}.promoAdminList{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:15px;max-height:145px;overflow:auto}.promoAdminList span{color:var(--primary);border-radius:6px;background:var(--primarySoft);padding:7px 9px;font-size:10px;font-weight:800;letter-spacing:.4px}
+.adminFutureMode{background:linear-gradient(125deg,var(--panel),var(--panel2));border-style:dashed}.adminFutureTags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.adminFutureTags span{border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--muted);font-size:9px;letter-spacing:1px}
+@media(max-width:1200px){.adminPromoGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.adminPromoGrid .primary{grid-column:1/-1;justify-self:start}}
+@media(max-width:600px){.profilePromoToggle,.profilePromoBody{padding:16px}.profilePromoBody .promoRedeemForm button{width:100%}.adminPromoStudio,.adminFutureMode{padding:17px}.adminPromoGrid{grid-template-columns:1fr}.adminPromoGrid .primary{grid-column:1;width:100%}}

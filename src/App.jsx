@@ -562,7 +562,7 @@ const legacyCasePools = [
 ]
 // Stage 15: balanced *public* drop tables. Keep case indices stable for historical saves.
 // Prices and weights are computed deterministically, independent of player/session.
-// Four bands with ~95% return BEFORE resale (96% of nominal item value).
+// Case return aimed at ~98.5% before resale. Fully virtual demo economy.
 function makeBalancedCasePools(){
  const poolFor=(caseIndex)=>{
   const price=cases[caseIndex][2]
@@ -573,15 +573,15 @@ function makeBalancedCasePools(){
    const units=1000000
    return prizes.map((it,n)=>[it.id,(Math.floor((n+1)*units/total)-Math.floor(n*units/total))/10000])
   }
-  // min 42% of case price; no cheaper-case backwards jumps in drop floors.
-  const minimum=price*.42
+  // min ~50% of case price; no cheaper-case backwards jumps in drop floors.
+  const minimum=price*.50
   const available=previewItems.filter(i=>i.value>=minimum&&i.value<=price*4.5)
   const bins=[
-   {low:.42,high:.82,weight:54},
-   {low:.82,high:1.18,weight:28},
-   {low:1.18,high:2.05,weight:15},
-   {low:2.05,high:3.25,weight:2.5},
-   {low:3.25,high:4.5,weight:.5}
+   {low:.50,high:.85,weight:39},
+   {low:.85,high:1.18,weight:37},
+   {low:1.18,high:2.05,weight:19},
+   {low:2.05,high:3.25,weight:4.3},
+   {low:3.25,high:4.5,weight:.7}
   ]
   const weights=new Map()
   const ensure=(id,w)=>weights.set(id,(weights.get(id)||0)+w)
@@ -599,7 +599,7 @@ function makeBalancedCasePools(){
   // Every item is placed in at least one possible paid case where viable.
   // Use a tiny, transparently displayed percentage, drawn from the base pool.
   const raw=[...weights.entries()]
-  const desiredEV=price*.96
+  const desiredEV=price*.985
   const evAt=(tilt)=>{
    let total=0,weighted=0
    for(const [id,w] of raw){
@@ -623,16 +623,24 @@ function makeBalancedCasePools(){
  const reachable=new Set(pools.flatMap(pool=>pool.map(([id])=>id)))
  const extras=previewItems.filter(item=>!reachable.has(item.id))
  if(extras.length){
-  const each=.01
-  pools[0]=pools[0].map(([id,pct],idx)=>[id,idx===0?Math.round((pct-extras.length*each)*10000)/10000:pct])
-  extras.forEach(item=>pools[0].push([item.id,each]))
+  // Preserve 250-item collectability WITHOUT injecting expensive rewards into FREE.
+  // Tiny per-item shares are taken from the largest existing outcome of a suitable case.
+  for(const item of extras){
+   const valid=cases.map((c,index)=>({index,price:c[2]})).filter(c=>c.index!==21 && (c.index===0?item.value<=42:item.value>=c.price*.50 && item.value<=c.price*4.5))
+   const best=valid.length?valid.reduce((a,b)=>Math.abs(Math.log(item.value/Math.max(a.price,1)))-Math.abs(Math.log(item.value/Math.max(b.price,1)))<0?a:b):{index:item.value<=cases[1][2]*.50?0:20}
+   const pool=pools[best.index]
+   const donor=pool.reduce((max,entry,i)=>entry[1]>pool[max][1]?i:max,0)
+   const tiny=.002
+   pool[donor]=[pool[donor][0],Math.round((pool[donor][1]-tiny)*10000)/10000]
+   pool.push([item.id,tiny])
+  }
  }
  return pools
 }
 const casePools=makeBalancedCasePools()
 const STARTER_CASE_INDEX=21
 const SELL_RATE=.96
-const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['arcade', Gamepad2], ['promo', Gift], ['settings', Settings2]]
+const nav = [['upgrade', Gem], ['cases', Gift], ['inventory', Boxes], ['profile', UserRound], ['arcade', Gamepad2], ['settings', Settings2]]
 
 const labels = {
   ru: {
@@ -1256,8 +1264,9 @@ function HourlyDropArcade({lang='ru',hourly,onDraw,textureSource}){
  </section>
 }
 
-function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,blocked=false,lang='ru'}){
+function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,onCreatePromo,promoCodes=[],blocked=false,lang='ru'}){
  const [amount,setAmount]=React.useState('10000');const [itemId,setItemId]=React.useState('diamond');const [qty,setQty]=React.useState('1');const [feedback,setFeedback]=React.useState('');
+ const [newCode,setNewCode]=React.useState('');const [newAmount,setNewAmount]=React.useState('500');const [newItem,setNewItem]=React.useState('diamond');const [newQty,setNewQty]=React.useState('1');
  const ru=lang==='ru',uk=lang==='uk';
  const txt=(r,u,e)=>ru?r:uk?u:e;
  function grantCoins(mode){const n=parseMC(amount);if(n===null||n<=0||n>1e8){setFeedback(txt('Введите сумму от 0,01 до 100 000 000 MC','Введіть суму від 0,01 до 100 000 000 MC','Enter an amount from 0.01 to 100,000,000 MC'));return}if(blocked){setFeedback(txt('Заверши текущую игру/выигрыш','Заверши поточну гру/виграш','Finish the current reward first'));return}onCoins(n,mode);setFeedback(txt('Тестовая операция выполнена','Тестову операцію виконано','Local test balance updated'))}
@@ -1267,6 +1276,20 @@ function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,bl
  <div className="adminGrid"><section className="adminCard"><div className="eyebrow">01 / MC COINS</div><h3>{txt('Выдать монеты','Видати монети','Grant coins')}</h3><label htmlFor="admin-coins">{txt('Количество MC','Кількість MC','Amount MC')}</label><input id="admin-coins" type="text" inputMode="decimal" placeholder="1221,21" value={amount} onChange={e=>setAmount(e.target.value)} /><div className="adminPresets">{[1000,10000,50000,100000].map(n=><button key={n} onClick={()=>setAmount(String(n))}>+{formatCoins(n)}</button>)}</div><div className="adminActions"><button className="primary" onClick={()=>grantCoins('add')}><Coins size={16}/>{txt('Начислить','Нарахувати','Add')}</button><button className="secondaryBtn" onClick={()=>grantCoins('subtract')}>{txt('Списать','Списати','Subtract')}</button></div></section>
  <section className="adminCard"><div className="eyebrow">02 / ITEMS</div><h3>{txt('Выдать предметы','Видати предмети','Grant items')}</h3><label htmlFor="admin-item">{txt('Предмет из каталога','Предмет з каталогу','Catalogue item')}</label><select id="admin-item" value={itemId} onChange={e=>setItemId(e.target.value)}>{previewItems.map(i=><option key={i.id} value={i.id}>{i.name} — {formatCoins(i.value)} MC</option>)}</select><div className="adminChosen"><img src={textureSource(itemId)} alt=""/><span>{getItem(itemId).name}</span><small>{getItem(itemId).rarity}</small></div><label htmlFor="admin-qty">{txt('Количество','Кількість','Quantity')}</label><input id="admin-qty" type="number" min="1" max="100" value={qty} onChange={e=>setQty(e.target.value)}/><button className="primary" onClick={grantItem}><Gift size={16}/>{txt('Добавить в инвентарь','Додати до інвентарю','Grant item')}</button></section></div>
  <div className="adminCooldownTool"><div><div className="eyebrow">03 / HOURLY VAULTS</div><h3>{txt('Сброс таймера тайников','Скидання таймера схованок','Reset vault cooldown')}</h3><p>{txt('Снимает часовое ожидание только в этом браузере. История и уже полученные предметы сохраняются.','Скасовує годинне очікування лише в цьому браузері. Історія й нагороди залишаються.','Removes the cooldown in this browser only. History and previously awarded items remain.')}</p><small>{hourly?.lastAt?new Date(hourly.lastAt).toLocaleString(lang==='en'?'en-US':'ru-RU'):'READY'}</small></div><button type="button" className="secondaryBtn" disabled={blocked} onClick={()=>{if(blocked)return;onResetHourly();setFeedback(txt('Таймер сброшен — клетки снова доступны','Таймер скинуто — клітинки знову доступні','Cooldown reset — vaults are ready'))}}><RotateCcw size={16}/>{txt('Сбросить кулдаун','Скинути кулдаун','Reset cooldown')}</button></div>
+ <section className="adminPromoStudio">
+  <div className="eyebrow">04 / PROMO MANAGEMENT</div>
+  <h3>{txt('Создать тестовый промокод','Створити тестовий промокод','Create demo promo')}</h3>
+  <p>{txt('Код будет работать только в этом браузере. После подключения сервера сможешь создавать общие коды, ставить лимиты и отслеживать активации игроков.','Код працюватиме лише у цьому браузері. Загальні промокоди з’являться після підключення сервера.','Codes work only in this browser until the secure backend is connected.')}</p>
+  <form className="adminPromoGrid" onSubmit={e=>{e.preventDefault();if(blocked)return;const value=parseMC(newAmount);const valid=onCreatePromo({code:newCode,amount:value??-1,itemId:newItem,qty:Number(newQty)});setFeedback(valid?txt('Промокод создан локально','Промокод створено локально','Local code created'):txt('Неверные параметры или код уже занят','Неправильні дані або код зайнятий','Invalid values or duplicate code'));if(valid)setNewCode('')}}>
+   <label>CODE<input value={newCode} onChange={e=>setNewCode(e.target.value.toUpperCase())} maxLength={24} placeholder="MYGIFT2026" required/></label>
+   <label>MC COINS<input value={newAmount} onChange={e=>setNewAmount(e.target.value)} inputMode="decimal" placeholder="500,00"/></label>
+   <label>ITEM<select value={newItem} onChange={e=>setNewItem(e.target.value)}>{previewItems.map(i=><option key={i.id} value={i.id}>{i.name}</option>)}</select></label>
+   <label>QUANTITY<input type="number" min="0" max="100" value={newQty} onChange={e=>setNewQty(e.target.value)}/></label>
+   <button type="submit" className="primary" disabled={blocked}><Gift size={17}/>{txt('Создать код','Створити код','Create code')}</button>
+  </form>
+  <div className="promoAdminList"><span>TEST · BUILT-IN / LOCAL</span>{promoCodes.map(p=><span key={p.code}>{p.code} · {formatCoins(p.amount)} MC · {p.qty?p.qty+' × '+getItem(p.itemId).name:'без предмета'}</span>)}</div>
+ </section>
+ <section className="adminFutureMode"><div className="eyebrow">05 / ONLINE ADMIN MODE · STAGE 17</div><h3>{txt('Управление игроками — после Google-входа','Керування гравцями — після Google-входу','Player management — after Google login')}</h3><p>{txt('Будет доступен поиск по уникальному нику, профили, топы, выдача MC Coins и предметов любому игроку, журналы и управление общими промокодами. Сейчас нет аккаунтов и эти действия недоступны.','Пізніше: пошук за ніком, рейтинги, винагороди та керування промокодами.','Coming later: unique nicknames, leaderboards, player grants and global promo management.')}</p><div className="adminFutureTags"><span>UNIQUE NICKNAMES</span><span>PLAYER SEARCH</span><span>LEADERBOARDS</span><span>REMOTE GRANTS</span><span>SERVER LOGS</span></div></section>
  <div className="adminLogs"><h3>{txt('История тестовых выдач','Історія тестових видач','Local activity log')}</h3>{audit.length?<div className="adminLogList">{audit.map(a=><div key={a.id}><span>{a.label}</span><small>{a.when}</small></div>)}</div>:<p>{txt('Пока операций нет','Операцій ще немає','No local actions yet')}</p>}</div>{feedback&&<div className="adminFeedback" role="status">{feedback}</div>}
  </section>
 }
@@ -1295,6 +1318,9 @@ export default function App() {
   const [hourlyData,setHourlyData]=useState(()=>stored('voxup-hourly-state',{lastAt:0,itemId:null,chosen:-1,slots:null,total:0,history:[]}))
   const [starterClaimed,setStarterClaimed]=useState(()=>Boolean(stored('voxup-starter-used',false)))
   const [promoRedeemed,setPromoRedeemed]=useState(()=>Boolean(stored('voxup-promo-test-used',false)))
+  const [promoCodes,setPromoCodes]=useState(()=>{const p=stored('voxup-local-promos',[]);return Array.isArray(p)?p.filter(x=>x&&typeof x.code==='string'):[]})
+  const [promoUsed,setPromoUsed]=useState(()=>{const p=stored('voxup-promo-used',[]);return Array.isArray(p)?p:[]})
+  const [promoOpen,setPromoOpen]=useState(false)
   const [promoInput,setPromoInput]=useState('')
   const [promoFeedback,setPromoFeedback]=useState('')
   const [favorites,setFavorites]=useState(()=>{const saved=stored('voxup-favorites',[]);return Array.isArray(saved)?saved.filter(id=>itemMap[id]):[]})
@@ -1405,6 +1431,8 @@ export default function App() {
 
   useEffect(()=>{try{localStorage.setItem('voxup-admin-audit',JSON.stringify(adminAudit.slice(0,30)))}catch{}},[adminAudit])
   useEffect(()=>{try{localStorage.setItem('voxup-favorites',JSON.stringify(favorites))}catch{}},[favorites])
+  useEffect(()=>{try{localStorage.setItem('voxup-local-promos',JSON.stringify(promoCodes))}catch{}},[promoCodes])
+  useEffect(()=>{try{localStorage.setItem('voxup-promo-used',JSON.stringify(promoUsed))}catch{}},[promoUsed])
 
   useEffect(() => {
     try {
@@ -1577,7 +1605,7 @@ export default function App() {
   }
 
   function exportSave(){
-    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,hourlyData,extras:{matchBest:stored('voxup-match-best',0),matchLastRewardDay:stored('voxup-match-last-reward-day',''),adminAudit,starterClaimed,promoRedeemed,favorites},settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
+    const data={format:'voxup-save',version:1,createdAt:new Date().toISOString(),coins,inventory,history,caseHistory,stats,sourceId,targetId,multiplier,lang,theme,accent,pendingReward,hourlyData,extras:{matchBest:stored('voxup-match-best',0),matchLastRewardDay:stored('voxup-match-last-reward-day',''),adminAudit,starterClaimed,promoRedeemed,promoUsed,promoCodes,favorites},settings:{volume,radius,glow,density,motion,jackpotFx,sound}}
     const file=new Blob([JSON.stringify(data,null,2)],{type:'application/json'})
     const url=URL.createObjectURL(file)
     const a=document.createElement('a');a.href=url;a.download='voxup-save.json';document.body.appendChild(a);a.click();a.remove()
@@ -1621,6 +1649,9 @@ export default function App() {
       const recoveredStarter=Boolean(data?.extras?.starterClaimed || starterClaimed || stored('voxup-starter-used',false))
       const recoveredPromo=Boolean(data?.extras?.promoRedeemed || promoRedeemed || stored('voxup-promo-test-used',false))
       setStarterClaimed(recoveredStarter);setPromoRedeemed(recoveredPromo)
+      const previousCodes=Array.isArray(stored('voxup-promo-used',[]))?stored('voxup-promo-used',[]):[]
+      const importedCodes=Array.isArray(data?.extras?.promoUsed)?data.extras.promoUsed.filter(x=>typeof x==='string' && /^[A-Z0-9_-]{4,24}$/.test(x)):[]
+      setPromoUsed([...new Set([...previousCodes,...importedCodes,...(recoveredPromo?['TEST']:[])])])
       try{localStorage.setItem('voxup-starter-used',JSON.stringify(recoveredStarter));localStorage.setItem('voxup-promo-test-used',JSON.stringify(recoveredPromo))}catch{}
       if(data.extras && typeof data.extras==='object'){
         const best=Number(data.extras.matchBest)
@@ -1630,6 +1661,10 @@ export default function App() {
         try{localStorage.setItem('voxup-match-best',JSON.stringify(safeBest));localStorage.setItem('voxup-match-last-reward-day',JSON.stringify(safeDay))}catch{}
         const safeAudit=Array.isArray(data.extras.adminAudit)?data.extras.adminAudit.slice(0,30).filter(x=>x&&typeof x==='object'&&typeof x.label==='string'&&x.label.length<150).map((x,i)=>({id:String(x.id||'import-'+i).slice(0,60),label:x.label,when:String(x.when||'').slice(0,40)})):[]
         setAdminAudit(safeAudit)
+      }
+      if(Array.isArray(data?.extras?.promoCodes)){
+        const imported=data.extras.promoCodes.filter(p=>p&&typeof p.code==='string'&&/^[A-Z0-9_-]{4,24}$/.test(p.code)&&p.code!=='TEST'&&Number.isFinite(Number(p.amount))&&Number(p.amount)>=0&&Number(p.amount)<=1e7&&Number.isSafeInteger(Number(p.qty))&&Number(p.qty)>=0&&Number(p.qty)<=100&&(Number(p.qty)===0||itemMap[p.itemId])).slice(0,100).map(p=>({code:p.code,amount:roundMC(Number(p.amount)),qty:Number(p.qty),itemId:p.itemId||null,createdAt:Number(p.createdAt)||Date.now()}))
+        setPromoCodes(prev=>[...new Map([...prev,...imported].map(p=>[p.code,p])).values()].slice(0,100))
       }
       if(Array.isArray(data?.extras?.favorites))setFavorites([...new Set(data.extras.favorites.filter(id=>typeof id==='string'&&itemMap[id]))])
       const opts=data.settings||{}
@@ -1759,22 +1794,49 @@ export default function App() {
     try{localStorage.setItem('mineup-demo-inventory',JSON.stringify(next))}catch{}
     setInventory(next);appendAdminAudit(`+${qty} × ${itemMap[id].name}`);
   }
+  function createLocalPromo(data){
+    if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward)return false
+    const code=String(data.code||'').trim().toUpperCase()
+    const amount=roundMC(Number(data.amount)||0)
+    const qty=Number(data.qty)||0
+    if(!/^[A-Z0-9_-]{4,24}$/.test(code)||code==='TEST'||promoCodes.some(p=>p.code===code))return false
+    if(amount<0||amount>10000000||!Number.isSafeInteger(qty)||qty<0||qty>100)return false
+    if(qty && !itemMap[data.itemId])return false
+    if(!amount && !qty)return false
+    const entry={code,amount,itemId:qty?data.itemId:null,qty,createdAt:Date.now()}
+    const next=[entry,...promoCodes].slice(0,100)
+    try{localStorage.setItem('voxup-local-promos',JSON.stringify(next))}catch{}
+    setPromoCodes(next)
+    appendAdminAudit(`PROMO ${code}: ${formatCoins(amount)} MC + ${qty} предметов (локально)`)
+    return true
+  }
   function redeemPromo(e){
     e?.preventDefault?.()
-    if(busyGuard.current||rollingGuard.current||pendingReward||caseRolling||upgradeBusy){setPromoFeedback('Заверши текущий выигрыш.');return}
+    if(busyGuard.current||rollingGuard.current||pendingReward||caseRolling||upgradeBusy){setPromoFeedback('Сначала заверши текущую награду.');return}
     const code=promoInput.trim().toUpperCase()
-    if(code!=='TEST'){setPromoFeedback(lang==='uk'?'Невідомий промокод':lang==='en'?'Unknown code':'Такого промокода нет');return}
-    // Local demo only; online promo claims must be server-verified and per account.
-    if(promoRedeemed || stored('voxup-promo-test-used',false)){setPromoRedeemed(true);setPromoFeedback(lang==='uk'?'Код уже використано':lang==='en'?'Code already redeemed':'Код уже использован');return}
-    const nextCoins=roundMC(coins+777.77)
-    const nextInventory={...inventory,diamond:(Number(inventory.diamond)||0)+1}
+    const definition=code==='TEST'?{code:'TEST',amount:777.77,itemId:'diamond',qty:1}:promoCodes.find(p=>p.code===code)
+    if(!definition){setPromoFeedback(lang==='uk'?'Код недійсний':lang==='en'?'Invalid promo code':'Такого промокода нет');return}
+    const usedNow=stored('voxup-promo-used',[])
+    if((Array.isArray(usedNow)&&usedNow.includes(code)) || promoUsed.includes(code) || (code==='TEST'&&(promoRedeemed||stored('voxup-promo-test-used',false)))){
+      setPromoFeedback(lang==='uk'?'Цей код уже використано':lang==='en'?'Already redeemed':'Промокод уже активирован');return
+    }
+    const nextCoins=roundMC(clamp(coins+(Number(definition.amount)||0),0,1e12))
+    const nextInventory={...inventory}
+    if(definition.qty && itemMap[definition.itemId])nextInventory[definition.itemId]=clamp((Number(inventory[definition.itemId])||0)+definition.qty,0,1e7)
+    const nextUsed=[...new Set([...promoUsed,code])]
     try{
-      localStorage.setItem('voxup-promo-test-used',JSON.stringify(true))
+      localStorage.setItem('voxup-promo-used',JSON.stringify(nextUsed))
+      if(code==='TEST')localStorage.setItem('voxup-promo-test-used',JSON.stringify(true))
       localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))
       localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))
     }catch{}
-    setPromoRedeemed(true);setCoins(nextCoins);setInventory(nextInventory);setPromoInput('')
-    setPromoFeedback(lang==='uk'?'+777,77 MC і +1 алмаз!':lang==='en'?'+777.77 MC and +1 diamond!':'+777,77 MC и +1 алмаз!')
+    setPromoUsed(nextUsed)
+    if(code==='TEST')setPromoRedeemed(true)
+    setCoins(nextCoins);setInventory(nextInventory);setPromoInput('')
+    const rewardBits=[]
+    if(definition.amount)rewardBits.push(`+${formatCoins(definition.amount)} MC`)
+    if(definition.qty)rewardBits.push(`+${definition.qty} × ${getItem(definition.itemId).name}`)
+    setPromoFeedback(`✓ ${rewardBits.join(' · ')}`)
   }
   function resetHourlyCooldown(){
     if(!adminUnlocked || busyGuard.current || rollingGuard.current || pendingReward || caseRolling || upgradeBusy)return
@@ -2024,17 +2086,7 @@ export default function App() {
 
           {page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
 
-          {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
-
-          {page === 'promo' && <>
-            <div className="eyebrow">VOXUP / REDEEM CENTER</div>
-            <div className="promoHero"><div className="eyebrow">GIFT CODE · STAGE 15</div><h1>{lang==='uk'?'ПРОМОКОДИ':lang==='en'?'PROMO CODES':'ПРОМОКОДЫ'}</h1><p>{lang==='uk'?'Вводь коди й отримуй тестові нагороди. Зараз працює лише TEST.':lang==='en'?'Redeem test codes for virtual rewards. Currently TEST is the only active code.':'Вводи коды и получай виртуальные награды. Пока работает только TEST.'}</p>
-              <div className="promoRewardPreview"><div><img src={textureSource('diamond')} alt=""/><span><strong>TEST</strong><small>+777,77 MC · +1 алмаз</small></span></div><b>{promoRedeemed?'✓ CLAIMED':'AVAILABLE'}</b></div>
-              <form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="ENTER CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)} /><button className="primary" disabled={Boolean(pendingReward)||upgradeBusy||caseRolling} type="submit"><Gift size={16}/> {promoRedeemed?'ВВЕСТИ ДРУГОЙ КОД':'АКТИВИРОВАТЬ'}</button></form>
-              {promoFeedback&&<div className="promoFeedback" role="status">{promoFeedback}</div>}
-            </div>
-            <div className="promoNotice"><ShieldCheck size={18}/>{lang==='uk'?'Демо-код зберігається лише в цьому браузері. Реальні коди будуть перевірятися на сервері.':lang==='en'?'Local test only. Real promotional codes will be validated on the server.':'Тестовый код сохраняется только локально. Настоящие промокоды и одноразовые награды будем проверять на сервере.'}</div>
-          </>}
+          {page === 'admin' && adminUnlocked && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} promoCodes={promoCodes} onCreatePromo={createLocalPromo} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>{setAdminUnlocked(false);go('settings')}}/>}
 
           {page === 'profile' && (
             <>
@@ -2044,6 +2096,10 @@ export default function App() {
               <div className="profileStats">
                 {[ [ex.total,previewItems.length], [ex.myCollection,totalItems], [ex.profit,formatCoins(portfolioValue)+' MC'], [ex.casesOpened,stats.cases||0], [ex.upgrades,stats.upgrades||0], [ex.wins,stats.wins||0] ].map(([label,value],i)=><div className="profileStat" key={i}><span>{label}</span><strong>{value}</strong></div>)}
               </div>
+              <section className="profilePromoSection">
+               <button type="button" className="profilePromoToggle" aria-expanded={promoOpen} onClick={()=>setPromoOpen(v=>!v)}><span><Gift size={19}/><b>{lang==='uk'?'Промокод':lang==='en'?'Redeem promo code':'Активировать промокод'}</b><small>{lang==='uk'?'Маєш код? Введи його тут.':lang==='en'?'Have a code? Enter it here.':'Есть код? Введи его в личном кабинете.'}</small></span><ChevronRight size={19}/></button>
+               {promoOpen&&<div className="profilePromoBody"><form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="PROMO CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)}/><button className="primary" type="submit" disabled={Boolean(pendingReward)||upgradeBusy||caseRolling}><Gift size={16}/> {lang==='uk'?'Активувати':lang==='en'?'Redeem':'Активировать'}</button></form>{promoFeedback&&<p role="status" className="promoFeedback">{promoFeedback}</p>}<p className="promoPrivacyNote">{lang==='uk'?'Тестові нагороди зберігаються лише у цьому браузері.':lang==='en'?'Demo rewards stay in this browser until online accounts launch.':'Тестовые награды работают локально. Общие промокоды появятся с серверными аккаунтами.'}</p></div>}
+              </section>
               <div className="starterInfo"><Gift size={19}/><span><strong>STARTER CASE / ПРИВЕТСТВЕННЫЙ</strong><small>{starterClaimed?'✓ Локальный стартовый кейс уже использован':'1 бесплатное открытие, награды 300–3 000 MC. После Google-регистрации — серверное право на одно открытие.'}</small></span><button className="secondaryBtn" onClick={()=>go('cases')}>К кейсам <ArrowUpRight size={16}/></button></div>
               <section className="cloudNextPanel"><div className="eyebrow">NEXT / CLOUD ACCOUNT</div><h3>{lang==='ru'?'Google-вход — следующий этап':lang==='uk'?'Вхід Google — наступний етап':'Google login — next milestone'}</h3><p>{lang==='ru'?'Для настоящих аккаунтов потребуется подключить Supabase. До этого монеты и предметы хранятся в браузере — скачай резервную копию ниже.':lang==='uk'?'Для акаунтів потрібно підключити Supabase. Наразі монети й предмети зберігаються в браузері — зроби резервну копію нижче.':'Real accounts require Supabase configuration. Until then, your coins and items stay in this browser: export a backup below.'}</p></section>
               <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
