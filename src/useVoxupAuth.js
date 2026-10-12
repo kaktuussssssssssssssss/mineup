@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL?.trim()
 const key = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY)?.trim()
 const configured = Boolean(url && key && /^https:\/\//.test(url))
-const client = configured ? createClient(url, key, {
+export const supabase = configured ? createClient(url, key, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 }) : null
 
@@ -17,12 +17,12 @@ export function useVoxupAuth() {
   const request = useRef(0)
 
   const reload = useCallback(async (maybeUser) => {
-    if (!client) return
+    if (!supabase) return
     const token = ++request.current
     try {
       let user = maybeUser
       if (user === undefined) {
-        const { data, error } = await client.auth.getUser()
+        const { data, error } = await supabase.auth.getUser()
         if (error && error.name !== 'AuthSessionMissingError') throw error
         user = data?.user ?? null
       }
@@ -31,8 +31,8 @@ export function useVoxupAuth() {
         return
       }
       const [profileResult, adminResult] = await Promise.all([
-        client.from('voxup_profiles').select('nickname').eq('user_id', user.id).maybeSingle(),
-        client.from('voxup_admins').select('user_id').eq('user_id', user.id).maybeSingle()
+        supabase.from('voxup_profiles').select('nickname').eq('user_id', user.id).maybeSingle(),
+        supabase.from('voxup_admins').select('user_id').eq('user_id', user.id).maybeSingle()
       ])
       if (profileResult.error) throw profileResult.error
       if (adminResult.error) throw adminResult.error
@@ -50,11 +50,11 @@ export function useVoxupAuth() {
   }, [])
 
   useEffect(() => {
-    if (!client) return
+    if (!supabase) return
     let active = true
     // Do not issue Supabase queries synchronously inside the auth callback:
     // they can deadlock with the session event processing in some SDK versions.
-    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       Promise.resolve().then(() => { if (active) reload(session?.user ?? null) })
     })
     reload()
@@ -66,20 +66,20 @@ export function useVoxupAuth() {
   }, [reload])
 
   async function signInGoogle() {
-    if (!client) throw new Error('Supabase ещё не настроен')
-    const { error } = await client.auth.signInWithOAuth({
+    if (!supabase) throw new Error('Supabase ещё не настроен')
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google', options: { redirectTo: window.location.origin }
     })
     if (error) throw error
   }
 
   async function saveNickname(value) {
-    if (!client || !auth.user) throw new Error('Сначала войди через Google')
+    if (!supabase || !auth.user) throw new Error('Сначала войди через Google')
     const nickname = String(value).trim()
     if (!/^[A-Za-z0-9_]{3,20}$/.test(nickname)) {
       throw new Error('Ник: 3–20 символов, латинские буквы, цифры или _')
     }
-    const { error } = await client.from('voxup_profiles').insert({
+    const { error } = await supabase.from('voxup_profiles').insert({
       user_id: auth.user.id, nickname
     })
     if (error) {
@@ -91,8 +91,8 @@ export function useVoxupAuth() {
   }
 
   async function signOut() {
-    if (!client) return
-    const { error } = await client.auth.signOut()
+    if (!supabase) return
+    const { error } = await supabase.auth.signOut()
     if (error) throw error
     request.current += 1
     setAuth({ ...EMPTY, ready: true })

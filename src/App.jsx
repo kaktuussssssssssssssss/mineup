@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {VoxelViewer, VoxelThumbnail} from './Voxel3D.jsx'
 import {useVoxupAuth} from './useVoxupAuth.js'
 import {GoogleAccount} from './GoogleAccount.jsx'
+import {OnlineAdmin, CloudEconomy} from './OnlineAdmin.jsx'
 import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2, Zap, Gamepad2, Timer, Target, Star } from 'lucide-react'
 
 const mcTextureRoot = 'https://raw.githubusercontent.com/Faithful-Pack/Default-Java/1.21.8/assets/minecraft/textures/'
@@ -1291,7 +1292,6 @@ function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,on
   </form>
   <div className="promoAdminList"><span>TEST · BUILT-IN / LOCAL</span>{promoCodes.map(p=><span key={p.code}>{p.code} · {formatCoins(p.amount)} MC · {p.qty?p.qty+' × '+getItem(p.itemId).name:'без предмета'}</span>)}</div>
  </section>
- <section className="adminFutureMode"><div className="eyebrow">05 / ONLINE ADMIN MODE · STAGE 17</div><h3>{txt('Управление игроками — после Google-входа','Керування гравцями — після Google-входу','Player management — after Google login')}</h3><p>{txt('Будет доступен поиск по уникальному нику, профили, топы, выдача MC Coins и предметов любому игроку, журналы и управление общими промокодами. Сейчас нет аккаунтов и эти действия недоступны.','Пізніше: пошук за ніком, рейтинги, винагороди та керування промокодами.','Coming later: unique nicknames, leaderboards, player grants and global promo management.')}</p><div className="adminFutureTags"><span>UNIQUE NICKNAMES</span><span>PLAYER SEARCH</span><span>LEADERBOARDS</span><span>REMOTE GRANTS</span><span>SERVER LOGS</span></div></section>
  <div className="adminLogs"><h3>{txt('История тестовых выдач','Історія тестових видач','Local activity log')}</h3>{audit.length?<div className="adminLogList">{audit.map(a=><div key={a.id}><span>{a.label}</span><small>{a.when}</small></div>)}</div>:<p>{txt('Пока операций нет','Операцій ще немає','No local actions yet')}</p>}</div>{feedback&&<div className="adminFeedback" role="status">{feedback}</div>}
  </section>
 }
@@ -1299,6 +1299,7 @@ function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,on
 export default function App() {
   const auth = useVoxupAuth()
   const [page, setPage] = useState('upgrade')
+  useEffect(()=>{if(auth.ready && page==='admin' && !auth.isAdmin)setPage('profile')},[auth.ready,auth.isAdmin,page])
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
   const [theme, setTheme] = useState(() => stored('mineup-theme', 'gold'))
   const [accent, setAccent] = useState(() => stored('mineup-accent', 'amber'))
@@ -1894,7 +1895,7 @@ export default function App() {
         <div className="navItems">
           {(auth.isAdmin?[...nav,['admin',ShieldCheck]]:nav).map(([id, Icon]) => (
             <button key={id} className={'navItem ' + (page === id ? 'active' : '')} onClick={() => go(id)}>
-              <Icon size={19} /><span>{id==='admin'?'LAB / ADMIN':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
+              <Icon size={19} /><span>{id==='admin'?'CONTROL CENTER':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
             </button>
           ))}
         </div>
@@ -2080,23 +2081,23 @@ export default function App() {
 
           {page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
 
-          {page === 'admin' && auth.isAdmin && <AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} promoCodes={promoCodes} onCreatePromo={createLocalPromo} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>go('profile')}/>}
+          {page === 'admin' && auth.isAdmin && <OnlineAdmin auth={auth} lang={lang} items={previewItems} localConsole={<AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} promoCodes={promoCodes} onCreatePromo={createLocalPromo} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>go('profile')}/>}/>}
 
           {page === 'profile' && (
             <>
               <div className="eyebrow">VOXUP / USER</div>
               <h1 className="sectionTitle">{t.profile}</h1>
               <div className="profileLead"><UserRound size={38}/><div><h2>{auth.nickname ? "@"+auth.nickname : t.guest}</h2><p>{auth.user ? "Google ID • "+(auth.isAdmin ? "ADMIN" : "PLAYER") : t.profileSoon}</p><span>{auth.user ? "ONLINE IDENTITY • LOCAL DEMO ECONOMY" : ex.mode}</span></div></div>
-              <GoogleAccount auth={auth} lang={lang}/>
+              <GoogleAccount auth={auth} lang={lang}/><CloudEconomy auth={auth} lang={lang}/>
               <div className="profileStats">
                 {[ [ex.total,previewItems.length], [ex.myCollection,totalItems], [ex.profit,formatCoins(portfolioValue)+' MC'], [ex.casesOpened,stats.cases||0], [ex.upgrades,stats.upgrades||0], [ex.wins,stats.wins||0] ].map(([label,value],i)=><div className="profileStat" key={i}><span>{label}</span><strong>{value}</strong></div>)}
               </div>
               <section className="profilePromoSection">
                <button type="button" className="profilePromoToggle" aria-expanded={promoOpen} onClick={()=>setPromoOpen(v=>!v)}><span><Gift size={19}/><b>{lang==='uk'?'Промокод':lang==='en'?'Redeem promo code':'Активировать промокод'}</b><small>{lang==='uk'?'Маєш код? Введи його тут.':lang==='en'?'Have a code? Enter it here.':'Есть код? Введи его в личном кабинете.'}</small></span><ChevronRight size={19}/></button>
-               {promoOpen&&<div className="profilePromoBody"><form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="PROMO CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)}/><button className="primary" type="submit" disabled={Boolean(pendingReward)||upgradeBusy||caseRolling}><Gift size={16}/> {lang==='uk'?'Активувати':lang==='en'?'Redeem':'Активировать'}</button></form>{promoFeedback&&<p role="status" className="promoFeedback">{promoFeedback}</p>}<p className="promoPrivacyNote">{lang==='uk'?'Тестові нагороди зберігаються лише у цьому браузері.':lang==='en'?'Demo rewards stay in this browser until online accounts launch.':'Тестовые награды работают локально. Общие промокоды появятся с серверными аккаунтами.'}</p></div>}
+               {promoOpen&&<div className="profilePromoBody"><form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="PROMO CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)}/><button className="primary" type="submit" disabled={Boolean(pendingReward)||upgradeBusy||caseRolling}><Gift size={16}/> {lang==='uk'?'Активувати':lang==='en'?'Redeem':'Активировать'}</button></form>{promoFeedback&&<p role="status" className="promoFeedback">{promoFeedback}</p>}<p className="promoPrivacyNote">{lang==='uk'?'Це локальні тестові нагороди. Спільні промокоди активуються вище, в онлайн-гаманці.':lang==='en'?'These are local demo rewards. Cloud promo codes can be redeemed in the server wallet above.':'Этот промокод действует только в локальной демоверсии. Общие серверные промокоды активируются выше, в онлайн-кошельке.'}</p></div>}
               </section>
               <div className="starterInfo"><Gift size={19}/><span><strong>STARTER CASE / ПРИВЕТСТВЕННЫЙ</strong><small>{starterClaimed?'✓ Локальный стартовый кейс уже использован':'1 бесплатное открытие, награды 300–3 000 MC. После Google-регистрации — серверное право на одно открытие.'}</small></span><button className="secondaryBtn" onClick={()=>go('cases')}>К кейсам <ArrowUpRight size={16}/></button></div>
-              <section className="cloudNextPanel"><div className="eyebrow">STAGE 17 / ACCOUNT FOUNDATION</div><h3>{lang==='ru'?'Вход и уникальный ник — онлайн':lang==='uk'?'Вхід та унікальний нік — онлайн':'Online identity and unique nickname'}</h3><p>{lang==='ru'?'Аккаунт и ник хранятся в Supabase после настройки Google. Монеты, кейсы и инвентарь ПОКА остаются локальным симулятором: не переносим редактируемые JSON-сохранения в будущую онлайн-экономику.':lang==='uk'?'Акаунт і нік зберігаються в Supabase після налаштування Google. Монети, кейси та інвентар ПОКИ залишаються локальною демоверсією.':'Google account and nickname are stored in Supabase after setup. Coins, cases and inventory are still LOCAL DEMO data and cannot be trusted as cloud economy.'}</p></section>
+              <section className="cloudNextPanel"><div className="eyebrow">STAGE 19 / CLOUD ECONOMY FOUNDATION</div><h3>{lang==='ru'?'Вход и уникальный ник — онлайн':lang==='uk'?'Вхід та унікальний нік — онлайн':'Online identity and unique nickname'}</h3><p>{lang==='ru'?'Google-аккаунт и ник живут в Supabase. Защищённые онлайн-монеты и предметы теперь отображаются выше, но игровой баланс в шапке, кейсы, апгрейды и девять тайников пока используют ОТДЕЛЬНУЮ локальную демоверсию. JSON не переносится в онлайн.':lang==='uk'?'Google-акаунт і нік живуть у Supabase. Окремий захищений онлайн-гаманець вище; кейси та апгрейди поки локальні.':'Your Google account and nickname are online. A separate secure cloud wallet is shown above; cases, upgrades and the coins in the top bar are still LOCAL DEMO data.'}</p></section>
               <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
                 <button className="primary" onClick={exportSave}><Download size={17}/>{ex.download}</button>
                 <button className="secondaryBtn" onClick={()=>backupInput.current?.click()}><Upload size={17}/>{ex.upload}</button>
@@ -2125,7 +2126,6 @@ export default function App() {
                 <section className="settingBox"><div className="settingName"><Activity size={17}/>{pc.motion}</div><div className="choices">{[['full',pc.motionFull],['calm',pc.motionCalm],['off',pc.motionOff]].map(([id,name])=><button key={id} className={motion===id?'chosen':''} onClick={()=>setMotion(id)}>{name}{motion===id&&<Check size={15}/>}</button>)}</div></section>
                 <section className="settingBox"><div className="settingName"><Sparkles size={17}/>{pc.rareEffects}</div><div className="choices">{[['on',pc.rareOn],['off',pc.rareOff]].map(([id,name])=><button key={id} className={jackpotFx===id?'chosen':''} onClick={()=>setJackpotFx(id)}>{name}{jackpotFx===id&&<Check size={15}/>}</button>)}</div><small className="settingNote">{pc.oddsGuarantee}</small></section>
               </div>
-              {auth.isAdmin && <div className="adminAccess"><div><div className="eyebrow">LOCAL LAB / DEV MODE</div><h3>{lang==='ru'?'Тестовая панель':lang==='uk'?'Тестова панель':'Local testing console'}</h3><p>{lang==='ru'?'Быстро выдавай тестовые MC Coins и предметы. Для настоящих аккаунтов нужна серверная админ-панель.':lang==='uk'?'Видавай тестові MC Coins та предмети. Для справжніх акаунтів потрібна серверна панель.':'Grant demo coins and items on this device. Real accounts require a secure server.'}</p></div><button className="secondaryBtn" onClick={()=>go('admin')}><ShieldCheck size={17}/>{lang==='ru'?'Открыть панель':lang==='uk'?'Відкрити панель':'Open admin lab'}</button></div>}
             </>
           )}
 
