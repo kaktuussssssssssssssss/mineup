@@ -549,3 +549,36 @@ button{outline-offset:3px}input,select{color-scheme:dark}[data-theme='light'] in
 @media(max-width:900px){.serverCases{grid-template-columns:repeat(2,minmax(0,1fr))}.serverInventory{grid-template-columns:repeat(2,minmax(0,1fr))}.serverUpgradeArea{grid-template-columns:1fr 1fr}.serverChanceWrap{grid-row:2;grid-column:1/-1}.serverToolbar{flex-wrap:wrap}.serverToolbar label{min-width:100%;max-width:100%}.serverHero{flex-wrap:wrap}}
 @media(max-width:620px){.serverHero{padding:20px}.serverCash{width:100%;min-width:0}.serverTabs button{flex:1}.serverTabs button:last-child{margin-left:0}.serverCases{grid-template-columns:1fr 1fr;gap:8px}.serverCaseCard{padding:11px}.serverCaseArt{height:93px}.serverCaseTitle{flex-direction:column;align-items:stretch}.serverCaseTitle .primary{width:100%}.serverOdds{grid-template-columns:1fr}.serverUpgradeArea{grid-template-columns:1fr}.serverChanceWrap{grid-column:1;grid-row:2}.serverUpgradeSlot{min-height:280px}.serverPickers{grid-template-columns:1fr}.serverInventory{grid-template-columns:1fr 1fr;gap:8px}.serverInvCard{padding:9px}.serverInvCard small{font-size:9px}.serverSpinDialog,.serverPendingDialog{padding:17px}}
 @media(prefers-reduced-motion:reduce){.serverSpinBar{animation:none;width:100%}.serverCaseCard:hover{transform:none}}
+
+/* Stage 21: one game and wallet, no exposed backend branding. */
+.voxupSeamlessGame{max-width:1480px;margin:0 auto;min-width:0}
+.voxupSignInGate{padding:clamp(24px,6vw,70px);border:1px solid var(--line);background:linear-gradient(120deg,var(--panel),var(--panel2));border-radius:18px;min-height:310px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px}
+.voxupSignInGate h1{font:800 clamp(32px,4vw,54px) 'Space Grotesk',sans-serif;margin:8px 0}
+.voxupSignInGate p{color:var(--muted);max-width:540px;line-height:1.7;font-size:13px}
+.profileCloudSummary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:20px 0}
+.profileCloudSummary>div{display:flex;flex-direction:column;gap:11px;padding:20px;background:var(--panel);border-radius:12px;border:1px solid var(--line)}
+.profileCloudSummary span{font-size:11px;color:var(--muted)}.profileCloudSummary strong{font-size:clamp(18px,2.5vw,28px);font-family:'Space Grotesk',sans-serif}
+.serverCaseBackdrop{position:fixed;inset:0;z-index:105;background:#040509e9;backdrop-filter:blur(9px);display:grid;place-items:center;padding:18px;overflow:auto}
+.serverCaseBackdrop .serverCaseDetail{position:relative;width:min(880px,100%);max-height:min(90vh,940px);overflow-y:auto;margin:0;box-shadow:0 25px 90px #0008}
+.serverCloseCase{position:absolute;top:14px;right:14px;background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:7px;display:grid;place-items:center}
+.serverCaseBackdrop .serverCaseTitle{padding-right:37px}
+.serverCaseCard{overflow:hidden;isolation:isolate;position:relative;min-height:237px}
+.serverCaseArt{width:100%;height:130px;overflow:hidden;isolation:isolate;contain:layout paint;flex:none;max-width:100%}
+.serverCaseSample{width:64px!important;height:64px!important;min-width:64px!important;min-height:64px!important;max-width:64px!important;max-height:64px!important;overflow:hidden;box-sizing:border-box;inset:auto}
+.serverCaseSample img{position:static!important;display:block!important;width:46px!important;max-width:46px!important;min-width:0!important;height:46px!important;max-height:46px!important;min-height:0!important;object-fit:contain!important;transform:none!important;filter:none!important;image-rendering:pixelated;pointer-events:none}
+.serverCaseCard>strong{margin-top:auto;min-height:0}
+.serverCaseCard>span:last-child{padding-top:8px;border-top:1px solid var(--line)}
+.voxupVaults{max-width:1050px;margin:auto}
+.voxupVaultStatus{padding:15px 18px;margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-weight:800;color:var(--primary)}
+.voxupVaultGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.voxupVaultCell{height:182px;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:14px;border-radius:13px;color:var(--text);background:var(--panel);border:1px solid var(--line);overflow:hidden;transition:background .18s,border-color .18s,transform .18s}
+.voxupVaultCell:hover:not(:disabled){transform:translateY(-3px);border-color:var(--primary);background:var(--primarySoft)}
+.voxupVaultCell:disabled{opacity:.86;cursor:default}
+.voxupVaultCell.won{border:2px solid #5bd3a3;background:color-mix(in srgb,#5bd3a3,transparent 87%)}
+.voxupVaultCell>svg{color:var(--primary)}.voxupVaultCell>span:not(.vaultNumber){font-size:15px;color:var(--muted)}
+.voxupVaultCell .vaultNumber{position:absolute;top:12px;left:13px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1px}
+.voxupVaultCell img{width:74px!important;height:74px!important;max-width:74px!important;max-height:74px!important;object-fit:contain!important;image-rendering:pixelated}
+.voxupVaultCell strong{font-size:11px;text-align:center;line-height:1.4;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.voxupVaultCell small{font-size:10px;color:var(--muted)}.voxupVaultCell.won small{color:#5bd3a3}
+.vaultNote{padding:10px 0;color:var(--muted);font-size:12px}
+@media(max-width:620px){.voxupVaultGrid{gap:7px}.voxupVaultCell{height:130px;padding:8px 4px}.voxupVaultCell img{width:48px!important;height:48px!important}.voxupVaultCell strong{font-size:9px}.voxupVaultCell small{font-size:8px}.serverCaseArt{height:100px}.serverCaseSample{width:51px!important;height:51px!important;min-width:51px!important;min-height:51px!important;max-width:51px!important;max-height:51px!important}.serverCaseSample img{width:35px!important;height:35px!important;max-width:35px!important;max-height:35px!important}.serverCaseCard{min-height:192px}.profileCloudSummary{gap:7px}.profileCloudSummary>div{padding:13px}}

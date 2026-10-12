@@ -17,8 +17,8 @@ function ItemArt({id,textureSource,blockIds,large=false}) {
   return large ? <VoxelViewer id={id} label={id} textureSource={textureSource} blockIds={blockIds}/> : <VoxelThumbnail id={id} textureSource={textureSource} blockIds={blockIds}/>
 }
 
-export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
- const [tab,setTab]=useState('cases')
+export function OnlineGame({auth,lang='ru',textureSource,blockIds=[],activeTab='cases',onWalletChange,onItemsChange}) {
+ const tab=activeTab
  const [cases,setCases]=useState([]),[drops,setDrops]=useState([]),[catalog,setCatalog]=useState([])
  const [wallet,setWallet]=useState(null),[owned,setOwned]=useState({}),[pending,setPending]=useState(null),[history,setHistory]=useState([])
  const [limits,setLimits]=useState({starter:false,freeAt:null}),[clock,setClock]=useState(Date.now())
@@ -27,7 +27,9 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
  const [search,setSearch]=useState(''),[sourceSearch,setSourceSearch]=useState(''),[targetSearch,setTargetSearch]=useState('')
  const [status,setStatus]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(true)
  const [working,setWorking]=useState(false),[spin,setSpin]=useState(null),[resultVisible,setResultVisible]=useState(true)
- const [intro,setIntro]=useState(true)
+ const [vault,setVault]=useState(null),[vaultBusy,setVaultBusy]=useState(false)
+ const walletRef=useRef(onWalletChange),itemsRef=useRef(onItemsChange)
+ walletRef.current=onWalletChange;itemsRef.current=onItemsChange
  const lock=useRef(false),trackRef=useRef(null),pointerRef=useRef(null),spinTimer=useRef(null),animations=useRef([])
  const userId=auth.user?.id
  const itemMap=useMemo(()=>Object.fromEntries(catalog.map(i=>[i.item_id,i])),[catalog])
@@ -40,14 +42,14 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
  const sourcePrice=price(src),targetPrice=price(target)
  const validUpgrade=Boolean(sourcePrice>0 && targetPrice>sourcePrice && targetPrice/sourcePrice<=900 && (owned[src]||0)>0)
  const chance=validUpgrade?Math.min(90,90*sourcePrice/targetPrice):0
- const gameHeader=translate(lang,'Онлайн-игра','Онлайн-гра','Online game')
- const notice=translate(lang,'Серверная экономика. Локальный JSON не влияет на онлайн-кошелёк.','Серверна економіка. Локальний JSON не впливає на онлайн-гаманець.','Server economy. Local JSON does not affect online balances.')
+
+
  const sortedCases=useMemo(()=>[...cases].sort((a,b)=>a.price_cents-b.price_cents || a.case_id-b.case_id),[cases])
  const refresh=useCallback(async({silent=false}={})=>{
   if(!supabase||!userId||!auth.nickname)return
   if(!silent)setLoading(true)
   setError('')
-  const [caseResult,dropResult,dropResult2,catResult,walletResult,itemsResult,pendingResult,historyResult,starterResult,freeResult]=await Promise.all([
+  const [caseResult,dropResult,dropResult2,catResult,walletResult,itemsResult,pendingResult,historyResult,starterResult,freeResult,vaultResult]=await Promise.all([
    supabase.from('voxup_game_cases').select('case_id,code,name,price_cents,cooldown_seconds,once_per_user,active').eq('active',true),
    supabase.from('voxup_game_case_drops').select('case_id,item_id,weight').order('case_id',{ascending:true}).order('item_id',{ascending:true}).range(0,999),
    supabase.from('voxup_game_case_drops').select('case_id,item_id,weight').order('case_id',{ascending:true}).order('item_id',{ascending:true}).range(1000,1999),
@@ -57,19 +59,23 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
    supabase.from('voxup_game_pending').select('user_id,request_id,item_id,outcome,source_kind,created_at').eq('user_id',userId).maybeSingle(),
    supabase.from('voxup_game_actions').select('kind,case_id,result,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(40),
    supabase.from('voxup_game_actions').select('created_at').eq('user_id',userId).eq('kind','case').eq('case_id',21).limit(1),
-   supabase.from('voxup_game_actions').select('created_at').eq('user_id',userId).eq('kind','case').eq('case_id',0).order('created_at',{ascending:false}).limit(1)
+   supabase.from('voxup_game_actions').select('created_at').eq('user_id',userId).eq('kind','case').eq('case_id',0).order('created_at',{ascending:false}).limit(1),
+   supabase.from('voxup_vault_rounds').select('user_id,opened_at,cell_index,slots,prize_id').eq('user_id',userId).maybeSingle()
   ])
-  const fail=[caseResult,dropResult,dropResult2,catResult,walletResult,itemsResult,pendingResult,historyResult,starterResult,freeResult].find(r=>r.error)
+  const fail=[caseResult,dropResult,dropResult2,catResult,walletResult,itemsResult,pendingResult,historyResult,starterResult,freeResult,vaultResult].find(r=>r.error)
   if(fail)setError(textError(fail.error))
   else{
    setCases(caseResult.data||[])
    setDrops([...(dropResult.data||[]),...(dropResult2.data||[])])
    setCatalog(catResult.data||[])
-   setWallet(Number(walletResult.data?.balance_cents??0))
-   setOwned(Object.fromEntries((itemsResult.data||[]).map(i=>[i.item_id,i.quantity])))
+   const nextWallet=Number(walletResult.data?.balance_cents??0)
+   setWallet(nextWallet);walletRef.current?.(nextWallet)
+   const nextItems=(itemsResult.data||[])
+   setOwned(Object.fromEntries(nextItems.map(i=>[i.item_id,i.quantity])));itemsRef.current?.(nextItems)
    setPending(pendingResult.data||null)
    setHistory(historyResult.data||[])
    setLimits({starter:Boolean(starterResult.data?.length),freeAt:freeResult.data?.[0]?.created_at?new Date(freeResult.data[0].created_at).getTime()+86400000:null})
+   setVault(vaultResult.data||null)
   }
   if(!silent)setLoading(false)
  },[userId,auth.nickname])
@@ -92,6 +98,7 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
   return pool.at(-1)?.item_id
  }
  const startSpin=(mode,response,entries=[])=>{
+  if(mode==='case')setSelectedCase(null)
   setSpin({mode,response,entries,key:randomId()})
   setResultVisible(false)
   setWorking(false)
@@ -148,7 +155,7 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
   try{
    const {error:err}=await supabase.rpc('voxup_game_resolve',{p_action:action,p_request_id:randomId()})
    if(err)throw err
-   setStatus(action==='sell'?translate(lang,'Продано за 96% цены.','Продано за 96% ціни.','Sold for 96% of item value.'):action==='claim'?translate(lang,'Предмет уже в облачном инвентаре!','Предмет у хмарному інвентарі!','Item is in online inventory!'):translate(lang,'Продолжаем!','Продовжуємо!','Continue!'))
+   setStatus(action==='sell'?translate(lang,'Продано за 96% цены.','Продано за 96% ціни.','Sold for 96% of item value.'):action==='claim'?translate(lang,'Предмет добавлен в инвентарь!','Предмет додано до інвентарю!','Item added to your inventory!'):translate(lang,'Продолжаем!','Продовжуємо!','Continue!'))
    await refresh({silent:true})
   }catch(err){setError(textError(err));await refresh({silent:true})}
   finally{lock.current=false;setWorking(false)}
@@ -166,6 +173,16 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
  }
  const expiredFree=()=>Boolean(limits.freeAt && clock < limits.freeAt)
  const started=()=>limits.starter
+ async function openVault(cellIndex){
+  if(vaultBusy||lock.current || cellIndex<0||cellIndex>8)return
+  setVaultBusy(true);setError('')
+  try{
+    const {error:err}=await supabase.rpc('voxup_open_vault',{p_cell:cellIndex,p_request_id:randomId()})
+    if(err)throw err
+    await refresh({silent:true})
+  }catch(err){setError(textError(err))}
+  finally{setVaultBusy(false)}
+ }
  const countdown=limits.freeAt&&clock<limits.freeAt?new Date(limits.freeAt-clock).toISOString().slice(11,19):null
  const poolByPrice=[...currentDrops].sort((a,b)=>b.weight-a.weight)
  const caseUsed=currentCase?.once_per_user && started()
@@ -175,33 +192,41 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[]}) {
  const sources=ownedList.filter(i=>i.item_name.toLowerCase().includes(sourceSearch.trim().toLowerCase()))
  const displayedOwned=ownedList.filter(i=>i.item_name.toLowerCase().includes(search.trim().toLowerCase())).sort((a,b)=>b.price_cents-a.price_cents)
  const winner=spin?.response?.itemId || pending?.item_id
- const serverNotice=translate(lang,'Награды и списания рассчитывает Supabase; анимация только показывает результат.','Нагороди й списання рахує Supabase; анімація лише показує результат.','Supabase decides rewards and payments; the animation only shows the result.')
+
  if(!auth.user||!auth.nickname)return <section className="serverCard"><p>Войди через Google и создай ник в личном кабинете.</p></section>
- return <div className="serverGame">
-  <div className="eyebrow"><span className="dot"/> VOXUP / SECURE ONLINE BETA 1.0</div>
-  <header className="serverHero"><div><span className="serverTag"><ShieldCheck size={15}/> LIVE SERVER GAME</span><h1>{gameHeader}</h1><p>{notice}</p></div><div className="serverCash"><small>ОНЛАЙН-КОШЕЛЁК</small><strong>{wallet===null?'—':fmtMoney(wallet)} <em>MC</em></strong><span>@{auth.nickname}</span></div></header>
-  <div className="serverTabs"><button className={tab==='cases'?'active':''} onClick={()=>{setTab('cases');setSearch('')}}><Gift size={17}/> Кейсы</button><button className={tab==='upgrade'?'active':''} onClick={()=>setTab('upgrade')}><Swords size={17}/> Апгрейдер</button><button className={tab==='inventory'?'active':''} onClick={()=>{setTab('inventory');setSearch('')}}><Package size={17}/> Инвентарь</button><button onClick={()=>refresh()} disabled={loading||working}><RefreshCw size={16}/> Обновить</button></div>
+ return <div className="serverGame voxupSeamlessGame">
   {error&&<p className="serverAlert error" role="alert"><AlertTriangle size={18}/>{error}</p>}
   {status&&<p className="serverAlert success" role="status"><Check size={18}/>{status}</p>}
-  {loading?<div className="serverCard"><p>Загружаем данные Supabase…</p></div>:<>
-   {tab==='cases' && <><div className="serverToolbar"><div><h2>Кейсы VOXUP <small>{cases.length}</small></h2><p>Серверные цены и шансы. Бесплатный раз в 24 часа, стартовый — один раз на аккаунт.</p></div><label><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Найти кейс"/></label></div>
+  {loading?<div className="serverCard"><p>Загружаем…</p></div>:<>
+   {tab==='cases' && <><div className="serverToolbar"><div><h2>Кейсы VOXUP <small>{cases.length}</small></h2><p>Собери свою коллекцию. Бесплатный кейс доступен раз в сутки.</p></div><label><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Найти кейс"/></label></div>
     <div className="serverCases">{visibleCases.map(c=>{
      const pool=dropsByCase[c.case_id]||[]
      const feature=[...pool].sort((a,b)=>b.weight-a.weight).slice(0,3)
      return <button type="button" key={c.case_id} className={'serverCaseCard '+(selectedCase===c.case_id?'selected':'')} onClick={()=>{setSelectedCase(c.case_id);setOddsOpen(false)}}><small>#{String(c.case_id+1).padStart(2,'0')} / {c.code}</small><div className="serverCaseArt">{feature.map((d,k)=><span key={d.item_id} className={'serverCaseSample sample'+k} style={{'--rarity':rarityColors[itemMap[d.item_id]?.rarity]||'#888'}}><img src={textureSource(d.item_id)} alt="" loading="lazy"/></span>)}</div><strong>{c.name}</strong><span>{c.price_cents?fmtMoney(c.price_cents)+' MC':c.once_per_user?'БЕСПЛАТНО · 1 РАЗ':'БЕСПЛАТНО · 24Ч'}</span></button>
     })}</div>
-    {currentCase && <section className="serverCaseDetail"><div className="serverCaseTitle"><div><span className="eyebrow">VOXUP ONLINE / CASE #{currentCase.case_id+1}</span><h2>{currentCase.name}</h2><p>{currentCase.price_cents?fmtMoney(currentCase.price_cents)+' MC':'Бесплатно'} · {currentDrops.length} возможных предметов</p></div><button className="primary" disabled={working||!!pending||!!spin||caseUsed||freeUsed||wallet<currentCase.price_cents} onClick={openCase}><Gift size={16}/>{caseUsed?'УЖЕ ОТКРЫТ':freeUsed?`ЖДАТЬ ${countdown||'24Ч'}`:working?'ОТКРЫТИЕ…':'ОТКРЫТЬ'}</button></div>
+    {currentCase && <div className="serverCaseBackdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setSelectedCase(null)}}><section className="serverCaseDetail" role="dialog" aria-modal="true"><button className="serverCloseCase" aria-label="Закрыть" type="button" onClick={()=>setSelectedCase(null)}><X size={20}/></button><div className="serverCaseTitle"><div><span className="eyebrow">VOXUP / CASE #{currentCase.case_id+1}</span><h2>{currentCase.name}</h2><p>{currentCase.price_cents?fmtMoney(currentCase.price_cents)+' MC':'Бесплатно'} · {currentDrops.length} возможных предметов</p></div><button className="primary" disabled={working||!!pending||!!spin||caseUsed||freeUsed||wallet<currentCase.price_cents} onClick={openCase}><Gift size={16}/>{caseUsed?'УЖЕ ОТКРЫТ':freeUsed?`ЖДАТЬ ${countdown||'24Ч'}`:working?'ОТКРЫТИЕ…':'ОТКРЫТЬ'}</button></div>
      <button type="button" className="serverDisclosure" onClick={()=>setOddsOpen(v=>!v)}><CircleHelp size={16}/> Шансы и содержимое ({currentDrops.length}) <ChevronDown size={16}/></button>
      {oddsOpen&&<div className="serverOdds">{poolByPrice.map(d=><div key={d.item_id}><img src={textureSource(d.item_id)} alt=""/><span>{showName(d.item_id)}<small>{fmtMoney(price(d.item_id))} MC</small></span><b>{(d.weight/10000).toLocaleString('ru-RU',{maximumFractionDigits:4})}%</b></div>)}</div>}
-    </section>}</>}
-   {tab==='upgrade'&&<><div className="serverToolbar"><div><h2>Апгрейдер ONLINE</h2><p>Выигрыш определяет сервер. Исходный предмет сгорает при каждой попытке, шанс — от 0,1% до 90%.</p></div></div>
+    </section></div>}</>}
+   {tab==='upgrade'&&<><div className="serverToolbar"><div><h2>Мастерская апгрейда</h2><p>Выбери свой предмет и цель. Чем дороже цель, тем меньше шанс.</p></div></div>
     <div className="serverUpgradeArea"><div className="serverUpgradeSlot"><span>ТВОЙ ПРЕДМЕТ</span><ItemArt id={src} textureSource={textureSource} blockIds={blockIds} large/><strong>{showName(src)}</strong><small>{fmtMoney(sourcePrice)} MC · В наличии: {owned[src]||0}</small></div><div className="serverChanceWrap"><div className="serverWheel" style={{'--chance':`${chance}%`}}><div className="serverArrow" ref={pointerRef} aria-hidden="true"><i/></div><div className="serverWheelText"><b>{chance.toFixed(2)}%</b><small>ШАНС</small></div></div><button className="primary" disabled={!validUpgrade||working||!!pending||!!spin} onClick={upgrade}><Zap size={16}/>{working?'ОЖИДАНИЕ…':'АПГРЕЙД'}</button></div><div className="serverUpgradeSlot"><span>ЦЕЛЬ</span><ItemArt id={target} textureSource={textureSource} blockIds={blockIds} large/><strong>{showName(target)}</strong><small>{fmtMoney(targetPrice)} MC</small></div></div>
     <div className="serverPickers"><section><h3>Из инвентаря</h3><label><Search size={16}/><input value={sourceSearch} onChange={e=>setSourceSearch(e.target.value)} placeholder="Поиск предмета"/></label><div className="serverItemGrid">{sources.map(i=><button key={i.item_id} onClick={()=>setSrc(i.item_id)} className={src===i.item_id?'active':''}><img src={textureSource(i.item_id)} alt=""/><span>{i.item_name}<small>×{owned[i.item_id]} · {fmtMoney(i.price_cents)} MC</small></span></button>)}</div></section><section><h3>Выбери цель</h3><label><Search size={16}/><input value={targetSearch} onChange={e=>setTargetSearch(e.target.value)} placeholder="Поиск цели"/></label><div className="serverItemGrid">{targets.map(i=><button key={i.item_id} onClick={()=>setTarget(i.item_id)} className={target===i.item_id?'active':''}><img src={textureSource(i.item_id)} alt=""/><span>{i.item_name}<small>{fmtMoney(i.price_cents)} MC</small></span></button>)}</div></section></div>
    </>}
-   {tab==='inventory'&&<><div className="serverToolbar"><div><h2>Облачный инвентарь</h2><p>Продажа за 96% от серверной цены. Изменения сразу сохраняются в Supabase.</p></div><label><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Искать предмет"/></label></div><div className="serverInventory">{displayedOwned.map(i=><div key={i.item_id} className="serverInvCard"><ItemArt id={i.item_id} textureSource={textureSource} blockIds={blockIds}/><strong>{i.item_name}</strong><small>{fmtMoney(i.price_cents)} MC · ×{owned[i.item_id]}</small><button disabled={working||!!pending||!!spin} onClick={()=>sellItem(i.item_id)}>Продать за {fmtMoney(Math.floor(i.price_cents*.96))} MC</button></div>)}{!displayedOwned.length&&<div className="serverCard">Пока нет предметов. Открой бесплатный кейс!</div>}</div></>}
-   <div className="serverTrust"><ShieldCheck size={18}/><p>{serverNotice} Нельзя получить два предмета одним запросом. Статус выигрыша остаётся на сервере после перезагрузки.</p></div>
+   {tab==='arcade' && <section className="voxupVaults">
+     <div className="serverToolbar"><div><h2>Девять тайников</h2><p>Открой одну клетку и узнай, что могло скрываться в остальных. Новая попытка каждый час.</p></div></div>
+     {(()=>{
+       const until=vault?.opened_at?new Date(vault.opened_at).getTime()+3600000:0
+       const timeLeft=Math.max(0,until-clock)
+       const ready=timeLeft===0
+       const shown=Array.isArray(vault?.slots)&&vault.slots.length===9&&!ready
+       const hh=Math.floor(timeLeft/3600000),mm=Math.floor(timeLeft%3600000/60000),ss=Math.ceil(timeLeft%60000/1000)
+       return <><div className="voxupVaultStatus">{ready?'Выбери клетку':`Следующая попытка через ${[hh,mm,ss].map(v=>String(v).padStart(2,'0')).join(':')}`}</div><div className="voxupVaultGrid">{Array.from({length:9},(_,i)=><button key={i} disabled={!ready||vaultBusy} type="button" onClick={()=>openVault(i)} className={'voxupVaultCell '+(shown&&i===vault.cell_index?'won':'')}><span className="vaultNumber">0{i+1}</span>{shown?<><img src={textureSource(vault.slots[i])} alt=""/><strong>{showName(vault.slots[i])}</strong><small>{i===vault.cell_index?'ТВОЙ ПРЕДМЕТ':fmtMoney(price(vault.slots[i]))+' MC'}</small></>:<><Gift size={38}/><span>?</span></>}</button>)}</div>{shown&&<p className="vaultNote">Твой выигрыш уже в инвентаре. Остальные клетки показывают, что могло выпасть.</p>}</>
+     })()}
+   </section>}
+   {tab==='inventory'&&<><div className="serverToolbar"><div><h2>Мой инвентарь</h2><p>Все твои предметы в одном месте.</p></div><label><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Искать предмет"/></label></div><div className="serverInventory">{displayedOwned.map(i=><div key={i.item_id} className="serverInvCard"><ItemArt id={i.item_id} textureSource={textureSource} blockIds={blockIds}/><strong>{i.item_name}</strong><small>{fmtMoney(i.price_cents)} MC · ×{owned[i.item_id]}</small><button disabled={working||!!pending||!!spin} onClick={()=>sellItem(i.item_id)}>Продать за {fmtMoney(Math.floor(i.price_cents*.96))} MC</button></div>)}{!displayedOwned.length&&<div className="serverCard">Пока нет предметов. Открой бесплатный кейс!</div>}</div></>}
+ 
   </>}
-  {spin&&<div className="serverSpinOverlay" role="dialog" aria-modal="true" aria-label="Идёт открытие"><section className="serverSpinDialog"><h2>{spin.mode==='case'?'ОТКРЫТИЕ КЕЙСА':'АПГРЕЙД'}</h2><p>Сервер уже зафиксировал результат. Подожди завершения анимации.</p>{spin.mode==='case'?<div className="serverReelWindow"><span className="serverReelMarker"/><div className="serverReelTrack" ref={trackRef}>{spin.entries.map((id,i)=><div key={`${i}-${id}`} style={{'--rarity':rarityColors[itemMap[id]?.rarity]||'#aaa'}}><img src={textureSource(id)} alt=""/><small>{showName(id)}</small></div>)}</div></div>:<div className="serverSpinWheel" style={{'--chance':`${Number(spin.response.chance||0)}%`}}><div className="serverSpinPointer" ref={pointerRef}><i/></div><b>{Number(spin.response.chance||0).toFixed(2)}%</b></div>}<span className="serverSpinBar"/></section></div>}
-  {pending&&!spin&&resultVisible&&<div className="serverPendingOverlay" role="dialog" aria-modal="true" aria-label="Результат"><section className="serverPendingDialog"><span className="eyebrow"><ShieldCheck size={15}/> SERVER VERIFIED RESULT</span><h2>{pending.outcome==='win'?'ТВОЙ ВЫИГРЫШ!':'НЕУДАЧА'}</h2>{pending.item_id?<><div className="serverPrizeArt"><ItemArt id={pending.item_id} textureSource={textureSource} blockIds={blockIds} large/></div><strong>{showName(pending.item_id)}</strong><small>{fmtMoney(price(pending.item_id))} MC</small><div className="serverPendingActions"><button className="primary" disabled={working} onClick={()=>resolve('claim')}><Check size={17}/> ЗАБРАТЬ</button><button disabled={working} onClick={()=>resolve('sell')}><Coins size={17}/> ПРОДАТЬ +{fmtMoney(Math.floor(price(pending.item_id)*.96))} MC</button></div></>:<><p>Исходный предмет потрачен. Можно попробовать снова с другим предметом.</p><button className="primary" disabled={working} onClick={()=>resolve('ack')}><ArrowRight size={16}/> ПРОДОЛЖИТЬ</button></>}<small className="serverMuted"><LockKeyhole size={14}/> Награда защищена и не исчезнет после перезагрузки страницы.</small></section></div>}
+  {spin&&<div className="serverSpinOverlay" role="dialog" aria-modal="true" aria-label="Идёт открытие"><section className="serverSpinDialog"><h2>{spin.mode==='case'?'ОТКРЫТИЕ КЕЙСА':'АПГРЕЙД'}</h2><p>Удача уже определена. Смотри, что выпадет!</p>{spin.mode==='case'?<div className="serverReelWindow"><span className="serverReelMarker"/><div className="serverReelTrack" ref={trackRef}>{spin.entries.map((id,i)=><div key={`${i}-${id}`} style={{'--rarity':rarityColors[itemMap[id]?.rarity]||'#aaa'}}><img src={textureSource(id)} alt=""/><small>{showName(id)}</small></div>)}</div></div>:<div className="serverSpinWheel" style={{'--chance':`${Number(spin.response.chance||0)}%`}}><div className="serverSpinPointer" ref={pointerRef}><i/></div><b>{Number(spin.response.chance||0).toFixed(2)}%</b></div>}<span className="serverSpinBar"/></section></div>}
+  {pending&&!spin&&resultVisible&&<div className="serverPendingOverlay" role="dialog" aria-modal="true" aria-label="Результат"><section className="serverPendingDialog"><span className="eyebrow"><Sparkles size={15}/> VOXUP / REWARD</span><h2>{pending.outcome==='win'?'ТВОЙ ВЫИГРЫШ!':'НЕУДАЧА'}</h2>{pending.item_id?<><div className="serverPrizeArt"><ItemArt id={pending.item_id} textureSource={textureSource} blockIds={blockIds} large/></div><strong>{showName(pending.item_id)}</strong><small>{fmtMoney(price(pending.item_id))} MC</small><div className="serverPendingActions"><button className="primary" disabled={working} onClick={()=>resolve('claim')}><Check size={17}/> ЗАБРАТЬ</button><button disabled={working} onClick={()=>resolve('sell')}><Coins size={17}/> ПРОДАТЬ +{fmtMoney(Math.floor(price(pending.item_id)*.96))} MC</button></div></>:<><p>Исходный предмет потрачен. Можно попробовать снова с другим предметом.</p><button className="primary" disabled={working} onClick={()=>resolve('ack')}><ArrowRight size={16}/> ПРОДОЛЖИТЬ</button></>}<small className="serverMuted"><LockKeyhole size={14}/> Не забудь забрать свою награду.</small></section></div>}
  </div>
 }

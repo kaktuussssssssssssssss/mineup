@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {VoxelViewer, VoxelThumbnail} from './Voxel3D.jsx'
-import {useVoxupAuth} from './useVoxupAuth.js'
+import {useVoxupAuth, supabase} from './useVoxupAuth.js'
 import {GoogleAccount} from './GoogleAccount.jsx'
-import {OnlineAdmin, CloudEconomy} from './OnlineAdmin.jsx'
+import {OnlineAdmin} from './OnlineAdmin.jsx'
 import {OnlineGame} from './OnlineGame.jsx'
 import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2, Zap, Gamepad2, Timer, Target, Star } from 'lucide-react'
 
@@ -1299,9 +1299,28 @@ function AdminConsole({coins,onCoins,onItem,onResetHourly,hourly,audit,onLock,on
 
 export default function App() {
   const auth = useVoxupAuth()
-  const [page, setPage] = useState('upgrade')
+  const [page, setPage] = useState('cases')
+  const [cloudBalance, setCloudBalance] = useState(null)
+  const [cloudItems, setCloudItems] = useState(null)
+  const [promoBusy, setPromoBusy] = useState(false)
   useEffect(()=>{if(auth.ready && page==='admin' && !auth.isAdmin)setPage('profile')},[auth.ready,auth.isAdmin,page])
-  useEffect(()=>{if(auth.ready && page==='online' && (!auth.user || !auth.nickname))setPage('profile')},[auth.ready,auth.user,auth.nickname,page])
+  useEffect(()=>{if(page==='online')setPage('cases')},[page])
+  useEffect(()=>{
+    let live=true
+    if(!auth.user?.id || !auth.nickname || !supabase){setCloudBalance(null);setCloudItems(null);return}
+    const sync=async()=>{
+      const [balance,items]=await Promise.all([
+        supabase.from('voxup_wallets').select('balance_cents').eq('user_id',auth.user.id).maybeSingle(),
+        supabase.from('voxup_user_items').select('item_id,quantity').eq('user_id',auth.user.id).limit(500)
+      ])
+      if(!live)return
+      if(!balance.error)setCloudBalance(Number(balance.data?.balance_cents??0))
+      if(!items.error)setCloudItems(items.data||[])
+    }
+    sync()
+    const id=setInterval(sync,30000)
+    return()=>{live=false;clearInterval(id)}
+  },[auth.user?.id,auth.nickname,page])
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
   const [theme, setTheme] = useState(() => stored('mineup-theme', 'gold'))
   const [accent, setAccent] = useState(() => stored('mineup-accent', 'amber'))
@@ -1812,33 +1831,24 @@ export default function App() {
     appendAdminAudit(`PROMO ${code}: ${formatCoins(amount)} MC + ${qty} предметов (локально)`)
     return true
   }
-  function redeemPromo(e){
+  async function redeemPromo(e){
     e?.preventDefault?.()
-    if(busyGuard.current||rollingGuard.current||pendingReward||caseRolling||upgradeBusy){setPromoFeedback('Сначала заверши текущую награду.');return}
+    if(promoBusy||!auth.user?.id||!auth.nickname||!supabase){setPromoFeedback('Войди в аккаунт, чтобы активировать промокод.');return}
     const code=promoInput.trim().toUpperCase()
-    const definition=code==='TEST'?{code:'TEST',amount:777.77,itemId:'diamond',qty:1}:promoCodes.find(p=>p.code===code)
-    if(!definition){setPromoFeedback(lang==='uk'?'Код недійсний':lang==='en'?'Invalid promo code':'Такого промокода нет');return}
-    const usedNow=stored('voxup-promo-used',[])
-    if((Array.isArray(usedNow)&&usedNow.includes(code)) || promoUsed.includes(code) || (code==='TEST'&&(promoRedeemed||stored('voxup-promo-test-used',false)))){
-      setPromoFeedback(lang==='uk'?'Цей код уже використано':lang==='en'?'Already redeemed':'Промокод уже активирован');return
-    }
-    const nextCoins=roundMC(clamp(coins+(Number(definition.amount)||0),0,1e12))
-    const nextInventory={...inventory}
-    if(definition.qty && itemMap[definition.itemId])nextInventory[definition.itemId]=clamp((Number(inventory[definition.itemId])||0)+definition.qty,0,1e7)
-    const nextUsed=[...new Set([...promoUsed,code])]
+    if(!/^[A-Z0-9_-]{3,32}$/.test(code)){setPromoFeedback('Проверь написание промокода.');return}
+    setPromoBusy(true);setPromoFeedback('Проверяем код…')
     try{
-      localStorage.setItem('voxup-promo-used',JSON.stringify(nextUsed))
-      if(code==='TEST')localStorage.setItem('voxup-promo-test-used',JSON.stringify(true))
-      localStorage.setItem('mineup-demo-coins',JSON.stringify(nextCoins))
-      localStorage.setItem('mineup-demo-inventory',JSON.stringify(nextInventory))
-    }catch{}
-    setPromoUsed(nextUsed)
-    if(code==='TEST')setPromoRedeemed(true)
-    setCoins(nextCoins);setInventory(nextInventory);setPromoInput('')
-    const rewardBits=[]
-    if(definition.amount)rewardBits.push(`+${formatCoins(definition.amount)} MC`)
-    if(definition.qty)rewardBits.push(`+${definition.qty} × ${getItem(definition.itemId).name}`)
-    setPromoFeedback(`✓ ${rewardBits.join(' · ')}`)
+      const requestId=crypto.randomUUID()
+      const result=await supabase.rpc('voxup_redeem_cloud_promo',{p_code:code,p_request_id:requestId})
+      if(result.error)throw result.error
+      setPromoInput('')
+      setPromoFeedback('✓ Награда зачислена!')
+      const bal=await supabase.from('voxup_wallets').select('balance_cents').eq('user_id',auth.user.id).maybeSingle()
+      if(!bal.error)setCloudBalance(Number(bal.data?.balance_cents??0))
+      const inv=await supabase.from('voxup_user_items').select('item_id,quantity').eq('user_id',auth.user.id).limit(500)
+      if(!inv.error)setCloudItems(inv.data||[])
+    }catch(err){setPromoFeedback(err?.message||'Не удалось активировать код.')}
+    finally{setPromoBusy(false)}
   }
   function resetHourlyCooldown(){
     if(!auth.isAdmin || busyGuard.current || rollingGuard.current || pendingReward || caseRolling || upgradeBusy)return
@@ -1895,15 +1905,15 @@ export default function App() {
         </button>
         <div className="navCaption">PLATFORM / 01</div>
         <div className="navItems">
-          {([...(auth.user && auth.nickname ? [['online',Globe2]] : []), ...nav, ...(auth.isAdmin ? [['admin',ShieldCheck]] : [])]).map(([id, Icon]) => (
+          {([...nav, ...(auth.isAdmin ? [['admin',ShieldCheck]] : [])]).map(([id, Icon]) => (
             <button key={id} className={'navItem ' + (page === id ? 'active' : '')} onClick={() => go(id)}>
-              <Icon size={19} /><span>{id==='admin'?'CONTROL CENTER':id==='online'?'ONLINE ИГРА':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
+              <Icon size={19} /><span>{id==='admin'?'CONTROL CENTER':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
             </button>
           ))}
         </div>
         <div className="sideBottom">
-          <div className="online"><span className="onlineDot" />{t.demo}</div>
-          <div className="stage">VOXUP <strong>ALPHA 0.9</strong><div className="stageBar"><i style={{ width: '34%' }} /></div><span>{t.ready}</span></div>
+          <div className="online"><span className="onlineDot" />VOXUP</div>
+          <div className="stage">VOXUP <strong>GAME</strong><div className="stageBar"><i style={{width:'100%'}} /></div><span>PLAY • COLLECT • UPGRADE</span></div>
         </div>
       </aside>
       {menu && <div className="overlay" onClick={() => setMenu(false)} />}
@@ -1912,15 +1922,16 @@ export default function App() {
         <header className="top">
           <div className="topLeft"><button className="mobileMenu" onClick={() => setMenu((v) => !v)} aria-label="menu">{menu ? <X size={22} /> : <Menu size={22} />}</button><span className="crumb">VOXUP</span><ChevronRight size={13} /><span>{t[page]}</span></div>
           <div className="topRight">
-            <div className="topBalance">{page==='online'?<><ShieldCheck size={17}/><span>VOXUP ONLINE</span><small>SERVER</small></>:<><Coins size={17} /><span>{formatCoins(coins)} <em>MC</em></span><small>LOCAL DEMO</small></>}</div>
+            <div className="topBalance"><Coins size={17}/><span>{auth.user && auth.nickname ? (cloudBalance===null?'…':formatCoins(cloudBalance/100)) : '—'} <em>MC</em></span></div>
             <button className="account" onClick={() => go('profile')}><UserRound size={17} /><span>{auth.nickname || (auth.user ? "Google" : t.guest)}</span></button>
           </div>
         </header>
 
         <main className="main">
-          {page === 'online' && auth.user && auth.nickname && <OnlineGame auth={auth} lang={lang} textureSource={textureSource} blockIds={blockIds}/>}
+          {auth.ready && auth.user && auth.nickname && ['upgrade','cases','inventory','arcade'].includes(page) && <OnlineGame key={auth.user.id} activeTab={page} onWalletChange={setCloudBalance} onItemsChange={setCloudItems} auth={auth} lang={lang} textureSource={textureSource} blockIds={blockIds}/>}
+          {auth.ready && (!auth.user || !auth.nickname) && ['upgrade','cases','inventory','arcade'].includes(page) && <section className="voxupSignInGate"><div className="eyebrow">VOXUP / WELCOME</div><h1>{t[page]}</h1><p>Войди через Google, чтобы открывать кейсы, улучшать Minecraft-предметы и сохранять коллекцию.</p><button type="button" className="primary" onClick={()=>go('profile')}><UserRound size={17}/> Войти в аккаунт</button></section>}
 
-          {page === 'upgrade' && (
+          {false && page === 'upgrade' && (
             <>
               <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.9</div>
               <section className="hero">
@@ -2044,7 +2055,7 @@ export default function App() {
             </>
           )}
 
-          {page === 'cases' && (
+          {false && page === 'cases' && (
             <>
               <div className="eyebrow"><span className="dot" /> VOXUP / CASE COLLECTION · 22 CASES · 250 ITEMS</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.catalog}</h1><p>{t.notice}</p></div><span className="stamp"><Coins size={15} /> {formatCoins(coins)} MC</span></div>
@@ -2058,7 +2069,7 @@ export default function App() {
             </>
           )}
 
-          {page === 'inventory' && (
+          {false && page === 'inventory' && (
             <>
               <div className="eyebrow">VOXUP / COLLECTION</div>
               <div className="areaHeading"><div><h1 className="sectionTitle">{t.inventory}</h1><p>{t.invText}</p></div><span className="stamp"><Coins size={15} />{formatCoins(coins)} MC</span></div>
@@ -2083,30 +2094,30 @@ export default function App() {
             </>
           )}
 
-          {page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
+          {false && page === 'arcade' && <HourlyDropArcade lang={lang} hourly={hourlyData} onDraw={awardHourlyDrop} textureSource={textureSource} />}
 
-          {page === 'admin' && auth.isAdmin && <OnlineAdmin auth={auth} lang={lang} items={previewItems} localConsole={<AdminConsole lang={lang} coins={coins} inventory={inventory} onCoins={changeAdminCoins} onItem={grantAdminItem} onResetHourly={resetHourlyCooldown} hourly={hourlyData} audit={adminAudit} promoCodes={promoCodes} onCreatePromo={createLocalPromo} blocked={Boolean(pendingReward||upgradeBusy||caseRolling)} onLock={()=>go('profile')}/>}/>}
+          {page === 'admin' && auth.isAdmin && <OnlineAdmin auth={auth} lang={lang} items={previewItems}/>}
 
           {page === 'profile' && (
             <>
               <div className="eyebrow">VOXUP / USER</div>
               <h1 className="sectionTitle">{t.profile}</h1>
-              <div className="profileLead"><UserRound size={38}/><div><h2>{auth.nickname ? "@"+auth.nickname : t.guest}</h2><p>{auth.user ? "Google ID • "+(auth.isAdmin ? "ADMIN" : "PLAYER") : t.profileSoon}</p><span>{auth.user ? "ONLINE IDENTITY • LOCAL DEMO ECONOMY" : ex.mode}</span></div></div>
-              <GoogleAccount auth={auth} lang={lang}/><CloudEconomy auth={auth} lang={lang}/>
-              <div className="profileStats">
+              <div className="profileLead"><UserRound size={38}/><div><h2>{auth.nickname ? "@"+auth.nickname : t.guest}</h2><p>{auth.user ? (auth.isAdmin ? "Владелец VOXUP" : "Игрок VOXUP") : t.profileSoon}</p><span>{auth.user ? "Личный кабинет" : ex.mode}</span></div></div>
+              <GoogleAccount auth={auth} lang={lang}/>{auth.user&&auth.nickname&&<div className="profileCloudSummary"><div><span>Баланс</span><strong>{cloudBalance===null?"—":formatCoins(cloudBalance/100)+" MC"}</strong></div><div><span>Предметов</span><strong>{cloudItems===null?"—":cloudItems.reduce((sum,row)=>sum+Number(row.quantity||0),0)}</strong></div></div>}
+              {false && <div className="profileStats">
                 {[ [ex.total,previewItems.length], [ex.myCollection,totalItems], [ex.profit,formatCoins(portfolioValue)+' MC'], [ex.casesOpened,stats.cases||0], [ex.upgrades,stats.upgrades||0], [ex.wins,stats.wins||0] ].map(([label,value],i)=><div className="profileStat" key={i}><span>{label}</span><strong>{value}</strong></div>)}
-              </div>
+              </div>}
               <section className="profilePromoSection">
                <button type="button" className="profilePromoToggle" aria-expanded={promoOpen} onClick={()=>setPromoOpen(v=>!v)}><span><Gift size={19}/><b>{lang==='uk'?'Промокод':lang==='en'?'Redeem promo code':'Активировать промокод'}</b><small>{lang==='uk'?'Маєш код? Введи його тут.':lang==='en'?'Have a code? Enter it here.':'Есть код? Введи его в личном кабинете.'}</small></span><ChevronRight size={19}/></button>
-               {promoOpen&&<div className="profilePromoBody"><form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="PROMO CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)}/><button className="primary" type="submit" disabled={Boolean(pendingReward)||upgradeBusy||caseRolling}><Gift size={16}/> {lang==='uk'?'Активувати':lang==='en'?'Redeem':'Активировать'}</button></form>{promoFeedback&&<p role="status" className="promoFeedback">{promoFeedback}</p>}<p className="promoPrivacyNote">{lang==='uk'?'Це локальні тестові нагороди. Спільні промокоди активуються вище, в онлайн-гаманці.':lang==='en'?'These are local demo rewards. Cloud promo codes can be redeemed in the server wallet above.':'Этот промокод действует только в локальной демоверсии. Общие серверные промокоды активируются выше, в онлайн-кошельке.'}</p></div>}
+               {promoOpen&&<div className="profilePromoBody"><form className="promoRedeemForm" onSubmit={redeemPromo}><input aria-label="Промокод" autoComplete="off" spellCheck="false" maxLength={32} placeholder="PROMO CODE" value={promoInput} onChange={e=>setPromoInput(e.target.value)}/><button className="primary" type="submit" disabled={promoBusy||!auth.user}><Gift size={16}/> {lang==='uk'?'Активувати':lang==='en'?'Redeem':'Активировать'}</button></form>{promoFeedback&&<p role="status" className="promoFeedback">{promoFeedback}</p>}</div>}
               </section>
-              <div className="starterInfo"><Gift size={19}/><span><strong>STARTER CASE / ПРИВЕТСТВЕННЫЙ</strong><small>{starterClaimed?'✓ Локальный стартовый кейс уже использован':'1 бесплатное открытие, награды 300–3 000 MC. После Google-регистрации — серверное право на одно открытие.'}</small></span><button className="secondaryBtn" onClick={()=>go('cases')}>К кейсам <ArrowUpRight size={16}/></button></div>
-              <section className="cloudNextPanel"><div className="eyebrow">STAGE 19 / CLOUD ECONOMY FOUNDATION</div><h3>{lang==='ru'?'Вход и уникальный ник — онлайн':lang==='uk'?'Вхід та унікальний нік — онлайн':'Online identity and unique nickname'}</h3><p>{lang==='ru'?'Google-аккаунт и ник живут в Supabase. Защищённые онлайн-монеты и предметы теперь отображаются выше, но игровой баланс в шапке, кейсы, апгрейды и девять тайников пока используют ОТДЕЛЬНУЮ локальную демоверсию. JSON не переносится в онлайн.':lang==='uk'?'Google-акаунт і нік живуть у Supabase. Окремий захищений онлайн-гаманець вище; кейси та апгрейди поки локальні.':'Your Google account and nickname are online. A separate secure cloud wallet is shown above; cases, upgrades and the coins in the top bar are still LOCAL DEMO data.'}</p></section>
-              <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
+              {false && <div className="starterInfo"><Gift size={19}/><span><strong>STARTER CASE / ПРИВЕТСТВЕННЫЙ</strong><small>{starterClaimed?'✓ Локальный стартовый кейс уже использован':'1 бесплатное открытие, награды 300–3 000 MC. После Google-регистрации — серверное право на одно открытие.'}</small></span><button className="secondaryBtn" onClick={()=>go('cases')}>К кейсам <ArrowUpRight size={16}/></button></div>
+              }<section className="cloudNextPanel" style={{display:"none"}}> <div className="eyebrow">STAGE 19 / CLOUD ECONOMY FOUNDATION</div><h3>{lang==='ru'?'Вход и уникальный ник — онлайн':lang==='uk'?'Вхід та унікальний нік — онлайн':'Online identity and unique nickname'}</h3><p>{lang==='ru'?'Google-аккаунт и ник живут в Supabase. Защищённые онлайн-монеты и предметы теперь отображаются выше, но игровой баланс в шапке, кейсы, апгрейды и девять тайников пока используют ОТДЕЛЬНУЮ локальную демоверсию. JSON не переносится в онлайн.':lang==='uk'?'Google-акаунт і нік живуть у Supabase. Окремий захищений онлайн-гаманець вище; кейси та апгрейди поки локальні.':'Your Google account and nickname are online. A separate secure cloud wallet is shown above; cases, upgrades and the coins in the top bar are still LOCAL DEMO data.'}</p></section>
+              {false && <section className="backupPanel"><div><div className="eyebrow">SAVE / LOCAL BACKUP</div><h3>{ex.demoSaves}</h3><p>{ex.backupHint}</p></div><div className="backupActions">
                 <button className="primary" onClick={exportSave}><Download size={17}/>{ex.download}</button>
                 <button className="secondaryBtn" onClick={()=>backupInput.current?.click()}><Upload size={17}/>{ex.upload}</button>
                 <input ref={backupInput} type="file" accept=".json,application/json" hidden onChange={importSave}/>
-              </div>{backupMessage&&<div className="backupFeedback" role="status">{backupMessage}</div>}</section>
+              </div>{backupMessage&&<div className="backupFeedback" role="status">{backupMessage}</div>}</section>}
             </>
           )}
 
@@ -2133,13 +2144,13 @@ export default function App() {
             </>
           )}
 
-          <footer><span>© 2026 VOXUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>ALPHA 0.9 • LOCAL DEMO / 250 ITEMS · 22 CASES</span></footer>
+          <footer><span>© 2026 VOXUP. UNOFFICIAL MINECRAFT FAN PROJECT.</span><span>250 ITEMS · 22 CASES · VOXUP</span></footer>
         </main>
       </div>
 
       {auth.configured && auth.ready && auth.user && !auth.nickname && <div className="modalBackdrop onlineNameBackdrop"><div className="onlineNameModal" role="dialog" aria-modal="true" aria-label="Регистрация VOXUP"><GoogleAccount auth={auth} lang={lang}/></div></div>}
 
-      {activeCase !== null && (
+      {false && activeCase !== null && (
         <div className="modalBackdrop caseBackdrop" onClick={closeCase}>
           <div className="modal caseModalV8" role="dialog" aria-modal="true" aria-label={caseTitle(activeCase)} onClick={e=>e.stopPropagation()}>
             <button className="modalClose" disabled={caseRolling} onClick={closeCase} aria-label="Закрыть"><X/></button>
@@ -2170,7 +2181,7 @@ export default function App() {
           </div>
         </div>
       )}
-      {displayClaim && <div className={'voxResultBackdrop '+(pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on'?'voxJackpot':'')} role="presentation">
+      {false && displayClaim && <div className={'voxResultBackdrop '+(pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on'?'voxJackpot':'')} role="presentation">
         <section className="voxResultDialog" role="dialog" aria-modal="true" aria-labelledby="voxResultTitle">
           {pendingReward.outcome==='win' && pendingReward.kind==='case' && pendingReward.odds<=0.5 && jackpotFx==='on' && <div className="voxJackpotSparks" aria-hidden="true">{Array.from({length:18},(_,i)=><i key={i} style={{'--n':i}}/>)}</div>}
           <div className="voxResultMark">{pendingReward.outcome==='win'?<Sparkles size={25}/>:<X size={25}/>}</div>
