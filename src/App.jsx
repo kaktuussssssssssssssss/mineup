@@ -1794,7 +1794,8 @@ export default function App() {
   }
 
   function go(p) {
-    if (busyGuard.current || pendingReward || rollingGuard.current) return
+    // Only the current online game controls its own transactions.
+    // Hidden legacy demo rewards must never lock the site's navigation.
     setPage(p)
     setMenu(false)
     setActiveCase(null)

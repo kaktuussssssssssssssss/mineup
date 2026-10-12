@@ -26,12 +26,13 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[],activeTab='
  const [src,setSrc]=useState('iron'),[target,setTarget]=useState('diamond')
  const [search,setSearch]=useState(''),[sourceSearch,setSourceSearch]=useState(''),[targetSearch,setTargetSearch]=useState('')
  const [status,setStatus]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(true)
- const [working,setWorking]=useState(false),[spin,setSpin]=useState(null),[resultVisible,setResultVisible]=useState(true)
+ const [working,setWorking]=useState(false),[spin,setSpin]=useState(null),[resultVisible,setResultVisible]=useState(true),[pendingDismissed,setPendingDismissed]=useState(false)
  const [vault,setVault]=useState(null),[vaultBusy,setVaultBusy]=useState(false)
  const walletRef=useRef(onWalletChange),itemsRef=useRef(onItemsChange)
  walletRef.current=onWalletChange;itemsRef.current=onItemsChange
  const lock=useRef(false),trackRef=useRef(null),pointerRef=useRef(null),spinTimer=useRef(null),animations=useRef([])
  const userId=auth.user?.id
+ useEffect(()=>setPendingDismissed(false),[pending?.request_id])
  const itemMap=useMemo(()=>Object.fromEntries(catalog.map(i=>[i.item_id,i])),[catalog])
  const ownedList=useMemo(()=>catalog.filter(i=>(owned[i.item_id]||0)>0),[catalog,owned])
  const dropsByCase=useMemo(()=>{const map={};for(const d of drops)(map[d.case_id]||=([])).push(d);return map},[drops])
@@ -195,6 +196,7 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[],activeTab='
 
  if(!auth.user||!auth.nickname)return <section className="serverCard"><p>Войди через Google и создай ник в личном кабинете.</p></section>
  return <div className="serverGame voxupSeamlessGame">
+  {pending && !spin && pendingDismissed && <button type="button" className="serverRewardReminder" onClick={()=>setPendingDismissed(false)}><Gift size={16}/> Незабранный приз — открыть</button>}
   {error&&<p className="serverAlert error" role="alert"><AlertTriangle size={18}/>{error}</p>}
   {status&&<p className="serverAlert success" role="status"><Check size={18}/>{status}</p>}
   {loading?<div className="serverCard"><p>Загружаем…</p></div>:<>
@@ -227,6 +229,6 @@ export function OnlineGame({auth,lang='ru',textureSource,blockIds=[],activeTab='
  
   </>}
   {spin&&<div className="serverSpinOverlay" role="dialog" aria-modal="true" aria-label="Идёт открытие"><section className="serverSpinDialog"><h2>{spin.mode==='case'?'ОТКРЫТИЕ КЕЙСА':'АПГРЕЙД'}</h2><p>Удача уже определена. Смотри, что выпадет!</p>{spin.mode==='case'?<div className="serverReelWindow"><span className="serverReelMarker"/><div className="serverReelTrack" ref={trackRef}>{spin.entries.map((id,i)=><div key={`${i}-${id}`} style={{'--rarity':rarityColors[itemMap[id]?.rarity]||'#aaa'}}><img src={textureSource(id)} alt=""/><small>{showName(id)}</small></div>)}</div></div>:<div className="serverSpinWheel" style={{'--chance':`${Number(spin.response.chance||0)}%`}}><div className="serverSpinPointer" ref={pointerRef}><i/></div><b>{Number(spin.response.chance||0).toFixed(2)}%</b></div>}<span className="serverSpinBar"/></section></div>}
-  {pending&&!spin&&resultVisible&&<div className="serverPendingOverlay" role="dialog" aria-modal="true" aria-label="Результат"><section className="serverPendingDialog"><span className="eyebrow"><Sparkles size={15}/> VOXUP / REWARD</span><h2>{pending.outcome==='win'?'ТВОЙ ВЫИГРЫШ!':'НЕУДАЧА'}</h2>{pending.item_id?<><div className="serverPrizeArt"><ItemArt id={pending.item_id} textureSource={textureSource} blockIds={blockIds} large/></div><strong>{showName(pending.item_id)}</strong><small>{fmtMoney(price(pending.item_id))} MC</small><div className="serverPendingActions"><button className="primary" disabled={working} onClick={()=>resolve('claim')}><Check size={17}/> ЗАБРАТЬ</button><button disabled={working} onClick={()=>resolve('sell')}><Coins size={17}/> ПРОДАТЬ +{fmtMoney(Math.floor(price(pending.item_id)*.96))} MC</button></div></>:<><p>Исходный предмет потрачен. Можно попробовать снова с другим предметом.</p><button className="primary" disabled={working} onClick={()=>resolve('ack')}><ArrowRight size={16}/> ПРОДОЛЖИТЬ</button></>}<small className="serverMuted"><LockKeyhole size={14}/> Не забудь забрать свою награду.</small></section></div>}
+  {pending&&!spin&&resultVisible&&!pendingDismissed&&<div className="serverPendingOverlay" role="dialog" aria-modal="true" aria-label="Результат"><section className="serverPendingDialog"><button type="button" className="serverCloseCase" aria-label="Закрыть окно и забрать позже" title="Забрать позже" onClick={()=>setPendingDismissed(true)}><X size={20}/></button><span className="eyebrow"><Sparkles size={15}/> VOXUP / REWARD</span><h2>{pending.outcome==='win'?'ТВОЙ ВЫИГРЫШ!':'НЕУДАЧА'}</h2>{pending.item_id?<><div className="serverPrizeArt"><ItemArt id={pending.item_id} textureSource={textureSource} blockIds={blockIds} large/></div><strong>{showName(pending.item_id)}</strong><small>{fmtMoney(price(pending.item_id))} MC</small><div className="serverPendingActions"><button className="primary" disabled={working} onClick={()=>resolve('claim')}><Check size={17}/> ЗАБРАТЬ</button><button disabled={working} onClick={()=>resolve('sell')}><Coins size={17}/> ПРОДАТЬ +{fmtMoney(Math.floor(price(pending.item_id)*.96))} MC</button></div></>:<><p>Исходный предмет потрачен. Можно попробовать снова с другим предметом.</p><button className="primary" disabled={working} onClick={()=>resolve('ack')}><ArrowRight size={16}/> ПРОДОЛЖИТЬ</button></>}<small className="serverMuted"><LockKeyhole size={14}/> Не забудь забрать свою награду.</small></section></div>}
  </div>
 }

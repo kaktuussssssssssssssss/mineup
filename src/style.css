@@ -582,3 +582,8 @@ button{outline-offset:3px}input,select{color-scheme:dark}[data-theme='light'] in
 .voxupVaultCell small{font-size:10px;color:var(--muted)}.voxupVaultCell.won small{color:#5bd3a3}
 .vaultNote{padding:10px 0;color:var(--muted);font-size:12px}
 @media(max-width:620px){.voxupVaultGrid{gap:7px}.voxupVaultCell{height:130px;padding:8px 4px}.voxupVaultCell img{width:48px!important;height:48px!important}.voxupVaultCell strong{font-size:9px}.voxupVaultCell small{font-size:8px}.serverCaseArt{height:100px}.serverCaseSample{width:51px!important;height:51px!important;min-width:51px!important;min-height:51px!important;max-width:51px!important;max-height:51px!important}.serverCaseSample img{width:35px!important;height:35px!important;max-width:35px!important;max-height:35px!important}.serverCaseCard{min-height:192px}.profileCloudSummary{gap:7px}.profileCloudSummary>div{padding:13px}}
+
+/* Stage 21.1: navigation and safe dismissal of server-side pending rewards. */
+.serverPendingDialog{position:relative}
+.serverRewardReminder{display:inline-flex;align-items:center;gap:9px;margin:0 0 16px;padding:12px 15px;background:var(--primarySoft);color:var(--primary);border:1px solid var(--primary);border-radius:10px;font-size:12px;font-weight:800}
+.serverRewardReminder:hover{filter:brightness(1.1)}
