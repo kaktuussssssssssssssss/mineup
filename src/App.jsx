@@ -3,6 +3,7 @@ import {VoxelViewer, VoxelThumbnail} from './Voxel3D.jsx'
 import {useVoxupAuth} from './useVoxupAuth.js'
 import {GoogleAccount} from './GoogleAccount.jsx'
 import {OnlineAdmin, CloudEconomy} from './OnlineAdmin.jsx'
+import {OnlineGame} from './OnlineGame.jsx'
 import { Gem, Layers3, Boxes, UserRound, Settings2, ArrowUpRight, ChevronRight, LockKeyhole, Gift, Sparkles, Menu, X, Check, ShieldCheck, Coins, Globe2, SlidersHorizontal, Wallet, Swords, RotateCcw, Search, Download, Upload, TrendingUp, Activity, Filter, Volume2, Zap, Gamepad2, Timer, Target, Star } from 'lucide-react'
 
 const mcTextureRoot = 'https://raw.githubusercontent.com/Faithful-Pack/Default-Java/1.21.8/assets/minecraft/textures/'
@@ -1300,6 +1301,7 @@ export default function App() {
   const auth = useVoxupAuth()
   const [page, setPage] = useState('upgrade')
   useEffect(()=>{if(auth.ready && page==='admin' && !auth.isAdmin)setPage('profile')},[auth.ready,auth.isAdmin,page])
+  useEffect(()=>{if(auth.ready && page==='online' && (!auth.user || !auth.nickname))setPage('profile')},[auth.ready,auth.user,auth.nickname,page])
   const [lang, setLang] = useState(() => stored('mineup-language', 'ru'))
   const [theme, setTheme] = useState(() => stored('mineup-theme', 'gold'))
   const [accent, setAccent] = useState(() => stored('mineup-accent', 'amber'))
@@ -1893,9 +1895,9 @@ export default function App() {
         </button>
         <div className="navCaption">PLATFORM / 01</div>
         <div className="navItems">
-          {(auth.isAdmin?[...nav,['admin',ShieldCheck]]:nav).map(([id, Icon]) => (
+          {([...(auth.user && auth.nickname ? [['online',Globe2]] : []), ...nav, ...(auth.isAdmin ? [['admin',ShieldCheck]] : [])]).map(([id, Icon]) => (
             <button key={id} className={'navItem ' + (page === id ? 'active' : '')} onClick={() => go(id)}>
-              <Icon size={19} /><span>{id==='admin'?'CONTROL CENTER':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
+              <Icon size={19} /><span>{id==='admin'?'CONTROL CENTER':id==='online'?'ONLINE ИГРА':id==='promo'?(t.promo||'PROMO'):t[id]}</span>{id === 'cases' && <small>{cases.length}</small>}
             </button>
           ))}
         </div>
@@ -1910,12 +1912,14 @@ export default function App() {
         <header className="top">
           <div className="topLeft"><button className="mobileMenu" onClick={() => setMenu((v) => !v)} aria-label="menu">{menu ? <X size={22} /> : <Menu size={22} />}</button><span className="crumb">VOXUP</span><ChevronRight size={13} /><span>{t[page]}</span></div>
           <div className="topRight">
-            <div className="topBalance"><Coins size={17} /><span>{formatCoins(coins)} <em>MC</em></span><small>{t.demo}</small></div>
+            <div className="topBalance">{page==='online'?<><ShieldCheck size={17}/><span>VOXUP ONLINE</span><small>SERVER</small></>:<><Coins size={17} /><span>{formatCoins(coins)} <em>MC</em></span><small>LOCAL DEMO</small></>}</div>
             <button className="account" onClick={() => go('profile')}><UserRound size={17} /><span>{auth.nickname || (auth.user ? "Google" : t.guest)}</span></button>
           </div>
         </header>
 
         <main className="main">
+          {page === 'online' && auth.user && auth.nickname && <OnlineGame auth={auth} lang={lang} textureSource={textureSource} blockIds={blockIds}/>}
+
           {page === 'upgrade' && (
             <>
               <div className="eyebrow"><span className="dot" /> VOXUP PROJECT — ALPHA 0.9</div>
@@ -1924,7 +1928,7 @@ export default function App() {
                   <div className="heroBadge"><Sparkles size={13} />{t.hello}</div>
                   <h1>{t.head.split(' ').slice(0, 2).join(' ')}<br /><span>{t.head.split(' ').slice(2).join(' ') || 'UPGRADE.'}</span></h1>
                   <p>{t.sub}</p>
-                  <div className="heroBtns"><button className="primary" onClick={() => go('cases')}>{t.explore}<ArrowUpRight size={17} /></button><span className="betaTag"><span className="onlineDot" />{t.demo}</span></div>
+                  <div className="heroBtns">{auth.user && auth.nickname && <button className="primary" onClick={() => go('online')}><ShieldCheck size={16}/> ИГРАТЬ ONLINE</button>}<button className="primary" onClick={() => go('cases')}>{t.explore}<ArrowUpRight size={17} /></button><span className="betaTag"><span className="onlineDot" />{t.demo}</span></div>
                 </div>
                 <div className="heroImage"><div className="halo haloOne" /><div className="halo haloTwo" /><div className="heroItem"><img src="/items/custom_question_black_white.png" alt="Question block" /></div><div className="heroOrb orb1" /><div className="heroOrb orb2" /><div className="renderNote">ITEM PREVIEW / CUSTOM TEXTURE</div></div>
               </section>
